@@ -31,14 +31,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        Intent intent = getIntent();
-        Bundle b = intent.getBundleExtra("GOITIN");
-        if(b!=null) {
-            String sms = b.getString("SMS");
-            String number = b.getString("PHONE");
-            Toast.makeText(MainActivity.this,"co tin nhan tu "+number,Toast.LENGTH_LONG).show();
-        }
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

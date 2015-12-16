@@ -13,5 +13,7 @@ public class MyBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String Infor=intent.getStringExtra("Infor");
         Toast.makeText(context,Infor,Toast.LENGTH_LONG).show();
+        //intent=new Intent(context,MainActivity.class);
+      //  context.startActivity(intent);
     }
 }

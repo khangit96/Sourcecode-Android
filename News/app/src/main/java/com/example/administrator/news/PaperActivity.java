@@ -8,9 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import khang.Variables;
 
 public class PaperActivity extends AppCompatActivity {
-
+    ListView lv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +32,22 @@ public class PaperActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        lv=(ListView)findViewById(R.id.lv);
+        ArrayList<Variables> arr=new ArrayList<Variables>();
+        for(int i=0;i<Variables.PAPERS.length;i++){
+            String paper=Variables.PAPERS[i].toString();
+            Integer icon=Variables.ICONS[i];
+            Variables v=new Variables();
+            v.PAPERS[i]=paper;
+            v.ICONS[i]=icon;
+            arr.add(v);
+        }
+
+        CustomApdaterPaper adapter=new CustomApdaterPaper(this,R.layout.custom_paper,arr);
+        lv.setAdapter(adapter);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

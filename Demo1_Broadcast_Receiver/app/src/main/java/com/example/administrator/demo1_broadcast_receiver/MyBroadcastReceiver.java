@@ -5,17 +5,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.widget.Toast;
 
 /**
  * Created by Administrator on 12/15/2015.
  */
 public class MyBroadcastReceiver extends BroadcastReceiver{
-
+    public static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
     @Override
     public void onReceive(Context context, Intent intent) {
-        processSMS(context,intent);
+
+        //processSMS(context,intent);
+        if (intent.getAction().equals(ACTION)) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                SmsMessage[] messages = new SmsMessage[pdus.length];
+                for (int i = 0; i < pdus.length; i++) {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                }
+                for (SmsMessage message : messages) {
+
+                    String strMessageFrom = message.getDisplayOriginatingAddress();
+                    String strMessageBody = message.getDisplayMessageBody();
+
+                    Toast.makeText(context, "SMS Message received from:" + strMessageFrom, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "SMS Message content" + strMessageBody, Toast.LENGTH_LONG).show();
+
+                }
+            }
+        }
     }
-    public void processSMS(Context context, Intent intent) {
+    /*public void processSMS(Context context, Intent intent) {
         // lấy đối tượng bundle mình đã nói ở loạt bài về intent
         Bundle bundle = intent.getExtras();
         // Do hệ thống trả về một loạt các tin nhắn đến cùng lúc nên phải dùng mảng
@@ -56,5 +77,5 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i); // cũng vì lý do trên nên phải dùng context để khởi động Activity
 
-        }
+        }*/
 }

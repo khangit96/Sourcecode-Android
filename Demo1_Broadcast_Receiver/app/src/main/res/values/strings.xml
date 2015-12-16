@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Demo1_Broadcast_Receiver</string>
+    <string name="action_settings">Settings</string>
+</resources>

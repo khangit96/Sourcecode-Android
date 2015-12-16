@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Demo1_SQLITE</string>
+    <string name="action_settings">Settings</string>
+</resources>

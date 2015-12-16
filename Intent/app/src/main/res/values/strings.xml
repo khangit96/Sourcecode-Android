@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Intent</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_screen_2">Screen_2</string>
+</resources>

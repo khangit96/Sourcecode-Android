@@ -11,6 +11,7 @@ import android.widget.Toast;
 public class MyBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context,"Đã nhận Broadcast",Toast.LENGTH_LONG).show();
+        String Infor=intent.getStringExtra("Infor");
+        Toast.makeText(context,Infor,Toast.LENGTH_LONG).show();
     }
 }

@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         });
         Intent i=new Intent();
         i.setAction("com.tutorialspoint.CUSTOM_INTENT");
+        i.putExtra("Infor","Received broadcast");
         sendBroadcast(i);
     }
 

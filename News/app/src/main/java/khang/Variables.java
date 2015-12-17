@@ -14,8 +14,9 @@ public class Variables{
     public static final  int[] ICONS={R.drawable.vnexpress,R.drawable.h24};
     //VNexpress
     public static final String[] VNEXPRESS_CATEGORIES={"Trang chủ","Xã hội"};
+    public static final String[] H24_CATEGORIES={"Trang chủ","Xã hội","Thể thao"};
     public static final String[] VNEXPRESS_LINKS={"http://vnexpress.net/rss/tin-moi-nhat.rss","http://vnexpress.net/rss/thoi-su.rss"};
-    public static final String[][] CATEGORIES={VNEXPRESS_CATEGORIES};
+    public static final String[][] CATEGORIES={VNEXPRESS_CATEGORIES,H24_CATEGORIES};
     public static final String[][] LINKS={VNEXPRESS_LINKS};
 
 

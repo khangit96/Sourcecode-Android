@@ -28,9 +28,11 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
 
                     String strMessageFrom = message.getDisplayOriginatingAddress();
                     String strMessageBody = message.getDisplayMessageBody();
-
-                    Toast.makeText(context, "SMS Message received from:" + strMessageFrom, Toast.LENGTH_LONG).show();
-                    Toast.makeText(context, "SMS Message content" + strMessageBody, Toast.LENGTH_LONG).show();
+                    if(strMessageFrom!=null&&strMessageBody!=null){
+                        Toast.makeText(context, strMessageFrom, Toast.LENGTH_LONG).show();
+                    }
+                   // Toast.makeText(context, strMessageFrom, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context,  strMessageBody, Toast.LENGTH_LONG).show();
 
                 }
             }

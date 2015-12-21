@@ -33,13 +33,14 @@ public class CategoryActivity extends AppCompatActivity {
         Bundle bd=getIntent().getExtras();
         if(bd!=null){
             int category=bd.getInt("pos");
+            Integer icon=bd.getInt("icon");
             ListView lvCategory=(ListView)findViewById(R.id.lvCategory);
             setTitle(Variables.PAPERS[category]);
             ArrayList<String> arrCategory=new ArrayList<String>();
             for(int i=0;i<Variables.CATEGORIES[category].length;i++){
                 arrCategory.add(Variables.CATEGORIES[category][i]);
             }
-            CustomAdapterCategory adapter=new CustomAdapterCategory(this,R.layout.custom_category,arrCategory);
+            CustomAdapterCategory adapter=new CustomAdapterCategory(this,R.layout.custom_category,icon,arrCategory);
            lvCategory.setAdapter(adapter);
         }
     }

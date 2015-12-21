@@ -18,9 +18,11 @@ import khang.Variables;
  */
 public class CustomAdapterCategory extends ArrayAdapter<String> {
     ArrayList<String> item;
-    public CustomAdapterCategory(Context context, int resource, ArrayList<String> items) {
-        super(context, resource, items);
+    private  int icon;
+    public CustomAdapterCategory(Context context, int resource,int icon, ArrayList<String> items) {
+        super(context, resource,icon, items);
         this.item=items;
+        this.icon=icon;
     }
 
     @Override
@@ -38,8 +40,9 @@ public class CustomAdapterCategory extends ArrayAdapter<String> {
         // Anh xa + Gan gia tri
       //  ImageView img=(ImageView) v.findViewById(R.id.img);
         TextView tvCategory = (TextView) v.findViewById(R.id.tvCategory);
+        ImageView img=(ImageView)v.findViewById(R.id.img);
         tvCategory.setText(item.get(position).toString());
-      //  img.setImageResource(Variables.ICONS[position]);
+        img.setImageResource(icon);
         return v;
     }
 }

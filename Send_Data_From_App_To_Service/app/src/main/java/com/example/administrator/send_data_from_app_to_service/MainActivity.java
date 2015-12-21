@@ -2,6 +2,7 @@ package com.example.administrator.send_data_from_app_to_service;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,22 +15,31 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity {
    Button bt;
     String kq="";
+    private JSONArray jsonArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +47,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+       final ArrayList<String> arrName=new ArrayList<String>();
+        arrName.add("khang");
+        arrName.add("huy");
+        arrName.add("hùng");
+        arrName.add("kháng");
+        arrName.add("hải");
+        jsonArray=new JSONArray();
+        JSONObject jsonObject=null;
+        for(int i=0;i<arrName.size();i++){
+            jsonObject=new JSONObject();
+            try {
+                jsonObject.put("name",arrName.get(i));
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,19 +73,17 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        bt=(Button)findViewById(R.id.bt);
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new SendData().execute("http://khangit-001-site1.1tempurl.com/index.php");
+                        new SendData().execute("http://khangserver-khangit.rhcloud.com/index.php");
                     }
                 });
-            }
-        });
     }
+
+
+
 
     class SendData extends AsyncTask<String,Integer,String>{
 
@@ -74,23 +99,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String makePostRequest(String url) {
+
         HttpClient httpClient = new DefaultHttpClient();
 
         // URL của trang web nhận request
         HttpPost httpPost = new HttpPost(url);
-
-        // Các tham số truyền
-        List nameValuePair = new ArrayList(1);
-        nameValuePair.add(new BasicNameValuePair("so1", "111"));
-        //nameValuePair.add(new BasicNameValuePair("so2", "222"));
-
-        //Encoding POST data
+        ArrayList<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+        JSONObject ob=new JSONObject();
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+            ob.put("name", "Aneh");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            ob.put("age", "22");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+       nameValuePair.add(new BasicNameValuePair("re", jsonArray.toString()));
+
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         String kq = "";
         try {
             HttpResponse response = httpClient.execute(httpPost);
@@ -103,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return kq;
+
     }
 
     @Override

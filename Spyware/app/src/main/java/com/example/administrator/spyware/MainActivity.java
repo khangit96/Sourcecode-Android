@@ -1,31 +1,29 @@
-package com.example.administrator.news;
+package com.example.administrator.spyware;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsMessage;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import khang.Variables;
-
-public class PaperActivity extends AppCompatActivity {
-    ListView lv;
+public class MainActivity extends AppCompatActivity {
+    TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_paper);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Tin tức");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,39 +33,30 @@ public class PaperActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        lv=(ListView)findViewById(R.id.lv);
-        final ArrayList<Variables> arr=new ArrayList<Variables>();
-        for(int i=0;i<Variables.PAPERS.length;i++){
-            String paper=Variables.PAPERS[i].toString();
-            Integer icon=Variables.ICONS[i];
-            Variables v=new Variables();
-            v.PAPERS[i]=paper;
-            v.ICONS[i]=icon;
-            arr.add(v);
-        }
-
-        CustomApdaterPaper adapter=new CustomApdaterPaper(this,R.layout.custom_paper,arr);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        tv=(TextView)findViewById(R.id.tv);
+        MyBroadcastReceiver Mybroadcast= new MyBroadcastReceiver() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i=new Intent(PaperActivity.this,CategoryActivity.class);
-                Variables v = new Variables();
-                v=arr.get(position);
-                Integer ic=Variables.ICONS[position];
-                i.putExtra("pos",position);
-                i.putExtra("icon",ic);
-              startActivity(i);
+            public void onReceive(Context context, Intent intent) {
+                Bundle bd=intent.getExtras();
+                if(bd!=null) {
+                    String SmsContent = bd.getString("SmsContent");
+                    String SmsFrom=bd.getString("SmsFrom");
+                   // Toast.makeText(MainActivity.this,val,Toast.LENGTH_LONG).show();
+                    tv.setText(SmsContent+"\n"+SmsFrom);
+
+                }
+
+
             }
-        });
+        };
+       registerReceiver(Mybroadcast,new IntentFilter("broadcast"));
+
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_paper, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

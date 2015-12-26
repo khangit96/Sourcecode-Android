@@ -19,9 +19,9 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+*/      //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +43,7 @@ public class CategoryActivity extends AppCompatActivity {
             CustomAdapterCategory adapter=new CustomAdapterCategory(this,R.layout.custom_category,icon,arrCategory);
            lvCategory.setAdapter(adapter);
         }
+
     }
 
 }

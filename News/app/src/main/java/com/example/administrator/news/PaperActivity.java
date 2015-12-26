@@ -23,9 +23,10 @@ public class PaperActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paper);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
         setTitle("Tin tức");
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,21 +47,23 @@ public class PaperActivity extends AppCompatActivity {
             arr.add(v);
         }
 
-        CustomApdaterPaper adapter=new CustomApdaterPaper(this,R.layout.custom_paper,arr);
+        CustomApdaterPaper adapter=new CustomApdaterPaper(this, R.layout.custom_paper,arr);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i=new Intent(PaperActivity.this,CategoryActivity.class);
+                Intent i = new Intent(PaperActivity.this, CategoryActivity.class);
                 Variables v = new Variables();
-                v=arr.get(position);
-                Integer ic=Variables.ICONS[position];
-                i.putExtra("pos",position);
-                i.putExtra("icon",ic);
-              startActivity(i);
+                v = arr.get(position);
+                Integer ic = Variables.ICONS[position];
+                i.putExtra("pos", position);
+                i.putExtra("icon", ic);
+                startActivity(i);
             }
         });
+
     }
+
 
 
 

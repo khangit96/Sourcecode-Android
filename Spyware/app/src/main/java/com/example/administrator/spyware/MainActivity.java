@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +14,16 @@ import android.telephony.SmsMessage;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     TextView tv;
+    ListView lv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tv=(TextView)findViewById(R.id.tv);
+        lv=(ListView)findViewById(R.id.lv);
+        ArrayList<String> arr=new ArrayList<String>();
+        Database db=new Database(this);
+        db.Query_Data("CREATE TABLE IF NOT EXISTS thongtin(_id INTEGER PRIMARY KEY,noidung VARCHAR(200) NOT NULL,nguoigui VARCHAR(200) NOT NULL)");
+        Cursor kq=db.GetData("SELECT * FROM thongtin");
+        while(kq.moveToNext()){
+            String s=kq.getString(1);
+            arr.add(s);
+        }
+        ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arr);
+        lv.setAdapter(adapter);
+       /* final ArrayList<String> arr=new ArrayList<String>();
         MyBroadcastReceiver Mybroadcast= new MyBroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -41,15 +59,22 @@ public class MainActivity extends AppCompatActivity {
                 if(bd!=null) {
                     String SmsContent = bd.getString("SmsContent");
                     String SmsFrom=bd.getString("SmsFrom");
-                   // Toast.makeText(MainActivity.this,val,Toast.LENGTH_LONG).show();
-                    tv.setText(SmsContent+"\n"+SmsFrom);
-
+                    Database db=new Database(context);
+                    db.Query_Data("CREATE TABLE IF NOT EXISTS thongtin(_id INTEGER PRIMARY KEY,noidung VARCHAR(200) NOT NULL,nguoigui VARCHAR(200) NOT NULL)");
+                    db.Query_Data("INSERT INTO thongtin VALUES(null,'khang','pro')");
+                    Cursor kq=db.GetData("SELECT * FROM thongtin");
+                    while(kq.moveToNext()){
+                        String s=kq.getString(1);
+                        arr.add(s);
+                    }
+                      ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arr);
+                     lv.setAdapter(adapter);
                 }
 
 
             }
         };
-       registerReceiver(Mybroadcast,new IntentFilter("broadcast"));
+       registerReceiver(Mybroadcast,new IntentFilter("broadcast"));*/
 
     }
 

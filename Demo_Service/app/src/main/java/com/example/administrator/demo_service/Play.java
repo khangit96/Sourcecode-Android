@@ -27,7 +27,7 @@ public class Play extends Service{
     }
     public void PlayNhacMp3(String url){
         //url = "http://khoapham.vn/KhoaPhamTraining/laptrinhios/EmCuaNgayHomQua.mp3";
-        try {
+        /*try {
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -39,7 +39,9 @@ public class Play extends Service{
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+        mediaPlayer=MediaPlayer.create(this,R.raw.chuabaogio);
+        mediaPlayer.start();
 
     }
 

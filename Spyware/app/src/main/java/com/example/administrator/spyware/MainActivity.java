@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,7 +20,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     TextView tv;
@@ -39,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        tv=(TextView)findViewById(R.id.tv);
+        /*tv=(TextView)findViewById(R.id.tv);
         lv=(ListView)findViewById(R.id.lv);
         ArrayList<String> arr=new ArrayList<String>();
         Database db=new Database(this);
@@ -50,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             arr.add(s);
         }
         ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arr);
-        lv.setAdapter(adapter);
+        lv.setAdapter(adapter);*/
        /* final ArrayList<String> arr=new ArrayList<String>();
         MyBroadcastReceiver Mybroadcast= new MyBroadcastReceiver() {
             @Override
@@ -76,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
         };
        registerReceiver(Mybroadcast,new IntentFilter("broadcast"));*/
 
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

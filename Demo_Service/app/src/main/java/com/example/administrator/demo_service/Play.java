@@ -4,9 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.Provider;
@@ -43,8 +45,8 @@ public class Play extends Service{
         mediaPlayer=MediaPlayer.create(this,R.raw.chuabaogio);
         mediaPlayer.start();
 
-    }
 
+    }
 
     @Override
     public void onDestroy() {
@@ -54,6 +56,7 @@ public class Play extends Service{
 
     @Override
     public void onStart(Intent intent, int startId) {
+
         Bundle bd=intent.getExtras();
         if(bd!=null){
             String url=bd.getString("url");

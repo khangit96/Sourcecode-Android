@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> fetchInbox(){
         ArrayList<String>sms=new ArrayList<String>();
        // Uri uri=Uri.parse("content://sms/inbox");
-        Uri uri=Uri.parse("content://sms/sent");
+        Uri uri=Uri.parse("content://sms/inbox");
         Cursor cursor=getContentResolver().query(uri, new String[]{"_id", "address", "date", "body"}, null, null, null);
           int count=cursor.getCount();//đếm số tin nhắn
         if(count!=0) {
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         if (fetchInbox()!=null){
             ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,fetchInbox());
             lv.setAdapter(adapter);
+
         }
         if(fetchInbox().isEmpty()){
             Toast.makeText(MainActivity.this," not have sms",Toast.LENGTH_LONG).show();

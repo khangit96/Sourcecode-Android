@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,7 +26,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-ListView lv;
+ListView lvInbox,lvSentbox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +42,82 @@ ListView lv;
                         .setAction("Action", null).show();
             }
         });
-        lv=(ListView)findViewById(R.id.lv);
+        //Tabhost
+        TabHost tabHost=(TabHost)findViewById(R.id.tabManage);
+        tabHost.setup();
+        //tab inbox
+        TabHost.TabSpec tabInbox=tabHost.newTabSpec("Inbox");
+        tabInbox.setIndicator("Inbox");
+        tabInbox.setContent(R.id.tabInbox);
+
+        //tab sentbox
+        TabHost.TabSpec tabSentbox=tabHost.newTabSpec("Sentbox");
+        tabSentbox.setIndicator("Sentbox");
+        tabSentbox.setContent(R.id.tabSentbox);
+
+        //add tab
+        tabHost.addTab(tabInbox);
+        tabHost.addTab(tabSentbox);
+
+        lvInbox=(ListView)findViewById(R.id.lvInbox);
+        lvSentbox=(ListView)findViewById(R.id.lvSentbox);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new DocJson().execute("http://khangserver-khangit.rhcloud.com/get.php");
+                new DocJson_Inbox().execute("http://khangserver-khangit.rhcloud.com/getInbox.php");
+            }
+        });
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new DocJson_Sentbox().execute("http://khangserver-khangit.rhcloud.com/getSentbox.php");
             }
         });
     }
-    class DocJson extends AsyncTask<String,Integer,String> {
+
+    //Đọc json sentbox từ Server
+    class DocJson_Sentbox extends AsyncTask<String,Integer,String> {
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            progressDialog=new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Loading");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return docNoiDung_Tu_URL(params[0]);
+        }
+
+        @Override
+        // thực hiện ở hàm này
+        protected void onPostExecute(String s) {
+            progressDialog.cancel();
+            Integer count=0;
+            ArrayList<String> arrContent = new ArrayList<String>();
+            try {
+                JSONArray mang = new JSONArray(s);
+                for (int i = 0; i < mang.length(); i++) {
+                    JSONObject name = mang.getJSONObject(i);
+                    arrContent.add(name.getString("content"));
+                }
+                ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arrContent);
+                lvSentbox.setAdapter(adapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+    //Đọc json inbox từ server
+    class DocJson_Inbox extends AsyncTask<String,Integer,String> {
         ProgressDialog progressDialog;
         @Override
         protected void onPreExecute() {
@@ -79,7 +147,7 @@ ListView lv;
                     arrName.add(name.getString("name"));
                 }
                  ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arrName);
-                lv.setAdapter(adapter);
+                lvInbox.setAdapter(adapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

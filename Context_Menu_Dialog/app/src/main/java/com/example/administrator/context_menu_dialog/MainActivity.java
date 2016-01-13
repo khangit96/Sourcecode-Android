@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ListView lv;
-    String[]arrName;
+    ArrayList<String>arrName;
+    ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +37,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         lv=(ListView)findViewById(R.id.lv);
-      arrName=getResources().getStringArray(R.array.arr);
-      /*  ArrayList<String> arr=new ArrayList<String>();
-        arr.add("Duy Khang");
-        arr.add("Văn Tiến");
-        arr.add("Thiện Huy");*/
-        ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arrName);
+        arrName=new ArrayList<String>();
+        arrName.add("Duy Khang");
+        arrName.add("Văn Tiến");
+        arrName.add("Thiện Huy");
+   adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arrName);
         lv.setAdapter(adapter);
         registerForContextMenu(lv);
     }
@@ -75,9 +75,10 @@ public class MainActivity extends AppCompatActivity {
         menu.add(0, v.getId(), 0, "Call");
         menu.add(0, v.getId(), 0, "Send SMS");*/
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo)menuInfo;
-        menu.setHeaderTitle(arrName[info.position]);
-        menu.add(menu.NONE,0,0,"From: "+arrName[info.position]);
-        menu.add(menu.NONE,1,1,"To: "+arrName[info.position]);
+        menu.setHeaderTitle(arrName.get(info.position));
+        //menu.add(menu.NONE,0,0,"From: "+arrName[info.position]);
+      //  menu.add(menu.NONE,1,1,"To: "+arrName[info.position]);
+        menu.add(menu.NONE,1,1,"Delete");
 
        /* for(int i=0;i<arrName.length;i++){
             menu.add(i,v.getId(),0,arrName[i]);
@@ -86,11 +87,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         if(item.getItemId()==0) {
-            Toast.makeText(MainActivity.this, "Call", Toast.LENGTH_LONG).show();
+           // String name=arrName[menuInfo.position];
+            //Toast.makeText(MainActivity.this,name, Toast.LENGTH_LONG).show();
         }
         else if(item.getItemId()==1){
-            Toast.makeText(MainActivity.this, "Send sms", Toast.LENGTH_LONG).show();
+            adapter.remove(arrName.remove(menuInfo.position));
+            adapter.notifyDataSetChanged();
+          //  Toast.makeText(MainActivity.this, "Send sms", Toast.LENGTH_LONG).show();
         }
        return true;
 

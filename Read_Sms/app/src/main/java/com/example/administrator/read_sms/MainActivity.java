@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> fetchInbox(){
         ArrayList<String>sms=new ArrayList<String>();
        // Uri uri=Uri.parse("content://sms/inbox");
-        Uri uri=Uri.parse("content://sms/inbox");
+        Uri uri=Uri.parse("content://sms/sent");
         Cursor cursor=getContentResolver().query(uri, new String[]{"_id", "address", "date", "body"}, null, null, null);
           int count=cursor.getCount();//đếm số tin nhắn
         if(count!=0) {

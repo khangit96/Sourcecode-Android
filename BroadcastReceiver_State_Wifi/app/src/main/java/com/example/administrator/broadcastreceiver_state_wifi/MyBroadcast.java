@@ -11,6 +11,9 @@ import android.widget.Toast;
 public class MyBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context,"Wifi changed",Toast.LENGTH_LONG).show();
+
+        Intent serviceIntent =new Intent();
+        serviceIntent.setAction("MyService");//khởi tạo một dịch vụ đk định nghĩa trong AndroidMaintifest
+        context.startService(serviceIntent);//bắt đầu service
     }
 }

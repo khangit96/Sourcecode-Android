@@ -1,5 +1,6 @@
 package com.example.administrator.get_numberphone;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        String number = tm.getLine1Number();
-        if(number!=null){
+     /*   if(number!=null){
             Toast.makeText(getApplicationContext(),number,Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(getApplicationContext(),"Null",Toast.LENGTH_LONG).show();
-        }
+        }*/
+        TelephonyManager phoneManager = (TelephonyManager)
+                getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String phoneNumber = phoneManager.getLine1Number();
+        Toast.makeText(getApplicationContext(),phoneNumber,Toast.LENGTH_LONG).show();
     }
 
     @Override

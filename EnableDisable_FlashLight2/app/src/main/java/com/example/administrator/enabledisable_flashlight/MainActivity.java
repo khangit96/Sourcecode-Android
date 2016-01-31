@@ -20,6 +20,7 @@ import java.security.Policy;
 public class MainActivity extends AppCompatActivity {
     private  Camera camera;
     private  boolean isFlashlightOn;
+    private  boolean isFlashOn=true;
     Parameters parameters;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,13 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        /*boolean isCameraFlash=getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        boolean isCameraFlash=getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if(!isCameraFlash){
             showToast("Device hasn't camera flash");
         }
-        else{*/
-           // camera=Camera.open();
-            //parameters=camera.getParameters();
-            CountDownTimer countDownTimer=new CountDownTimer(5000,1000) {
+        else{
+            camera=Camera.open();
+            CountDownTimer countDownTimer=new CountDownTimer(5000,10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     setFlashlightOn();
@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
                     setFlashlightOff();
                 }
             }.start();
-     //   }
+        }
+
     }
 
     @Override
@@ -81,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-         camera=Camera.open();
-        //  parameters=camera.getParameters();
         super.onResume();
         Log.d("test", "On Resum");
     }
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this,alert,Toast.LENGTH_LONG).show();
     }
    public  void setFlashlightOn(){
-      // camera=Camera.open();
+
       parameters=camera.getParameters();
        parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
        camera.setParameters(parameters);

@@ -10,10 +10,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
   //ProgressBar progressBar;
+    TextView tv;
   ProgressDialog progress;
+    Integer count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        tv=(TextView)findViewById(R.id.tv);
         //progressBar=(ProgressBar)findViewById(R.id.progressBar);
-        progress=new ProgressDialog(this);
+      /*  progress=new ProgressDialog(this);
         progress.setMessage("Downloading Music");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
         progress.setProgress(0);
-        progress.show();
+        progress.show();*/
 
         final int totalProgressTime = 100;
         final Thread t = new Thread() {
@@ -47,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         sleep(200);
                         jumpTime += 5;
-                        progress.setProgress(jumpTime);
+                       count++;
+                      //  progress.setProgress(jumpTime);
                     }
                     catch (InterruptedException e) {
                         // TODO Auto-generated catch block
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         t.start();
+        Toast.makeText(MainActivity.this,""+count,Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -18,8 +18,9 @@ public class ConnectService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
+        Toast.makeText(getApplicationContext(), "Phone Is Ringing", Toast.LENGTH_LONG).show();//Khi có cuộc gọi đến
         super.onStart(intent, startId);
-        Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+     //   Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
     }
 
 }

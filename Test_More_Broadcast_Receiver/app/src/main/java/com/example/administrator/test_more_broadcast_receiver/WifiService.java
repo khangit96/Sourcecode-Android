@@ -18,7 +18,8 @@ public class WifiService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
+        Toast.makeText(getApplicationContext(),"Received sms",Toast.LENGTH_LONG).show();
         super.onStart(intent, startId);
-        Toast.makeText(getApplicationContext(), "Wifi changed", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Wifi changed", Toast.LENGTH_LONG).show();
     }
 }

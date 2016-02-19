@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BroadcastReceiver_IntentService</string>
+    <string name="action_settings">Settings</string>
+</resources>

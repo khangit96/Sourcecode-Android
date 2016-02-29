@@ -9,10 +9,10 @@
         android:layout_height="200dp"
         android:background="#888888"
         android:orientation="horizontal">
-        <ImageView
+        <musicapp.khangit.music_app.customview.RoundedImageView
             android:layout_width="128dp"
             android:src="@drawable/ic_default"
-            android:layout_height="wrap_content" />
+            android:layout_height="128dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"

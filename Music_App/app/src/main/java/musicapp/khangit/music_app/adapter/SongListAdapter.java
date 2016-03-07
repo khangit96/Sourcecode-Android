@@ -107,12 +107,12 @@ public class SongListAdapter extends BaseAdapter {
     }
 
 
-  /*  public void addItem(Song song){
+   public void addItem(Song song){
         if(listSong != null && song != null){
             listSong.add(song);
         }
     }
-*/
+
     /*
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

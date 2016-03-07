@@ -3,11 +3,13 @@ package musicapp.khangit.music_app.activity;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Build;
 import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.View;
 import android.widget.CursorAdapter;
@@ -25,6 +27,7 @@ import musicapp.khangit.music_app.element.BaseListElement;
 import musicapp.khangit.music_app.element.SongElement;
 
 public class HomeActivity extends AppCompatActivity {
+    public static String SONG_NAME="songName";
     ListView listView;
     List<BaseListElement> offlineListElement;
     ElementListAdapter elementListAdapter;
@@ -88,6 +91,23 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                suggestionAdapter.getCursor().moveToPosition(position);
+                String query=suggestionAdapter.getCursor().getString(1);//lấy giá trị của item đk selected
+                Intent i=new Intent(HomeActivity.this,ListSongActivity.class);
+                i.putExtra("songName",query);
+                startActivity(i);
+                return true;
+            }
+        });
+
         return true;
 
     }

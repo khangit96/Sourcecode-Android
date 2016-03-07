@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SendReceiverData_Between_Arduino_And_Android_Bluetooth</string>
+    <string name="action_settings">Settings</string>
+</resources>

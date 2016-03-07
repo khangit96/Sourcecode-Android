@@ -7,12 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import musicapp.khangit.music_app.R;
+import musicapp.khangit.music_app.adapter.SongListAdapter;
 
 public class ListSongActivity extends AppCompatActivity {
 
     ListView listSong;
-   // SongListAdapter songListAdapter;
+    SongListAdapter songListAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +23,10 @@ public class ListSongActivity extends AppCompatActivity {
 
         listSong = (ListView) findViewById(R.id.list_song);
 
-       /* songListAdapter = new SongListAdapter(this);
+       songListAdapter = new SongListAdapter(this);
         listSong.setAdapter(songListAdapter);
-        listSong.setOnItemClickListener(songListAdapter);
+        handleIntent(getIntent());
+      /*  listSong.setOnItemClickListener(songListAdapter);
 
         listSong.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -44,6 +48,10 @@ public class ListSongActivity extends AppCompatActivity {
 
         handleIntent(getIntent());
         */
+    }
+    private  void handleIntent(Intent intent){
+        String query=intent.getStringExtra(HomeActivity.SONG_NAME);
+        Toast.makeText(getApplicationContext(),query,Toast.LENGTH_LONG).show();
     }
 
    /*  private void handleIntent(Intent intent){

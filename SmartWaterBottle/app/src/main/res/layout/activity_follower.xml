@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBEFF2"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btLitre"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/button_bg_round"
+            android:padding="15dp"
+            android:text="2.0 Lit"
+            android:textColor="#1E94F2"
+            android:textSize="30dp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="60dp"
+            android:text="Status: Good"
+            android:textColor="#1E94F2"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2">
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="60dp"
+                android:src="@drawable/battery1"
+                android:layout_height="33dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Remaining: 350ml"
+                android:layout_marginLeft="30dp"
+                android:textColor="#1E94F2"
+                android:textSize="15dp"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2">
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/battery1"
+                android:layout_height="33dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Drank: 300ml"
+                android:layout_marginLeft="20dp"
+                android:textColor="#1E94F2"
+                android:textSize="15dp"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public static int count = 0;
     public static int count1 = 0;
 
+
+    //Nhấn 2 lần để thoát ứng dụng
+    private boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < ARRAYLIST.size(); i++) {
             t += ARRAYLIST.get(i).toString();
         }
-        TV.setText("Số nước còn lại bạn phải uống: " + t.toString());
+        TV.setText("Khoảng cách từ cảm biến đến vật là : " + t);
         ARRAYLIST.clear();
     }
 
@@ -168,16 +171,10 @@ public class MainActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 public void run() {
                                     if (count1 == 0) {
-                                        // count1 = Integer.parseInt(string.toString());
-                                        if (string.equals("1")) {
-                                            textView.setText("Đèn mở");
-                                        } else if (string.equals("2")) {
-                                            textView.setText("Đèn tắt");
-                                        }
+                                        count1 = Integer.parseInt(string.toString());
                                     } else {
                                         if (count1 == count) {
                                             getValues(arrayList, textView);
-                                            //textView.setText(string.toString());
                                             count1 = 0;
                                             count = 0;
                                         } else {
@@ -263,10 +260,21 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.doubleBackToExitPressedOnce = false;
+    }
+
     //Function onBackPress()
     @Override
     public void onBackPressed() {
-        showDialogExitApp();
+        if (doubleBackToExitPressedOnce) { //doubleBackToExitPressedOnce==true
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Nhấn lần nữa để thoát ứng dụng!", Toast.LENGTH_SHORT).show();
 
     }
 

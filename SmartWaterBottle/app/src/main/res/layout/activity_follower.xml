@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/ln"
     android:layout_height="match_parent"
     android:background="#EBEFF2"
     android:orientation="vertical">
@@ -15,7 +16,7 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginLeft="85dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/button_bg_round"
             android:padding="15dp"
             android:text="2.0 Lit"
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="90dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:text="Status: Good"
             android:textColor="#1E94F2"
             android:textSize="20dp"
@@ -47,17 +48,19 @@
             android:orientation="vertical"
             android:layout_weight="2">
             <ImageView
+                android:id="@+id/imgRemaining"
                 android:layout_width="33dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="60dp"
                 android:src="@drawable/battery1"
                 android:layout_height="33dp" />
             <TextView
+                android:id="@+id/tvRemaining"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Remaining: 350ml"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="10dp"
                 android:textColor="#1E94F2"
                 android:textSize="15dp"
                 android:textStyle="normal" />
@@ -70,17 +73,19 @@
             android:orientation="vertical"
             android:layout_weight="2">
             <ImageView
+                android:id="@+id/imgDrank"
                 android:layout_width="33dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="50dp"
                 android:src="@drawable/battery1"
                 android:layout_height="33dp" />
             <TextView
+                android:id="@+id/tvDrank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Drank: 300ml"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:textColor="#1E94F2"
                 android:textSize="15dp"
                 android:textStyle="normal" />

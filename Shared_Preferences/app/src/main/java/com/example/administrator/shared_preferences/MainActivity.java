@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         init();
         String s=sp.getString("value","");
         ed.setText(s);
+        if(s.equals("khang")){
+            Toast.makeText(getApplicationContext(),"Ok",Toast.LENGTH_LONG).show();
+        }
+
 
     }
 

@@ -8,4 +8,11 @@
         android:title="Alarm"
         android:icon="@drawable/alarm"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        android:icon="@drawable/logout"
+        app:showAsAction="ifRoom" />
+
 </menu>

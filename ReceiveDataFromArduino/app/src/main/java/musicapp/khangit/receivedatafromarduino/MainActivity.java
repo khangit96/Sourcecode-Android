@@ -141,12 +141,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickStart(View view) {
-        if (BTinit()) {
-            if (BTconnect()) {
+        if(BTinit())
+        {
+            if(BTconnect())
+            {
                 setUiEnabled(true);
-                deviceConnected = true;
-                //  textView.append("\nConnection Opened!\n");
+                deviceConnected=true;
+
             }
+
         }
         //
 
@@ -170,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                             final String string = new String(rawBytes, "UTF-8");
                             handler.post(new Runnable() {
                                 public void run() {
-                                    if (count1 == 0) {
+                                   /* if (count1 == 0) {
                                         count1 = Integer.parseInt(string.toString());
                                     } else {
                                         if (count1 == count) {
@@ -189,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
 
 
-                                    }
+                                    }*/
+                                    textView.setText(string.toString());
 
 
                                 }

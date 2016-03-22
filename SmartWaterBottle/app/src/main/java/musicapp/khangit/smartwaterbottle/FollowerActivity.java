@@ -116,6 +116,7 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     public static int addWater;
 
 
+
     //ArrayList
     ArrayList<String> arrUsername;
 
@@ -124,7 +125,6 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.activity_follower, container, false);
-
         //Khởi tạo
         init(rootview);
 
@@ -134,8 +134,12 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         //Init Sharepreferences
         spLitre = this.getActivity().getSharedPreferences("LITRE", Context.MODE_PRIVATE);
 
-        //Sharepreferences số lít nước
+        //Lấy dữ liệu thông tin của người dùng từ MainActivity
+        MainActivity activity = (MainActivity) getActivity();
+        String myDataFromActivity = activity.FULLNAME;
+        Toast.makeText(getContext(),myDataFromActivity,LENGTH_LONG).show();
 
+        //Sharepreferences số lít nước
         //Test
         strLitre = spLitre.getString("litre", "");
         SharedPreferences.Editor editor = spLitre.edit();
@@ -193,13 +197,6 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         //Ẩn thông tin
         //  HideInfor();
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new DocJson_Inbox().execute("http://khangserver-khangit.rhcloud.com/getInforOfUser.php");
-            }
-        });
-        t.start();
 
         return rootview;
     }

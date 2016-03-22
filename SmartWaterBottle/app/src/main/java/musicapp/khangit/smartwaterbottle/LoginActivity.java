@@ -1,7 +1,9 @@
 package musicapp.khangit.smartwaterbottle;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,12 +42,68 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
 
+    //SharedPreferences
+    SharedPreferences spLogin;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Init
+        spLogin = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);//thông tin lít nước
+
+        //Kiểm tra xem người dùng có logout hay ko
+        Bundle bdLogin = getIntent().getExtras();
+        if (bdLogin != null) {//Nếu người dùng logout
+            PutDataSharepreferences("login", "");
+        }
+        //Kiểm tra nếu xem người dùng đã đăng nhập hay chưa
+        String checkLogin = spLogin.getString("login", "");
+        init();
+        if (checkLogin.equals("")) {//đăng nhập lần đầu
+            //Khỏi tạo
+            // Login button Click Event
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View view) {
+                    String username = inputUsername.getText().toString().trim();
+                    String password = inputPassword.getText().toString().trim();
+
+                    // Check for empty data in the form
+                    if (!username.isEmpty() && !password.isEmpty()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new SendData().execute("http://khangserver-khangit.rhcloud.com/checkLogin.php");
+                            }
+                        });
+                    } else {
+                        // Prompt user to enter credentials
+                        Toast.makeText(getApplicationContext(), "Please enter your full account information !!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            });
+        } else if (checkLogin.equals("ok")) {
+            //Ẩn thông tin đăng nhập
+            HideLogin();
+            //To HomeScreen
+            String username = spLogin.getString("username", "");
+            String password = spLogin.getString("password", "");
+            String fullname = spLogin.getString("fullname", "");
+            Intent iHomeScreen = new Intent(LoginActivity.this, MainActivity.class);
+            iHomeScreen.putExtra("username", username);
+            iHomeScreen.putExtra("password", password);
+            iHomeScreen.putExtra("fullname", fullname);
+            startActivity(iHomeScreen);
+            finish();
+        }
+    }
+
+    //Hàm khởi tạo
+    public void init() {
         inputUsername = (EditText) findViewById(R.id.username);
         inputPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -53,34 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
-        // Login button Click Event
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                String username = inputUsername.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
-
-                // Check for empty data in the form
-                if (!username.isEmpty() && !password.isEmpty()) {
-                    // login user
-                   // checkLogin(email, password);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new SendData().execute("http://khangserver-khangit.rhcloud.com/checkLogin.php");
-                        }
-                    });
-                } else {
-                    // Prompt user to enter cre
-                    // dentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter your full account information !!", Toast.LENGTH_LONG).show();
-                }
-            }
-
-        });
-
         // Link to Register Screen
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -90,7 +121,14 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    //Hàm thông tin đăng nhập
+    public void HideLogin() {
+        inputUsername.setVisibility(View.INVISIBLE);
+        inputPassword.setVisibility(View.INVISIBLE);
+        btnLogin.setVisibility(View.INVISIBLE);
+        btnLinkToRegister.setVisibility(View.INVISIBLE);
     }
 
     private void checkLogin(String email, String password) {
@@ -127,12 +165,39 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-           if(s.equals("ok")){
-            Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
-               Intent iHomeScreen=new Intent(LoginActivity.this,MainActivity.class);
-               startActivity(iHomeScreen);
-               finish();
-           }
+            if (!s.equals("Failed")) {
+                ArrayList<String> arrUsername = new ArrayList<String>();
+                ArrayList<String> arrPassword = new ArrayList<String>();
+                ArrayList<String> arrFulname = new ArrayList<String>();
+                try {
+                    JSONArray mang = new JSONArray(s);
+                    for (int i = 0; i < mang.length(); i++) {
+                        JSONObject test = mang.getJSONObject(i);
+                        arrUsername.add(test.getString("username"));
+                        arrPassword.add(test.getString("password"));
+                        arrFulname.add(test.getString("fullname"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //Put data cho login
+                PutDataSharepreferences("login", "ok");
+
+                //PUt data cho Username
+                PutDataSharepreferences("username", arrUsername.get(0));
+                PutDataSharepreferences("password", arrPassword.get(0));
+                PutDataSharepreferences("fullname", arrFulname.get(0));
+
+                //To HomeScreen
+                Intent iHomeScreen = new Intent(LoginActivity.this, MainActivity.class);
+                iHomeScreen.putExtra("username", arrUsername.get(0));
+                iHomeScreen.putExtra("password", arrPassword.get(0));
+                iHomeScreen.putExtra("fullname", arrFulname.get(0));
+                startActivity(iHomeScreen);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -145,8 +210,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Các tham số truyền
         List nameValuePair = new ArrayList(2);
-        nameValuePair.add(new BasicNameValuePair("username",inputUsername.getText().toString()));
-        nameValuePair.add(new BasicNameValuePair("password",inputPassword.getText().toString()));
+        nameValuePair.add(new BasicNameValuePair("username", inputUsername.getText().toString()));
+        nameValuePair.add(new BasicNameValuePair("password", inputPassword.getText().toString()));
 
         //Encoding POST data
         try {
@@ -168,4 +233,12 @@ public class LoginActivity extends AppCompatActivity {
 
         return kq;
     }
+
+    //Hàm put data Sharepreferences spLogin
+    public void PutDataSharepreferences(String name, String data) {
+        SharedPreferences.Editor editor = spLogin.edit();
+        editor.putString(name, data);
+        editor.commit();
+    }
+
 }

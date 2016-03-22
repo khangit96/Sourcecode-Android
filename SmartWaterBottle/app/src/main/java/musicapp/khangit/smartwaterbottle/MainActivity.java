@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    public  String FULLNAME;
+    public  String PASSWORD;
+    public  String USERNAME;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +59,24 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        String name="khang";
-      setTitle("Hi  "+name +"!");
-    }
 
+
+        //Nếu người dùng đăng nhập thành công
+        Bundle bdMainActivity=getIntent().getExtras();
+        if(bdMainActivity!=null){
+
+            //Set title app equal fullname of username
+            String fullname=bdMainActivity.getString("fullname");
+            setTitle("Hi  " + fullname + "!");
+
+            //Send data of user to FollowerActivity
+            FULLNAME=fullname;
+
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,7 +95,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
             finish();
-            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            //Back to LoginHome
+            Intent iLogin=new Intent(getApplicationContext(),LoginActivity.class);
+            iLogin.putExtra("logout","logout");
+            startActivity(iLogin);
             return true;
         }
 
@@ -100,11 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Bundle bdFollowerActivity = new Bundle();
+            bdFollowerActivity.putString("fullname", "Nguyen Khang");
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new FollowerActivity();
+                    //FollowerActivity followerActivity=new FollowerActivity();
+                    //followerActivity.setArguments(bdFollowerActivity);
+                    return  new FollowerActivity();
                 case 1:
                     return new Statistic();
             }

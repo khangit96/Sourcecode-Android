@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,14 +24,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
 import android.os.Handler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.widget.Toast.LENGTH_LONG;
@@ -72,10 +81,12 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     //Lưu dữ liệu bằng SharePreferences
     SharedPreferences spLitre;//thông tin lít nước
     String strLitre;
-    int intLitre;
+    //Số lít  nước của người dùng cẩn phải uống
+    public static int intLitre;
 
     //nước còn lại phải uống của người dùng
     String strRemainingLitreOfUser;
+    public static int intRemainingWaterOfUser;
 
     //Tổng lượng nước người dùng đã uống
     String strDrankWaterSumOfUser;
@@ -105,6 +116,10 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     public static int addWater;
 
 
+    //ArrayList
+    ArrayList<String> arrUsername;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -120,16 +135,19 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         spLitre = this.getActivity().getSharedPreferences("LITRE", Context.MODE_PRIVATE);
 
         //Sharepreferences số lít nước
+
+        //Test
         strLitre = spLitre.getString("litre", "");
-        if (strLitre.equals(null)) {
-            SharedPreferences.Editor editor = spLitre.edit();
-            editor.putString("litre", "3");
-            editor.commit();
-        }
+        SharedPreferences.Editor editor = spLitre.edit();
+        editor.putString("litre", "3");
+        editor.commit();
+
         if (strLitre.equals("")) {
             btLitre.setText("NO DATA");
         } else {
-            btLitre.setText("NO DATA");
+            intLitre= (Integer.parseInt(strLitre.toString()));
+            btLitre.setText("" + intLitre +".0 LIT");
+            intLitre = (Integer.parseInt(strLitre.toString()))*1000;
 
         }
 
@@ -174,6 +192,14 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         */
         //Ẩn thông tin
         //  HideInfor();
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new DocJson_Inbox().execute("http://khangserver-khangit.rhcloud.com/getInforOfUser.php");
+            }
+        });
+        t.start();
 
         return rootview;
     }
@@ -382,9 +408,6 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                     }
 
 
-                                    //Lưu số nước còn lại của người dùng vào SharePreferences
-                                    PutDataSharepreferences("remainingLitre", "" + remainingWaterInBottle);
-
                                     //nếu như hết nước trong bình thì thông báo
                                     if (remainingWaterInBottle == 0 || remainingWaterInBottle <= 20) {
                                         try {
@@ -396,18 +419,28 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                         }
 
                                         //Lần đầu vào app
+                                        //Lần đầu vào app
                                         if (countWater == 0) {
                                             fakeWater = remainingWaterInBottle;
                                             countWater = 1;
 
                                         } else {
+
                                             if (fakeWater > remainingWaterInBottle) {
                                                 int res = fakeWater - remainingWaterInBottle;
                                                 saveDrankWater += res;
+                                                intRemainingWaterOfUser=intLitre-saveDrankWater;
+
+                                                //PutDataSharepreferences cho lượng nước đã uống
                                                 PutDataSharepreferences("drankWaterSum", "" + saveDrankWater);
                                                 tvDrank.setText("Drank: " + saveDrankWater + "ml");
-                                                saveDrankWater -= res;
 
+
+                                                //PutDataSharepreferences cho lượng nước còn lại
+                                                PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
+                                                tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+
+                                                saveDrankWater -= res;
                                             }
                                         }
                                         //Ngược lại
@@ -421,33 +454,28 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
                                             } else {
 
-                                                //Kiểm tra nếu người dùng có đỏ nước
-                                                // thêm vào
-                                                /*if (remainingWaterInBottle > waterCheck) {
-                                                      //lượng nước đã thêm vào
-                                                        addWater=remainingWaterInBottle-waterCheck;
-                                                    fakeWater+=addWater;
-                                                }*/
-                                                if (fakeWater >remainingWaterInBottle) {
+                                                if (fakeWater > remainingWaterInBottle) {
                                                     int res = fakeWater - remainingWaterInBottle;
                                                     saveDrankWater += res;
+                                                    intRemainingWaterOfUser=intLitre-saveDrankWater;
 
+                                                    //PutDataSharepreferences cho lượng nước đã uống
                                                     PutDataSharepreferences("drankWaterSum", "" + saveDrankWater);
                                                     tvDrank.setText("Drank: " + saveDrankWater + "ml");
+
+                                                    //PutDataSharepreferences cho lượng nước còn lại
+                                                    PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
+                                                    tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+
                                                     saveDrankWater -= res;
                                                 }
                                             }
 
-                                            //
-                                            // waterCheck=remainingWaterInBottle;
                                         }
 
                                     }
-                                    tvRemaining.setText("Remaining: " + remainingWaterInBottle + "ml");
 
                                     //
-
-
 
 
                                 }
@@ -495,6 +523,68 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     }
 
     //
+    class DocJson_Inbox extends AsyncTask<String, Integer, String> {
+        // ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            //  progressDialog = new ProgressDialog(MainActivity.this);
+            //  progressDialog.setMessage("Loading");
+            // progressDialog.setCancelable(false);
+            //  progressDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return docNoiDung_Tu_URL(params[0]);
+        }
+
+        @Override
+        // thực hiện ở hàm này
+        protected void onPostExecute(String s) {
+            arrUsername = new ArrayList<>();
+            try {
+                JSONArray mang = new JSONArray(s);
+                for (int i = 0; i < mang.length(); i++) {
+                    JSONObject ob = mang.getJSONObject(i);
+                    arrUsername.add(ob.getString("username"));
+                }
+                for (int i = 0; i < arrUsername.size(); i++) {
+                    Toast.makeText(getContext(), arrUsername.get(i).toString(), LENGTH_LONG).show();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static String docNoiDung_Tu_URL(String theUrl) {
+        StringBuilder content = new StringBuilder();
+        try {
+            // create a url object
+            URL url = new URL(theUrl);
+
+            // create a urlconnection object
+            URLConnection urlConnection = url.openConnection();
+
+            // wrap the urlconnection in a bufferedreader
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+            String line;
+
+            // read from the urlconnection via the bufferedreader
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line + "\n");
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
 
 
     //OnBackpress

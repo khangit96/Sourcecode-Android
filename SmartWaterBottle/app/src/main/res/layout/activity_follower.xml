@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Drank: 300ml"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:textColor="#1E94F2"
                 android:textSize="15dp"
                 android:textStyle="normal" />

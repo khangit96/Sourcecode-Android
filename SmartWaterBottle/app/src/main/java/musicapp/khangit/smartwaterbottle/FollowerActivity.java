@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -40,6 +41,8 @@ import android.os.Handler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.support.v7.app.AlertDialog;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.widget.Toast.LENGTH_LONG;
@@ -115,7 +118,8 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     //BIến dùng để kiểm tra xem đã thêm vào bao nhiêu lít nước
     public static int addWater;
 
-
+    //Biến dùng để lưu chiều cân nặng và chiều cao của người dùng
+    public static int heightOfUser, weightOfUser;
 
     //ArrayList
     ArrayList<String> arrUsername;
@@ -127,39 +131,130 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.activity_follower, container, false);
         //Khởi tạo
         init(rootview);
-
-        //Bắt đầu kết nối Bluetooth
         Connect();
-
-        //Init Sharepreferences
-        spLitre = this.getActivity().getSharedPreferences("LITRE", Context.MODE_PRIVATE);
-
         //Lấy dữ liệu thông tin của người dùng từ MainActivity
         MainActivity activity = (MainActivity) getActivity();
-        String myDataFromActivity = activity.FULLNAME;
-        Toast.makeText(getContext(),myDataFromActivity,LENGTH_LONG).show();
+        String remaing = activity.REMAINING;
+        String drank = activity.DRANK;
+        String litre = activity.LITRE;
 
-        //Sharepreferences số lít nước
-        //Test
-        strLitre = spLitre.getString("litre", "");
-        SharedPreferences.Editor editor = spLitre.edit();
-        editor.putString("litre", "3");
-        editor.commit();
+        if (litre.equals("0")) {//trường hợp này có nghĩa là người dùng mới đăng nhập lần đầu chưa có thông tin gì cả
+            HideInfor();
+            ln.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
-        if (strLitre.equals("")) {
-            btLitre.setText("NO DATA");
+                    InputHeightAndWeight();//hiện dialog để người dùng  nhập vào chiều cao và câng nặng
+                    if (heightOfUser != 0 && weightOfUser != 0) {//nếu như người dùng đã nhập chiều cao và cân nặng và nhấn ok
+
+                    }
+
+                    return false;
+                }
+            });
+            //Onclick
+            btLitre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClickCheck();
+
+                }
+            });
+
         } else {
-            intLitre= (Integer.parseInt(strLitre.toString()));
-            btLitre.setText("" + intLitre +".0 LIT");
-            intLitre = (Integer.parseInt(strLitre.toString()))*1000;
+            if (litre.equals("null")) {//người dùng đã đăng nhập rồi và đã có thông tin
+                Process();
+                //Onclick
+                btLitre.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ClickCheck();
 
+                    }
+                });
+            } else {//Nếu người dùng đăng  nhập lại và đã có thông tin
+                PutDataSharepreferences("litre", litre);
+                PutDataSharepreferences("drankWaterSum", drank);
+                PutDataSharepreferences("remainingLitre", remaing);
+                Process();
+                //Onclick
+                btLitre.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        ClickCheck();
+
+                    }
+                });
+            }
         }
 
 
+        return rootview;
+    }
+
+   //Hàm nhập chiều cao và câng nặng
+    public void InputHeightAndWeight() {
+        //init edittext
+        final EditText inputHeight = new EditText(getActivity());
+        final EditText inputWeight = new EditText(getActivity());
+
+        //init layout
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // inputHeight
+        inputHeight.setHint("Your height");
+        inputHeight.setHintTextColor(getResources().getColor(R.color.textColorPrimary));
+        inputHeight.setTextColor(getResources().getColor(R.color.textColorPrimary));
+        layout.addView(inputHeight);
+
+        //inputWeight
+        inputWeight.setHint("Your weight");
+        inputWeight.setHintTextColor(getResources().getColor(R.color.textColorPrimary));
+        inputWeight.setTextColor(getResources().getColor(R.color.textColorPrimary));
+        layout.addView(inputWeight);
+
+        //Alert
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Information");
+        builder.setView(layout);
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                heightOfUser = 0;
+                weightOfUser = 0;
+            }
+        });//second parameter used for onclicklistener
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                heightOfUser = Integer.parseInt(inputHeight.getText().toString());
+                weightOfUser = Integer.parseInt(inputWeight.getText().toString());
+                String Litre =""+heightOfUser;
+                ShowInfor(Litre);
+                PutDataSharepreferences("litre", Litre);
+                PutDataSharepreferences("remainingLitre", "0");
+                PutDataSharepreferences("drankWaterSum", "0");
+                Process();
+            }
+        });
+        builder.show();
+    }
+
+    public void Process() {
+
+
+        //Sharepreferences số lít nước
+        strLitre = spLitre.getString("litre", "");
+        intLitre = (Integer.parseInt(strLitre.toString()));
+        btLitre.setText("" + intLitre + ".0 LIT");
+        intLitre = (Integer.parseInt(strLitre.toString())) * 1000;
+
         //Sharepreferences tổng số nước người dùng đã uống
         strDrankWaterSumOfUser = spLitre.getString("drankWaterSum", "");
-        if (strDrankWaterSumOfUser.equals("")) {
-            tvDrank.setText("NO DATA");
+        if (strDrankWaterSumOfUser.equals("0")) {
+            tvDrank.setText("Drank: 0ml");
             saveDrankWater = 0;
 
         } else {
@@ -169,36 +264,11 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
         //Sharepreferences số nước còn lại của người dung
         strRemainingLitreOfUser = spLitre.getString("remainingLitre", "");
-        if (strRemainingLitreOfUser.equals("")) {
-            tvRemaining.setText("NO Data ");
+        if (strRemainingLitreOfUser.equals("0")) {
+            tvRemaining.setText("Remaining: " + intLitre + "ml");
         } else {
             tvRemaining.setText("Remaining: " + strRemainingLitreOfUser + "ml");
         }
-
-
-        //Onclick
-        btLitre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClickCheck();
-
-            }
-        });
-        /*
-        //Sự kiện touch screen
-        ln.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ShowInfor();
-                 return false;
-            }
-        });
-        */
-        //Ẩn thông tin
-        //  HideInfor();
-
-
-        return rootview;
     }
 
     //Hàm kiểm tra xem người dùng nhấn theo dõi hay stop
@@ -245,6 +315,10 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         imgDrank = (ImageView) rooView.findViewById(R.id.imgDrank);
         imgRemaining = (ImageView) rooView.findViewById(R.id.imgRemaining);
         ln = (LinearLayout) rooView.findViewById(R.id.ln);
+        //Init Sharepreferences
+        spLitre = this.getActivity().getSharedPreferences("LITRE", Context.MODE_PRIVATE);
+        //Bắt đầu kết nối Bluetooth
+
     }
 
     //Hàm ẩn hiện thông tin theo dõi nếu như dữ liệu người dùng chưa có(mới đăng nhập lần đầu)
@@ -259,11 +333,12 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
     //Hàm hiện thông tin theo dõi
 
-    public void ShowInfor() {
+    public void ShowInfor(String Litre) {
         btLitre.setVisibility(View.VISIBLE);
+        btLitre.setText(Litre + ".0 LIT");
         tvStatus.setText("Status: Good");
-        tvDrank.setText("Drank: 300ml");
-        tvRemaining.setText("Remaining: 350ml");
+        tvDrank.setText("No Data ");
+        tvRemaining.setText("No Data");
         imgDrank.setVisibility(View.VISIBLE);
         imgRemaining.setVisibility(View.VISIBLE);
     }
@@ -405,6 +480,20 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                     }
 
 
+                                 /*   if (remainingWaterInBottle > waterCheck) {
+                                        Toast.makeText(getContext(), "You added !", LENGTH_LONG).show();
+                                        waterCheck = remainingWaterInBottle;
+                                        check = true;
+                                    }
+                                    waterCheck = remainingWaterInBottle;//lưu nước còn lại trong bình vào 1 biến tạm*/
+
+                                    //Kiểm tra nếu người dùng uống đủ nước
+                                    if (saveDrankWater >= intLitre) {
+                                        if (check == false) {
+                                            Toast.makeText(getContext(), "You drank full water in day", LENGTH_LONG).show();
+                                        }
+
+                                    }
                                     //nếu như hết nước trong bình thì thông báo
                                     if (remainingWaterInBottle == 0 || remainingWaterInBottle <= 20) {
                                         try {
@@ -414,31 +503,39 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
                                             Toast.makeText(getContext(), "Out Of Water", LENGTH_LONG).show();
                                         }
-
-                                        //Lần đầu vào app
                                         //Lần đầu vào app
                                         if (countWater == 0) {
                                             fakeWater = remainingWaterInBottle;
                                             countWater = 1;
 
                                         } else {
-
                                             if (fakeWater > remainingWaterInBottle) {
+
+                                                check = true;
                                                 int res = fakeWater - remainingWaterInBottle;
                                                 saveDrankWater += res;
-                                                intRemainingWaterOfUser=intLitre-saveDrankWater;
 
                                                 //PutDataSharepreferences cho lượng nước đã uống
                                                 PutDataSharepreferences("drankWaterSum", "" + saveDrankWater);
                                                 tvDrank.setText("Drank: " + saveDrankWater + "ml");
 
+                                                //Kiểm tra nếu người dùng đã uống đủ nước hay chưa
+                                                if (saveDrankWater >= intLitre) {
+                                                    Toast.makeText(getContext(), "You drank full water in day", LENGTH_LONG).show();
+                                                    PutDataSharepreferences("remainingLitre", "0");
+                                                    tvRemaining.setText("Remaining: 0ml");
+                                                } else if (saveDrankWater < intLitre) {
 
-                                                //PutDataSharepreferences cho lượng nước còn lại
-                                                PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
-                                                tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+                                                    //PutDataSharepreferences cho lượng nước còn lại
+                                                    intRemainingWaterOfUser = intLitre - saveDrankWater;
+                                                    PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
+                                                    tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+                                                }
 
                                                 saveDrankWater -= res;
                                             }
+
+
                                         }
                                         //Ngược lại
                                     } else {
@@ -450,19 +547,28 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                                 countWater = 1;
 
                                             } else {
+                                                check = true;
 
                                                 if (fakeWater > remainingWaterInBottle) {
                                                     int res = fakeWater - remainingWaterInBottle;
                                                     saveDrankWater += res;
-                                                    intRemainingWaterOfUser=intLitre-saveDrankWater;
 
                                                     //PutDataSharepreferences cho lượng nước đã uống
                                                     PutDataSharepreferences("drankWaterSum", "" + saveDrankWater);
                                                     tvDrank.setText("Drank: " + saveDrankWater + "ml");
 
-                                                    //PutDataSharepreferences cho lượng nước còn lại
-                                                    PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
-                                                    tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+                                                    //Kiểm tra nếu người dùng đã uống đủ nước hay chưa
+                                                    if (saveDrankWater >= intLitre) {
+                                                        Toast.makeText(getContext(), "You drank full water in day", LENGTH_LONG).show();
+                                                        PutDataSharepreferences("remainingLitre", "0");
+                                                        tvRemaining.setText("Remaining: 0ml");
+                                                    } else if (saveDrankWater < intLitre) {
+
+                                                        //PutDataSharepreferences cho lượng nước còn lại
+                                                        intRemainingWaterOfUser = intLitre - saveDrankWater;
+                                                        PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
+                                                        tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
+                                                    }
 
                                                     saveDrankWater -= res;
                                                 }
@@ -586,7 +692,7 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
     //OnBackpress
     public static void onBackpressed() {
-        Log.d("test", "Press");
+
     }
 
 }

@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public  String FULLNAME;
     public  String PASSWORD;
     public  String USERNAME;
+    public  String REMAINING;
+    public  String DRANK;
+    public  String LITRE;
 
 
     @Override
@@ -69,11 +72,27 @@ public class MainActivity extends AppCompatActivity {
 
             //Set title app equal fullname of username
             String fullname=bdMainActivity.getString("fullname");
+            String password=bdMainActivity.getString("password");
+            String username=bdMainActivity.getString("username");
+            String remaining=bdMainActivity.getString("remaining");
+            String drank=bdMainActivity.getString("drank");
+            String litre=bdMainActivity.getString("litre");
             setTitle("Hi  " + fullname + "!");
 
             //Send data of user to FollowerActivity
             FULLNAME=fullname;
-
+            PASSWORD=password;
+            USERNAME=username;
+            if(remaining!=null&&drank!=null&&litre!=null){
+                REMAINING=remaining;
+                DRANK=drank;
+                LITRE=litre;
+            }
+            else{
+                REMAINING="null";
+                DRANK="null";
+                LITRE="null";
+            }
         }
 
     }
@@ -118,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Bundle bdFollowerActivity = new Bundle();
-            bdFollowerActivity.putString("fullname", "Nguyen Khang");
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
@@ -188,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         FollowerActivity.onBackpressed();
+        super.onBackPressed();
+
     }
 }

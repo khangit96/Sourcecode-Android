@@ -29,13 +29,12 @@
             android:textColorHint="@color/input_register_hint" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@color/input_register_bg"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/hint_username"
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_register"

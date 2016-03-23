@@ -12,6 +12,7 @@
 
    <!-- Login String!-->
     <string name="hint_email">Email</string>
+    <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>

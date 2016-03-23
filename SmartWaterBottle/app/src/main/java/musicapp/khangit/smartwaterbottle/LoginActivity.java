@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLinkToRegister;
     private EditText inputUsername;
     private EditText inputPassword;
-    private ProgressDialog pDialog;
 
     //SharedPreferences
     SharedPreferences spLogin;
@@ -53,6 +52,18 @@ public class LoginActivity extends AppCompatActivity {
 
         spLogin = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);//thông tin lít nước
 
+        //Khỏi tạo
+        init();
+        //Kiểm tra nếu người dùng mới vùa đăng kí (đk gửi từ RegisterActivity)
+        Bundle bdRegister = getIntent().getExtras();
+        if (bdRegister != null) {
+            String username = bdRegister.getString("username");
+            String password = bdRegister.getString("password");
+
+            inputUsername.setText(username);
+            inputPassword.setText(password);
+        }
+
         //Kiểm tra xem người dùng có logout hay ko
         Bundle bdLogin = getIntent().getExtras();
         if (bdLogin != null) {//Nếu người dùng logout
@@ -60,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         //Kiểm tra nếu xem người dùng đã đăng nhập hay chưa
         String checkLogin = spLogin.getString("login", "");
-        init();
+
         if (checkLogin.equals("")) {//đăng nhập lần đầu
-            //Khỏi tạo
+
             // Login button Click Event
             btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -74,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (!username.isEmpty() && !password.isEmpty()) {
                         runOnUiThread(new Runnable() {
                             @Override
-                            public void run() {
+                            public void run() {//bắt đầu gủi dữ liệu lên server và kiểm tra
                                 new SendData().execute("http://khangserver-khangit.rhcloud.com/checkLogin.php");
                             }
                         });
@@ -109,9 +120,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
 
-        // Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
         // Link to Register Screen
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -157,6 +165,16 @@ public class LoginActivity extends AppCompatActivity {
 
     //Gửi dữ liệu username và password lên server để kiểm tra
     class SendData extends AsyncTask<String, Integer, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage("Logging....");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -169,6 +187,9 @@ public class LoginActivity extends AppCompatActivity {
                 ArrayList<String> arrUsername = new ArrayList<String>();
                 ArrayList<String> arrPassword = new ArrayList<String>();
                 ArrayList<String> arrFulname = new ArrayList<String>();
+                ArrayList<String> arrRemaing = new ArrayList<String>();
+                ArrayList<String> arrDrank = new ArrayList<String>();
+                ArrayList<String> arrLitre = new ArrayList<String>();
                 try {
                     JSONArray mang = new JSONArray(s);
                     for (int i = 0; i < mang.length(); i++) {
@@ -176,10 +197,16 @@ public class LoginActivity extends AppCompatActivity {
                         arrUsername.add(test.getString("username"));
                         arrPassword.add(test.getString("password"));
                         arrFulname.add(test.getString("fullname"));
+                        arrRemaing.add(test.getString("remaining"));
+                        arrDrank.add(test.getString("drank"));
+                        arrLitre.add(test.getString("litre"));
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
                 //Put data cho login
                 PutDataSharepreferences("login", "ok");
 
@@ -193,9 +220,15 @@ public class LoginActivity extends AppCompatActivity {
                 iHomeScreen.putExtra("username", arrUsername.get(0));
                 iHomeScreen.putExtra("password", arrPassword.get(0));
                 iHomeScreen.putExtra("fullname", arrFulname.get(0));
+                iHomeScreen.putExtra("remaining", arrRemaing.get(0));
+                iHomeScreen.putExtra("drank", arrDrank.get(0));
+                iHomeScreen.putExtra("litre", arrLitre.get(0));
+                Toast.makeText(getApplicationContext(), "Login Successed!", Toast.LENGTH_LONG).show();
                 startActivity(iHomeScreen);
                 finish();
+                progressDialog.cancel();
             } else {
+                progressDialog.cancel();
                 Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
             }
         }

@@ -65,17 +65,17 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
     private final String DEVICE_ADDRESS = "98:D3:31:30:77:4F";
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
     private BluetoothDevice device;
-    private BluetoothSocket socket;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+    private static BluetoothSocket socket;
+    private static OutputStream outputStream;
+    private static InputStream inputStream;
     Button startButton, sendButton, clearButton, stopButton;
     TextView textView;
     EditText editText;
-    boolean deviceConnected = false;
+    static boolean deviceConnected = false;
     Thread thread;
     byte buffer[];
     int bufferPosition;
-    boolean stopThread;
+    static boolean stopThread;
 
     //Xử lý thông tin nước
     ArrayList<String> arrayList = new ArrayList<>();
@@ -649,6 +649,27 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
             return ml;
 
         }
+    }
+
+    //Hàm stop Theard and Bluetooth
+    public static void Stop(){
+        stopThread = true;
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        deviceConnected = false;
     }
 
     //Hàm put data Sharepreferences spLitre

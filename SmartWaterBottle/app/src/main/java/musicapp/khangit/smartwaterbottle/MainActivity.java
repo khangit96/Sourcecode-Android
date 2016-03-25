@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
+            FollowerActivity.Stop();
             drank=FollowerActivity.saveDrankWater;
             litre=Integer.parseInt(FollowerActivity.strLitre.toString());
             remaining =(litre*1000)-drank;
@@ -295,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+
     public void onBackPressed() {
+        FollowerActivity.Stop();
         super.onBackPressed();
 
     }

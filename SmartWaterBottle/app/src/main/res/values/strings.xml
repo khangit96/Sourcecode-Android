@@ -22,4 +22,7 @@
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
+    <string name="parsed_data">http://android.vn\nHướng dẫn bởi thanhlong90.it</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="str_tv_title">Biểu đồ đánh giá</string>
 </resources>

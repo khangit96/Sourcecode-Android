@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -83,12 +84,12 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
     //Lưu dữ liệu bằng SharePreferences
     SharedPreferences spLitre;//thông tin lít nước
-    String strLitre;
+    public static String strLitre;
     //Số lít  nước của người dùng cẩn phải uống
     public static int intLitre;
 
     //nước còn lại phải uống của người dùng
-    String strRemainingLitreOfUser;
+    public static String strRemainingLitreOfUser;
     public static int intRemainingWaterOfUser;
 
     //Tổng lượng nước người dùng đã uống
@@ -123,7 +124,7 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
 
     //ArrayList
     ArrayList<String> arrUsername;
-
+    // public static String REMAINING;
 
     @Nullable
     @Override
@@ -145,10 +146,6 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                 public boolean onTouch(View v, MotionEvent event) {
 
                     InputHeightAndWeight();//hiện dialog để người dùng  nhập vào chiều cao và câng nặng
-                    if (heightOfUser != 0 && weightOfUser != 0) {//nếu như người dùng đã nhập chiều cao và cân nặng và nhấn ok
-
-                    }
-
                     return false;
                 }
             });
@@ -193,7 +190,7 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         return rootview;
     }
 
-   //Hàm nhập chiều cao và câng nặng
+    //Hàm nhập chiều cao và câng nặng
     public void InputHeightAndWeight() {
         //init edittext
         final EditText inputHeight = new EditText(getActivity());
@@ -204,21 +201,23 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         // inputHeight
-        inputHeight.setHint("Your height");
-        inputHeight.setHintTextColor(getResources().getColor(R.color.textColorPrimary));
-        inputHeight.setTextColor(getResources().getColor(R.color.textColorPrimary));
-        layout.addView(inputHeight);
+      /*  inputHeight.setHint("Your height");
+        inputHeight.setTop(30);
+        inputHeight.setHintTextColor(getResources().getColor(R.color.btn_login));
+        inputHeight.setTextColor(getResources().getColor(R.color.btn_login));
+        layout.addView(inputHeight);*/
 
         //inputWeight
         inputWeight.setHint("Your weight");
-        inputWeight.setHintTextColor(getResources().getColor(R.color.textColorPrimary));
-        inputWeight.setTextColor(getResources().getColor(R.color.textColorPrimary));
+        inputWeight.setHintTextColor(getResources().getColor(R.color.btn_login));
+        inputWeight.setTextColor(getResources().getColor(R.color.btn_login));
         layout.addView(inputWeight);
 
         //Alert
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AppCompatAlertDialogStyle);
-        builder.setTitle("Information");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(" Add Information");
         builder.setView(layout);
+        builder.setIcon(R.drawable.bottle);
         builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -229,9 +228,10 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                heightOfUser = Integer.parseInt(inputHeight.getText().toString());
+                //   heightOfUser = Integer.parseInt(inputHeight.getText().toString());
                 weightOfUser = Integer.parseInt(inputWeight.getText().toString());
-                String Litre =""+heightOfUser;
+            //    int LITRE= (int) (weightOfUser/0.03);
+                String Litre = "" +weightOfUser;
                 ShowInfor(Litre);
                 PutDataSharepreferences("litre", Litre);
                 PutDataSharepreferences("remainingLitre", "0");
@@ -242,18 +242,20 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         builder.show();
     }
 
+
     public void Process() {
 
 
         //Sharepreferences số lít nước
         strLitre = spLitre.getString("litre", "");
-        intLitre = (Integer.parseInt(strLitre.toString()));
-        btLitre.setText("" + intLitre + ".0 LIT");
-        intLitre = (Integer.parseInt(strLitre.toString())) * 1000;
+        intLitre = Integer.parseInt(strLitre.toString());
+        btLitre.setText("" + intLitre +".0 LIT");
+        intLitre = (Integer.parseInt(strLitre.toString()) *1000);
 
         //Sharepreferences tổng số nước người dùng đã uống
         strDrankWaterSumOfUser = spLitre.getString("drankWaterSum", "");
         if (strDrankWaterSumOfUser.equals("0")) {
+
             tvDrank.setText("Drank: 0ml");
             saveDrankWater = 0;
 
@@ -265,16 +267,46 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         //Sharepreferences số nước còn lại của người dung
         strRemainingLitreOfUser = spLitre.getString("remainingLitre", "");
         if (strRemainingLitreOfUser.equals("0")) {
-            tvRemaining.setText("Remaining: " + intLitre + "ml");
+
+            //Kiểm tra nếu người dùng uống đủ nước
+            if (saveDrankWater >= intLitre) {
+                tvRemaining.setText("Remaining: 0ml");
+            } else {
+                tvRemaining.setText("Remaining: " + intLitre + "ml");
+            }
+
         } else {
             tvRemaining.setText("Remaining: " + strRemainingLitreOfUser + "ml");
         }
+
     }
+
+    private void OpenCategroyDialogBox() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.addnewcategory, null);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Add New Category");
+        alert.setView(promptView);
+
+        final EditText input = (EditText) promptView
+                .findViewById(R.id.etCategory);
+
+        input.requestFocus();
+        input.setHint("Enter Category");
+        input.setTextColor(Color.BLACK);
+        // create an alert dialog
+        AlertDialog alert1 = alert.create();
+
+        alert1.show();
+
+    }
+
 
     //Hàm kiểm tra xem người dùng nhấn theo dõi hay stop
     public void ClickCheck() {
         if (clickCheck == true) {//nếu người dunfng click lân đầu để theo dõi
-            Toast.makeText(getContext(), "Following !", LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Monitoring !", LENGTH_LONG).show();
             btLitre.setText("Following...");
             btLitre.setTextSize(15);
             clickCheck = false;
@@ -491,11 +523,13 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                     if (saveDrankWater >= intLitre) {
                                         if (check == false) {
                                             Toast.makeText(getContext(), "You drank full water in day", LENGTH_LONG).show();
+                                            tvRemaining.setText("Remaining: 0ml");
                                         }
 
                                     }
                                     //nếu như hết nước trong bình thì thông báo
                                     if (remainingWaterInBottle == 0 || remainingWaterInBottle <= 20) {
+
                                         try {
                                             Toast.makeText(getContext(), "Out Of Water", LENGTH_LONG).show();
 
@@ -565,7 +599,7 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
                                                     } else if (saveDrankWater < intLitre) {
 
                                                         //PutDataSharepreferences cho lượng nước còn lại
-                                                        intRemainingWaterOfUser = intLitre - saveDrankWater;
+                                                        intRemainingWaterOfUser =intLitre - saveDrankWater;
                                                         PutDataSharepreferences("remainingLitre", "" + intRemainingWaterOfUser);
                                                         tvRemaining.setText("Remaining: " + intRemainingWaterOfUser + "ml");
                                                     }
@@ -624,71 +658,6 @@ public class FollowerActivity extends android.support.v4.app.Fragment {
         editor.putString(name, data);
         editor.commit();
     }
-
-    //
-    class DocJson_Inbox extends AsyncTask<String, Integer, String> {
-        // ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            //  progressDialog = new ProgressDialog(MainActivity.this);
-            //  progressDialog.setMessage("Loading");
-            // progressDialog.setCancelable(false);
-            //  progressDialog.show();
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            return docNoiDung_Tu_URL(params[0]);
-        }
-
-        @Override
-        // thực hiện ở hàm này
-        protected void onPostExecute(String s) {
-            arrUsername = new ArrayList<>();
-            try {
-                JSONArray mang = new JSONArray(s);
-                for (int i = 0; i < mang.length(); i++) {
-                    JSONObject ob = mang.getJSONObject(i);
-                    arrUsername.add(ob.getString("username"));
-                }
-                for (int i = 0; i < arrUsername.size(); i++) {
-                    Toast.makeText(getContext(), arrUsername.get(i).toString(), LENGTH_LONG).show();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static String docNoiDung_Tu_URL(String theUrl) {
-        StringBuilder content = new StringBuilder();
-        try {
-            // create a url object
-            URL url = new URL(theUrl);
-
-            // create a urlconnection object
-            URLConnection urlConnection = url.openConnection();
-
-            // wrap the urlconnection in a bufferedreader
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-            String line;
-
-            // read from the urlconnection via the bufferedreader
-            while ((line = bufferedReader.readLine()) != null) {
-                content.append(line + "\n");
-            }
-            bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return content.toString();
-    }
-
 
     //OnBackpress
     public static void onBackpressed() {

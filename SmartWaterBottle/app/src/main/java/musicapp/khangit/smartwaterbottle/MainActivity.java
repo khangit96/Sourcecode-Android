@@ -1,7 +1,9 @@
 package musicapp.khangit.smartwaterbottle;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,30 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.widget.Toast.LENGTH_LONG;
+
 public class MainActivity extends AppCompatActivity {
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,13 +65,17 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    public  String FULLNAME;
-    public  String PASSWORD;
-    public  String USERNAME;
-    public  String REMAINING;
-    public  String DRANK;
-    public  String LITRE;
+    public String FULLNAME;
+    public String PASSWORD;
+    public String USERNAME;
+    public String REMAINING;
+    public String DRANK;
+    public String LITRE;
 
+    //Biến dùng để gửi dữ liệu lên server
+    public static int litre;
+    public static int drank;
+    public static int remaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,34 +97,83 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Nếu người dùng đăng nhập thành công
-        Bundle bdMainActivity=getIntent().getExtras();
-        if(bdMainActivity!=null){
+        Bundle bdMainActivity = getIntent().getExtras();
+        if (bdMainActivity != null) {
 
             //Set title app equal fullname of username
-            String fullname=bdMainActivity.getString("fullname");
-            String password=bdMainActivity.getString("password");
-            String username=bdMainActivity.getString("username");
-            String remaining=bdMainActivity.getString("remaining");
-            String drank=bdMainActivity.getString("drank");
-            String litre=bdMainActivity.getString("litre");
+            String fullname = bdMainActivity.getString("fullname");
+            String password = bdMainActivity.getString("password");
+            String username = bdMainActivity.getString("username");
+            String remaining = bdMainActivity.getString("remaining");
+            String drank = bdMainActivity.getString("drank");
+            String litre = bdMainActivity.getString("litre");
             setTitle("Hi  " + fullname + "!");
 
             //Send data of user to FollowerActivity
-            FULLNAME=fullname;
-            PASSWORD=password;
-            USERNAME=username;
-            if(remaining!=null&&drank!=null&&litre!=null){
-                REMAINING=remaining;
-                DRANK=drank;
-                LITRE=litre;
-            }
-            else{
-                REMAINING="null";
-                DRANK="null";
-                LITRE="null";
+            FULLNAME = fullname;
+            PASSWORD = password;
+            USERNAME = username;
+            if (remaining != null && drank != null && litre != null) {
+                REMAINING = remaining;
+                DRANK = drank;
+                LITRE = litre;
+            } else {
+                REMAINING = "null";
+                DRANK = "null";
+                LITRE = "null";
             }
         }
 
+    }
+
+
+        //Gửi thông tin  lượng nước còn lại,lượng nước đã uống và số lít nước  lên server để lưu
+        class SendData extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            return makePostRequest(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getApplicationContext(),"Saved!",LENGTH_LONG).show();
+        }
+    }
+
+    //Hàm gửi dữ liệu
+    private String makePostRequest(String url) {
+        HttpClient httpClient = new DefaultHttpClient();
+
+        // URL của trang web nhận request
+        HttpPost httpPost = new HttpPost(url);
+
+        // Các tham số truyền
+        List nameValuePair = new ArrayList(4);
+        nameValuePair.add(new BasicNameValuePair("username", USERNAME.toString()));
+        nameValuePair.add(new BasicNameValuePair("litre", "" + litre));
+        nameValuePair.add(new BasicNameValuePair("remaining", "" + remaining));
+        nameValuePair.add(new BasicNameValuePair("drank", "" +drank));
+
+        //Encoding POST data
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String kq = "";
+        try {
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            kq = EntityUtils.toString(entity);
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return kq;
     }
 
     @Override
@@ -113,10 +192,21 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
+            drank=FollowerActivity.saveDrankWater;
+            litre=Integer.parseInt(FollowerActivity.strLitre.toString());
+            remaining =(litre*1000)-drank;
+            runOnUiThread(new Runnable() {
+                @Override
+
+                public void run() {
+                    new SendData().execute("http://khangserver-khangit.rhcloud.com/saveInforOfUser.php");
+                }
+            });
             finish();
             //Back to LoginHome
-            Intent iLogin=new Intent(getApplicationContext(),LoginActivity.class);
-            iLogin.putExtra("logout","logout");
+
+            Intent iLogin = new Intent(getApplicationContext(), LoginActivity.class);
+            iLogin.putExtra("logout", "logout");
             startActivity(iLogin);
             return true;
         }
@@ -143,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     //FollowerActivity followerActivity=new FollowerActivity();
                     //followerActivity.setArguments(bdFollowerActivity);
-                    return  new FollowerActivity();
+                    return new FollowerActivity();
                 case 1:
                     return new Statistic();
             }
@@ -160,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Follower";
+                    return "Monitor";
                 case 1:
                     return "STATISTIC";
             }
@@ -197,15 +287,15 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-           // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
 
+
     @Override
     public void onBackPressed() {
-        FollowerActivity.onBackpressed();
         super.onBackPressed();
 
     }

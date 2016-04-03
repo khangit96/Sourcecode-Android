@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_5">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border_color_primary"
+            android:padding="5dp"
+            android:text="Fri 31-08-2015 09:55"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_time_textsize"
+            android:textIsSelectable="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_5">
+
+            <ImageView
+                android:id="@+id/img_sms"
+                android:layout_width="@dimen/ic_row_size"
+                android:layout_height="@dimen/ic_row_size" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Binh"
+                    android:textColor="@color/color_primary_dark"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/tv_common_textsize" />
+
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="This is a message"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:textSize="@dimen/tv_common_textsize" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_delete"
+                android:layout_width="@dimen/ic_remove_size"
+                android:layout_height="@dimen/ic_remove_size"
+                android:layout_gravity="center_vertical|right"
+
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
+
+
+
+
+
+
+

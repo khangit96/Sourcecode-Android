@@ -1,0 +1,30 @@
+1. add on/off feature for sms
+2. check material design lib for pre Lipolop
+3. handle rotate screen
+4. Pick to get contact multiple select
+5. notification when sent a sms
+6. add feature repeat daily, weekly
+7. Compare date and time before saving
+8. Drawer action
+9 Handle reboot for alarm
+10 handle row sms when receiver is so long or message is so long
+11 hander when receiver is duplicate
+12 handler backstack
+13 transaction animation
+14 test only clearTOP
+15 sms order by time
+16 row sms with Day of Week
+17 file:///data/local/tmp/com.hnib.smslater
+18. set style
+19 Display tomorrow or today , yesterday on list sms and save sms
+20 GOogle Analatic
+21 Test Unit
+22 Icon for Notification
+23 super on backpress
+24 set date time picker color is teal
+25 edit text touch outside soft keyboard disable
+26 Bug/Error tracking services API
+27 pending cardview color and sent cardview color is
+different
+28 change icon failed and content
+29 "no messsage found" if list is empty

@@ -1,0 +1,18 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <rotate
+        android:duration="50"
+        android:fromDegrees="-3"
+        android:pivotX="30%"
+        android:pivotY="30%"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toDegrees="5" />
+    <translate
+        android:fromXDelta="-5"
+        android:toXDelta="5"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:duration="50" />
+</set>

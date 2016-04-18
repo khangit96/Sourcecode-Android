@@ -1,5 +1,7 @@
 package tdmug3.wateringsystem;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +26,16 @@ import android.widget.ToggleButton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import android.text.format.Time;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
 import android.os.Handler;
+
+import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
     ToggleButton toogleLed, togglePush, toggleWatering;
@@ -46,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
     int bufferPosition;
     boolean stopThread;
     ProgressDialog progressDialog;
-
+    int count = 0;
+    TextView tvDoAm, tvTimeUpdate, tvTemperature;
+    String value = "";
+    String checkHumidity = "";
+    String checkTemperature = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +68,49 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Hệ thống tưới");
         toolbar.setNavigationIcon(R.drawable.dout);
-        ConnectBluetooth();
-        CountDownTimer countDownTimer=new CountDownTimer(4000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                progressDialog.setTitle("Đang kết nối với hệ thống tưới");
-                progressDialog.setMessage("Vui lòng chờ...");
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-            }
-
-            @Override
-            public void onFinish() {
-                progressDialog.dismiss();
-                ConnectBluetooth();
-                SendData("O");//gửi tín hiệu kết nối Bluetooth với arduino
-                Toast.makeText(MainActivity.this,"Kết nối thành công!",Toast.LENGTH_LONG).show();
-            }
-        }.start();
         init();
+        ConnectBluetooth();
+        Bundle bd = getIntent().getExtras();
+        if (bd != null) {
+            ConnectBluetooth();
+            SendData("t");
+            beginListenForData();
+            CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    progressDialog.setMessage("Đang cài đặt thời gian tưới");
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    progressDialog.dismiss();
+                    SendData("13:02:05");
+                    Toast.makeText(MainActivity.this, "Cài đặt thời gian tưới thành công", Toast.LENGTH_LONG).show();
+                }
+            }.start();
+        } else {
+            CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //progressDialog.setTitle("Đang kết nối với hệ thống tưới");
+                    progressDialog.setMessage("Đang kết nối với hệ thống tưới.");
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    progressDialog.dismiss();
+                    ConnectBluetooth();
+                    SendData("O");//gửi tín hiệu kết nối Bluetooth với arduino
+                    beginListenForData();
+                    Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
+                }
+            }.start();
+        }
+
     }
 
     //Hàm khởi tạo
@@ -82,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
         toogleLed = (ToggleButton) findViewById(R.id.toggleLed);
         togglePush = (ToggleButton) findViewById(R.id.togglePush);
         toggleWatering = (ToggleButton) findViewById(R.id.toggleWatering);
-        progressDialog=new ProgressDialog(this);
+        tvDoAm = (TextView) findViewById(R.id.tvDoAm);
+        tvTimeUpdate = (TextView) findViewById(R.id.tvTimeUpdate);
+        tvTemperature = (TextView) findViewById(R.id.tvTemperature);
+        progressDialog = new ProgressDialog(this);
     }
 
     //Hàm bật đèn
@@ -92,12 +131,44 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Tắt đèn", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(MainActivity.this, "Bật đèn", Toast.LENGTH_LONG).show();
+
         }
     }
 
     //Hàm thay đổi độ ẩm đát
     public void ChangeHumidity(View v) {
-        Toast.makeText(MainActivity.this, "Thay đổi độ ẩm", Toast.LENGTH_LONG).show();
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.addnewcategory, null);
+
+        final EditText input = (EditText) promptView.findViewById(R.id.etCategory);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Nhập giá trị độ ẩm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SendData("h");
+                CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        //  progressDialog.setTitle("Đang thay đổi độ ẩm");
+                        progressDialog.setMessage("Đang thay đổi độ ẩm.");
+                        progressDialog.show();
+                        progressDialog.setCancelable(false);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        progressDialog.dismiss();
+                        SendData(input.getText().toString());
+                        Toast.makeText(MainActivity.this, "Thay đổi độ ẩm thành công!", Toast.LENGTH_LONG).show();
+                    }
+                }.start();
+
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.setView(promptView);
+        builder.show();
     }
 
     //Hàm kéo màn
@@ -193,17 +264,18 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-  public void SendData(String data){
-      data.concat("\n");
-      if (data != "") {
-          try {
-              outputStream.write(data.getBytes());
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
 
-      }
-  }
+    public void SendData(String data) {
+        data.concat("\n");
+        if (data != "") {
+            try {
+                outputStream.write(data.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 
 
     //Hàm lắng nghe dữ liệu từ arduino
@@ -225,6 +297,48 @@ public class MainActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 public void run() {
 
+                                    if (string.equals("h")) {
+                                        checkHumidity = "h";
+                                        checkTemperature = "";
+                                    } else if (string.equals("t")) {
+                                        checkTemperature = "t";
+                                        checkHumidity = "";
+                                    }
+                                    if (checkTemperature == "t") {//nếu là dữ liệu nhiệt độ tử arduino gửi qua
+                                        if (count >= 1) {
+                                            value += string;
+                                        }
+                                        count++;
+                                        if (count == 3) {
+                                            Time today = new Time(Time.getCurrentTimezone());
+                                            today.setToNow();
+                                            String nowTime = today.format("%k:%M:%S");
+                                            tvTemperature.setText("Nhiệt độ:" + value + "°C");
+                                            tvTimeUpdate.setText("Thời gian cập nhật: " + nowTime);
+                                            count = 0;
+                                            value = "";
+                                            checkTemperature = "";
+                                        }
+                                    }
+                                    if (checkHumidity == "h") {//nếu là dữ liệu độ ẩm từ arduino gửi qua
+
+                                        if (count >= 1) {
+                                            value += string;
+                                        }
+                                        count++;
+                                        if (count == 3) {
+                                            Time today = new Time(Time.getCurrentTimezone());
+                                            today.setToNow();
+                                            String nowTime = today.format("%k:%M:%S");
+                                            tvDoAm.setText("Độ ẩm:" + value + "%");
+                                            tvTimeUpdate.setText("Thời gian cập nhật: " + nowTime);
+                                            count = 0;
+                                            value = "";
+                                            checkHumidity = "";
+                                        }
+                                    }
+
+
                                 }
                             });
 
@@ -238,34 +352,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         thread.start();
-
     }
 
 
-   //Hàm dừng kết nói Bluetooth
-  public void Stop()throws IOException {
-      SendData("F");
-      stopThread = true;
-      outputStream.close();
-      inputStream.close();
-      socket.close();
-      deviceConnected = false;
-      CountDownTimer countDownTimer=new CountDownTimer(4000,1000) {
-          @Override
-          public void onTick(long millisUntilFinished) {
-              progressDialog.setTitle("Đang ngắt kết nối với hệ thống tưới.");
-              progressDialog.setMessage("Vui lòng chờ...");
-              progressDialog.show();
-              progressDialog.setCancelable(false);
-          }
+    //Hàm dừng kết nói Bluetooth
+    public void Stop() throws IOException {
+        SendData("F");
+        stopThread = true;
+        outputStream.close();
+        inputStream.close();
+        socket.close();
+        deviceConnected = false;
+        CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progressDialog.setMessage("Đang ngắt kết nối với hệ thống.");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+            }
 
-          @Override
-          public void onFinish() {
-              Toast.makeText(MainActivity.this,"Ngắt kết nối thành công!",Toast.LENGTH_LONG).show();
-              System.exit(0);
-          }
-      }.start();
-  }
+            @Override
+            public void onFinish() {
+                Toast.makeText(MainActivity.this, "Ngắt kết nối thành công!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                System.exit(0);
+            }
+        }.start();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -283,9 +396,25 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.alarm) {
-            Toast.makeText(MainActivity.this, "Alarm", Toast.LENGTH_LONG).show();
-        }
-        else if(id==R.id.exit){
+            stopThread = true;
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            deviceConnected = false;
+            startActivity(new Intent(MainActivity.this, Alarm.class));
+        } else if (id == R.id.exit) {
             try {
                 Stop();
             } catch (IOException e) {

@@ -28,6 +28,7 @@
                 android:src="@drawable/cloud" />
 
             <TextView
+                android:id="@+id/tvTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -49,6 +50,7 @@
                 android:src="@drawable/huminity" />
 
             <TextView
+                android:id="@+id/tvDoAm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -90,6 +92,7 @@
                 android:src="@drawable/time" />
 
             <TextView
+                android:id="@+id/tvTimeUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -218,7 +221,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textOn="BẬt"
+                android:textOn="BẬT"
                 android:background="@color/red"
                 android:textOff="TẮT"
                 android:textColor="@color/white"

@@ -42,8 +42,16 @@ RecyclerView rv;
         ArrayList<Person>arrPerson=new ArrayList<Person>();
         Person p=new Person("Emma Wilson", "23 years old", R.drawable.emma);
         Person p1=new Person("Lavery Maiss", "25 years old", R.drawable.lavery);
+        Person p2=new Person("Lavery Maiss", "25 years old", R.drawable.lavery);
+        Person p3=new Person("Lavery Maiss", "25 years old", R.drawable.lavery);
         arrPerson.add(p);
         arrPerson.add(p1);
+        arrPerson.add(p2);
+        arrPerson.add(p3);
+        arrPerson.add(p3);
+        arrPerson.add(p3);
+        arrPerson.add(p3);
+
         RVAdapter adapter = new RVAdapter(arrPerson);
         rv.setAdapter(adapter);
     }

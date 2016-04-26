@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0051)http://khoapham.vn/KhoaPhamTraining/nodejs/snippet/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>LẬP TRÌNH NODEJS &amp; SOCKETIO - KhoaPham.Vn</title>
+<style></style></head>
+
+<body>
+<p>- Cài đặt NodeJS: nodejs.org &amp; git-scm.com</p>
+<p>- <a href="http://khoapham.vn/KhoaPhamTraining/nodejs/snippet/Socket-IO-Realtime-Web-App-Development.pdf" target="new">Ebook NodeJS &amp; SocketIO + Express Module (Web App)</a></p>
+<p><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/GioiThieuNode.png" width="90%"></p>
+<iframe width="853" height="480" src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/O7R52IpWYW8.html" frameborder="0" allowfullscreen=""></iframe>
+
+
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">Lập trình NodeJS cơ bản</td>
+  </tr>
+</tbody></table>
+<pre>var n = 5;
+var x = 2; 
+-----------------------------------
+if(n&gt;x)
+console.log(n + " lon hon " + x);
+else
+console.log(n + " nho hon " + x);
+-----------------------------------
+for(var i=1; i&lt;=10; i++){
+	console.log("Dong so " + i);	
+}
+-----------------------------------
+var x=0;
+while(x&lt;=5){
+	console.log("Dong so " + x);
+	x++;
+}
+-----------------------------------
+var mang = [];
+mang.push("Teo Em");
+mang.push("Teo Anh");
+mang.push("Teo Chi");
+
+console.log(mang.length);
+console.log(mang[1]);
+-----------------------------------
+var buffer = new  Buffer("Khoa Pham", "utf-8");
+console.log(buffer);
+console.log(buffer.toString());
+console.log(buffer.toJSON());
+-----------------------------------
+var fs = require("fs");
+var noidung = fs.readFileSync(__dirname + "/acquy.png");
+console.log(noidung);
+console.log(noidung.toString());
+console.log(noidung.toJSON());
+</pre>
+
+
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">Cấu hình file package.json</td>
+  </tr>
+</tbody></table>
+<pre>{
+  "name": "KhoaPham",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "express": "*",
+    "socket.io": "*",
+    "socketio-file-upload": "^0.4.4"
+  }
+}
+</pre>
+
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">Cấu hình Express</td>
+  </tr>
+</tbody></table>
+
+<pre>var express = require("express");
+var app = express();
+var server = require("http").createServer(app);
+var io = require("socket.io").listen(server);
+var fs = require("fs");
+server.listen(process.env.PORT || 3000);
+
+app.get("/", function(req, res){
+	res.sendFile(__dirname + "/index.html");	
+});
+</pre>
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" alt="" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">Cấu hình đường dẫn thư mục trong Express</td>
+  </tr>
+</tbody></table>
+<pre>app.use("/asset", express.static(__dirname + "/layout"));
+</pre>
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" alt="" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">NodeJS kết nối MySQL</td>
+  </tr>
+</tbody></table>
+<br>
+<img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs-mysqlpng.png" alt="" width="624" height="518">
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" alt="" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">Deply với Heroku</td>
+  </tr>
+</tbody></table>
+<br>
+<img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/heroku.png" alt="" width="624" height="472">
+
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" alt="" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">SOCKET IO: Phía SERVER NODEJS</td>
+  </tr>
+</tbody></table>
+<pre>io.sockets.on('connection', function (socket) {
+	
+  console.log("Co nguoi connect ne");
+  
+  io.sockets.emit('serverguitinnhan', { noidung: "okbaby" });
+  
+  socket.on('servernhantinnhan', function (data) {
+	// emit toi tat ca moi nguoi
+	io.sockets.emit('serverguitinnhan', { noidung: data });
+	
+	// emit tới máy nguoi vừa gửi
+	socket.emit('serverguitinnhan', { noidung: data });
+  });
+  
+});
+</pre>
+
+
+<table width="100%" border="0">
+  <tbody><tr>
+    <td width="100"><img src="./LẬP TRÌNH NODEJS & SOCKETIO - KhoaPham.Vn_files/nodejs.png" alt="" width="100" height="100"></td>
+    <td style="color:#0C3; font-weight:bold">SOCKET IO: Phía client WEB HTML</td>
+  </tr>
+</tbody></table>
+<pre>src="http://code.jquery.com/jquery-2.1.4.min.js"
+src="/socket.io/socket.io.js"
+
+$(document).ready(function(){
+	var socket = io.connect("http://localhost:3000/");
+	
+	socket.emit("new user", "khoapham.vn");
+	
+	socket.emit("new user", $username.val(), function(data){
+		if(data){
+			
+		}else{
+			
+		}	
+	});	
+
+	socket.on("server-gui-ve", function(data){
+		//io.sockets.emit("new message",{msg:data});
+		alert(data);
+	})
+	
+	socket.on("disconnect", function(data){
+		if(!socket.username) return;
+		else
+		usernames.splice(usernames.indexOf(socket.username), 1);	
+	});
+	
+});
+</pre>
+
+
+</body><div></div></html>

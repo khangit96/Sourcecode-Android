@@ -73,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
         final Bundle bd = getIntent().getExtras();
         if (bd != null) {
             ConnectBluetooth();
-            SendData("t");
-           // beginListenForData();
+            if(bd.getString("time")!=null){
+                SendData("t");
+            }
+            // beginListenForData();
             CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -86,7 +88,18 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
                     progressDialog.dismiss();
-                    SendData(bd.getString("time"));
+                    if (bd.getString("time") != null) {
+                        SendData(bd.getString("time"));
+                        try {
+                            Thread.sleep(2000);
+                        } catch (Exception e) {
+
+                        }
+                        SendData(bd.getString("repeat"));
+
+                    } else {
+                        SendData(bd.getString("repeat"));
+                    }
                     Toast.makeText(MainActivity.this, "Lưu cài đặt thành công.", Toast.LENGTH_LONG).show();
                 }
             }.start();
@@ -106,32 +119,19 @@ public class MainActivity extends AppCompatActivity {
                     SendData("O");//gửi tín hiệu kết nối Bluetooth với arduino
                     try {
                         Thread.sleep(1000);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                     Time today = new Time(Time.getCurrentTimezone());
                     today.setToNow();
                     String hour = today.format("%k:%M:%S");
-                    //String minute = today.format("%M");
-                    //String second = today.format("%S");
-                    //SendData(hour);
                     try {
                         Thread.sleep(1000);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
 
                     }
                     SendData(hour);
-                    /*SendData(minute);
-                    try {
-                        Thread.sleep(1000);
-                    }
-                    catch (Exception e) {
-
-                    }
-                    SendData(second);*/
-                   // beginListenForData();
+                    // beginListenForData();
                     Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
                 }
             }.start();
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SendData("h");
-                CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
+                CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         progressDialog.setMessage("Đang thay đổi độ ẩm.");
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Tắt máy bơm", Toast.LENGTH_LONG).show();
         } else {
             SendData("1");
-           Toast.makeText(MainActivity.this, "Bật máy bơm ", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Bật máy bơm ", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
                             final String string = new String(rawBytes, "UTF-8");
                             handler.post(new Runnable() {
                                 public void run() {
-                                    Toast.makeText(MainActivity.this,string,Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, string, Toast.LENGTH_LONG).show();
                                   /* if (string.equals("h")) {
                                         checkHumidity = "h";
                                         checkTemperature = "";

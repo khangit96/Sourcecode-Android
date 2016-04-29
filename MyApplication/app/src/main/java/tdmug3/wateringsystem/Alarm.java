@@ -11,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+
 import com.wdullaer.materialdatetimepicker.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -25,7 +27,10 @@ import java.util.Calendar;
 public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
     Button btTime;
     SwitchCompat switchRepeat;
-    String time="";
+    String time = "";
+    boolean checkRepeat = false;
+    public static int t = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +38,30 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
         setTitle("Cài đặt");
         Init();
     }
-    public void Init(){
-        btTime=(Button)findViewById(R.id.btTime);
-        switchRepeat=(SwitchCompat)findViewById(R.id.swichRepeat);
+
+    public void Init() {
+        btTime = (Button) findViewById(R.id.btTime);
+        switchRepeat = (SwitchCompat) findViewById(R.id.swichRepeat);
+        switchRepeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    checkRepeat = true;
+                } else {
+                    checkRepeat = false;
+                }
+            }
+        });
+        if (switchRepeat.isChecked()) {
+            checkRepeat = true;
+        } else {
+            checkRepeat = false;
+        }
     }
-    public void Time(View v){
+
+    public void Time(View v) {
+        time = "";
+
         Calendar now = Calendar.getInstance();
         TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
                 (TimePickerDialog.OnTimeSetListener) Alarm.this,
@@ -52,26 +76,39 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-     //   getMenuInflater().inflate(R.menu.menu_alarm, menu);
+        //   getMenuInflater().inflate(R.menu.menu_alarm, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       int id = item.getItemId();
-        if(id== android.R.id.home){
-            if(time!=""){
-                Intent iHome=new Intent(Alarm.this,MainActivity.class);
-                iHome.putExtra("time",time);
-               // iHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                NavUtils.navigateUpTo(this, iHome);
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            Intent iHome = new Intent(Alarm.this, MainActivity.class);
+            if (checkRepeat == true) {
+                iHome.putExtra("repeat", "r");
+            } else {
+                iHome.putExtra("repeat", "n");
             }
+            if (time != "") {
+                iHome.putExtra("time", time);
+            }
+            NavUtils.navigateUpTo(this, iHome);
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        time=String.valueOf(hourOfDay)+String.valueOf(minute)+String.valueOf(second);
+        if (String.valueOf(hourOfDay).length() == 1) {
+            time += "0";
+        }
+        time += String.valueOf(hourOfDay);
+        if (String.valueOf(minute).length() == 1) {
+            time += "0";
+        }
+        time += (String.valueOf(minute));
+
     }
 }

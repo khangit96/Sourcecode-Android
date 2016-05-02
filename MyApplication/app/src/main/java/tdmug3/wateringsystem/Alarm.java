@@ -1,7 +1,9 @@
 package tdmug3.wateringsystem;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.Utils;
@@ -28,8 +31,10 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
     Button btTime;
     SwitchCompat switchRepeat;
     String time = "";
+    TextView tvTime;
     boolean checkRepeat = false;
     public static int t = 0;
+    SharedPreferences spWatering;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +42,22 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
         setContentView(R.layout.layout_alarm);
         setTitle("Cài đặt");
         Init();
+        CheckSharepreference();
     }
 
     public void Init() {
+        spWatering = getSharedPreferences("WATERING", Context.MODE_PRIVATE);
         btTime = (Button) findViewById(R.id.btTime);
+        tvTime = (TextView) findViewById(R.id.tvTime);
         switchRepeat = (SwitchCompat) findViewById(R.id.swichRepeat);
         switchRepeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     checkRepeat = true;
+                    PutDataShareperences("repeat","true");
                 } else {
+                    PutDataShareperences("repeat","false");
                     checkRepeat = false;
                 }
             }
@@ -59,9 +69,26 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
         }
     }
 
+    public void CheckSharepreference() {
+        String getSpTime = spWatering.getString("time", "");
+        if (getSpTime.equals("")) {
+            tvTime.setText("Không có");
+        } else {
+            tvTime.setText(getSpTime);
+        }
+        String getSpRepeat = spWatering.getString("repeat", "");
+        if (!getSpRepeat.equals("")) {
+            if (getSpRepeat.equals("true")) {
+                switchRepeat.setChecked(true);
+            } else {
+                switchRepeat.setChecked(false);
+
+            }
+        }
+    }
+
     public void Time(View v) {
         time = "";
-
         Calendar now = Calendar.getInstance();
         TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
                 (TimePickerDialog.OnTimeSetListener) Alarm.this,
@@ -73,6 +100,12 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
         timePickerDialog.show(getFragmentManager(), "Timepicker");
     }
 
+    //put data shareperences
+    public void PutDataShareperences(String name, String data) {
+        SharedPreferences.Editor editor = spWatering.edit();
+        editor.putString(name, data);
+        editor.commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,6 +142,7 @@ public class Alarm extends AppCompatActivity implements TimePickerDialog.OnTimeS
             time += "0";
         }
         time += (String.valueOf(minute));
-
+        PutDataShareperences("time", "" + hourOfDay + ":" + "" + minute + ":" + "30");
+        tvTime.setText("" + hourOfDay + ":" + "" + minute + ":" + "30");
     }
 }

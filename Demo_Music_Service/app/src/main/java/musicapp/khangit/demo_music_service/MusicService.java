@@ -23,7 +23,7 @@ public class MusicService extends Service {
         mediaPlayer.start();
         Toast.makeText(getApplicationContext(),"Service is running",Toast.LENGTH_LONG).show();
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable

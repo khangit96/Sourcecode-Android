@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             if(bd.getString("time")!=null){
                 SendData("t");
             }
-            // beginListenForData();
+             beginListenForData();
             CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         SendData(bd.getString("repeat"));
                     }
-                    Toast.makeText(MainActivity.this, "Lưu cài đặt thành công.", Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(MainActivity.this, "Lưu cài đặt thành công.", Toast.LENGTH_LONG).show();
                 }
             }.start();
         } else {
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     SendData(hour);
-                    // beginListenForData();
-                    Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
+                     beginListenForData();
+                   // Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
                 }
             }.start();
         }
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFinish() {
                         progressDialog.dismiss();
                         SendData(input.getText().toString());
-                        Toast.makeText(MainActivity.this, "Thay đổi độ ẩm thành công!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, "Thay đổi độ ẩm thành công!", Toast.LENGTH_LONG).show();
                     }
                 }.start();
 
@@ -201,10 +201,10 @@ public class MainActivity extends AppCompatActivity {
         boolean checked = ((ToggleButton) v).isChecked();
         if (checked) {
             SendData("4");
-            Toast.makeText(MainActivity.this, "Tắt kéo màn", Toast.LENGTH_LONG).show();
+           // Toast.makeText(MainActivity.this, "Tắt kéo màn", Toast.LENGTH_LONG).show();
         } else {
             SendData("3");
-            Toast.makeText(MainActivity.this, "Bật kéo màn ", Toast.LENGTH_LONG).show();
+           // Toast.makeText(MainActivity.this, "Bật kéo màn ", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -214,10 +214,10 @@ public class MainActivity extends AppCompatActivity {
         boolean checked = ((ToggleButton) v).isChecked();
         if (checked) {
             SendData("2");
-            Toast.makeText(MainActivity.this, "Tắt máy bơm", Toast.LENGTH_LONG).show();
+         //   Toast.makeText(MainActivity.this, "Tắt máy bơm", Toast.LENGTH_LONG).show();
         } else {
             SendData("1");
-            Toast.makeText(MainActivity.this, "Bật máy bơm ", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(MainActivity.this, "Bật máy bơm ", Toast.LENGTH_LONG).show();
 
         }
     }

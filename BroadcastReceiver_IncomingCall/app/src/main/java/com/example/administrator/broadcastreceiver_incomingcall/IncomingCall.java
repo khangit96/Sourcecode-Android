@@ -25,10 +25,11 @@ public class IncomingCall extends BroadcastReceiver implements SensorEventListen
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         if(state.equals(TelephonyManager.EXTRA_STATE_RINGING))
         {
-          answerPhoneHeadsethook(context,intent);
+       //   answerPhoneHeadsethook(context,intent);
           //  context.startService(new Intent(context,CallService.class));
           //  getTeleService(context);
            // disconnectCall();
+            Toast.makeText(context.getApplicationContext(),"Ringing",Toast.LENGTH_LONG).show();
         }
         if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
         {

@@ -11,42 +11,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.viksaa.sssplash.lib.activity.AwesomeSplash;
-import com.viksaa.sssplash.lib.cnst.Flags;
-import com.viksaa.sssplash.lib.model.ConfigSplash;
-
-import gr.net.maroulis.library.EasySplashScreen;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
+TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        EasySplashScreen config = new EasySplashScreen(MainActivity.this)
-                .withFullScreen()
-                .withTargetActivity(MainActivity.class)
-                .withSplashTimeOut(4000)
-                .withBackgroundResource(android.R.color.holo_red_light)
-                .withHeaderText("Header")
-                .withFooterText("Copyright 2016")
-                .withBeforeLogoText("My cool company")
-                .withLogo(R.drawable.cover_image)
-                .withAfterLogoText("Watering System");
-        //add custom font
+        tv= (TextView) findViewById(R.id.tv);
         Typeface pacificoFont = Typeface.createFromAsset(getAssets(), "fonts/Pacifico.ttf");
-        config.getAfterLogoTextView().setTypeface(pacificoFont);
+        tv.setTypeface(pacificoFont);
+        startAnim();
 
-        //change text color
-        config.getHeaderTextView().setTextColor(Color.WHITE);
+    }
+    void startAnim(){
+        findViewById(R.id.avloadingIndicatorView).setVisibility(View.VISIBLE);
+    }
 
-        //finally create the view
-        View easySplashScreenView = config.create();
-        setContentView(easySplashScreenView);
+    void stopAnim(){
+        findViewById(R.id.avloadingIndicatorView).setVisibility(View.GONE);
     }
 
     @Override
@@ -55,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

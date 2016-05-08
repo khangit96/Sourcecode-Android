@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void SetupHeaderAndFooter() {
         listHeader = View.inflate(this, R.layout.list_header, null);
-        listFooter = View.inflate(this, R.layout.list_footer, null);
+        //listFooter = View.inflate(this, R.layout.list_footer, null);
         lv.addHeaderView(listHeader);
-        lv.addFooterView(listFooter);
+        //lv.addFooterView(listFooter);
     }
 
     @Override

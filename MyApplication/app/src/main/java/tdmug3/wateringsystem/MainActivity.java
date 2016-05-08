@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private OutputStream outputStream;
     private InputStream inputStream;
     Button startButton, sendButton, clearButton, stopButton;
-    TextView textView,tvWatering,tvPush,tvHumidity;
+    TextView textView, tvWatering, tvPush, tvHumidity, tvSun;
     EditText editText;
     boolean deviceConnected = false;
     Thread thread;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     String value = "";
     String checkHumidity = "";
     String checkTemperature = "";
+    String checkSun = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,78 +71,24 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.dout);
         init();
         ConnectBluetooth();
-        final Bundle bd = getIntent().getExtras();
-        if (bd != null) {
-            ConnectBluetooth();
-            if(bd.getString("time")!=null){
-                SendData("t");
+        CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progressDialog.setMessage("Đang kết nối với hệ thống tưới.");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
             }
-            CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    progressDialog.setMessage("Đang lưu cài đặt.");
-                    progressDialog.show();
-                    progressDialog.setCancelable(false);
-                }
 
-                @Override
-                public void onFinish() {
-                    progressDialog.dismiss();
-                    if (bd.getString("time") != null) {
-                        SendData(bd.getString("time"));
-                        try {
-                            Thread.sleep(2000);
-                        } catch (Exception e) {
+            @Override
+            public void onFinish() {
+                progressDialog.dismiss();
+                ConnectBluetooth();
+                SendData("O");//gửi tín hiệu kết nối Bluetooth với arduino
+                beginListenForData();
+                Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
+            }
+        }.start();
 
-                        }
-                        SendData(bd.getString("repeat"));
-
-                    } else {
-                        SendData(bd.getString("repeat"));
-                    }
-                    beginListenForData();
-                 //   Toast.makeText(MainActivity.this, "Lưu cài đặt thành công.", Toast.LENGTH_LONG).show();
-                }
-            }.start();
-        } else {
-            CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    progressDialog.setMessage("Đang kết nối với hệ thống tưới.");
-                    progressDialog.show();
-                    progressDialog.setCancelable(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    progressDialog.dismiss();
-                    ConnectBluetooth();
-
-                    SendData("O");//gửi tín hiệu kết nối Bluetooth với arduino
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-
-                    }
-                    Time today = new Time(Time.getCurrentTimezone());
-                    today.setToNow();
-                    String hour = today.format("%k:%M:%S");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-
-                    }
-                   // SendData(hour);
-                    Toast.makeText(MainActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-
-                    }
-                    beginListenForData();
-                }
-            }.start();
-        }
 
     }
 
@@ -154,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
         tvTimeUpdate = (TextView) findViewById(R.id.tvTimeUpdate);
         tvTemperature = (TextView) findViewById(R.id.tvTemperature);
         progressDialog = new ProgressDialog(this);
-        tvWatering=(TextView)findViewById(R.id.tvWatering);
-        tvPush=(TextView)findViewById(R.id.tvPush);
-        tvHumidity=(TextView)findViewById(R.id.tvChangeHumidity);
+        tvWatering = (TextView) findViewById(R.id.tvWatering);
+        tvPush = (TextView) findViewById(R.id.tvPush);
+        tvHumidity = (TextView) findViewById(R.id.tvChangeHumidity);
+        tvSun = (TextView) findViewById(R.id.tvSun);
     }
 
     //Hàm bật đèn
@@ -194,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onFinish() {
                         progressDialog.dismiss();
                         SendData(input.getText().toString());
-                       Toast.makeText(MainActivity.this, "Thay đổi độ ẩm thành công!", Toast.LENGTH_LONG).show();
-                        tvHumidity.setText("Đã thay đổi độ ẩm thành: "+input.getText().toString());
+                        Toast.makeText(MainActivity.this, "Thay đổi độ ẩm thành công!", Toast.LENGTH_LONG).show();
+                        tvHumidity.setText("Đã thay đổi độ ẩm thành: " + input.getText().toString());
                     }
                 }.start();
 
@@ -211,11 +159,9 @@ public class MainActivity extends AppCompatActivity {
         boolean checked = ((ToggleButton) v).isChecked();
         if (checked) {
             SendData("4");
-           // Toast.makeText(MainActivity.this, "Tắt kéo màn", Toast.LENGTH_LONG).show();
             tvPush.setText("Đã tắt kéo màn...");
         } else {
             SendData("3");
-           // Toast.makeText(MainActivity.this, "Bật kéo màn ", Toast.LENGTH_LONG).show();
             tvPush.setText("Đang bật kéo màn...");
         }
     }
@@ -226,11 +172,9 @@ public class MainActivity extends AppCompatActivity {
         boolean checked = ((ToggleButton) v).isChecked();
         if (checked) {
             SendData("2");
-         //   Toast.makeText(MainActivity.this, "Tắt máy bơm", Toast.LENGTH_LONG).show();
             tvWatering.setText("Đã tắt máy bơm...");
         } else {
             SendData("1");
-          //  Toast.makeText(MainActivity.this, "Bật máy bơm ", Toast.LENGTH_LONG).show();
             tvWatering.setText("Đang bật máy bơm...");
 
         }
@@ -335,12 +279,17 @@ public class MainActivity extends AppCompatActivity {
                             final String string = new String(rawBytes, "UTF-8");
                             handler.post(new Runnable() {
                                 public void run() {
-                                   // Toast.makeText(MainActivity.this, string, Toast.LENGTH_LONG).show();
-                                   if (string.equals("h")) {
+                                    if (string.equals("h")) {
                                         checkHumidity = "h";
                                         checkTemperature = "";
+                                        checkSun = "";
                                     } else if (string.equals("t")) {
                                         checkTemperature = "t";
+                                        checkHumidity = "";
+                                        checkSun = "";
+                                    } else if (string.equals("s")) {
+                                        checkSun = "s";
+                                        checkTemperature = "";
                                         checkHumidity = "";
                                     }
                                     if (checkTemperature == "t") {//nếu là dữ liệu nhiệt độ tử arduino gửi qua
@@ -348,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                                             value += string;
                                         }
                                         count++;
-                                        if (count == 3) {
+                                        if (count ==3) {
                                             Time today = new Time(Time.getCurrentTimezone());
                                             today.setToNow();
                                             String nowTime = today.format("%k:%M:%S");
@@ -374,6 +323,23 @@ public class MainActivity extends AppCompatActivity {
                                             count = 0;
                                             value = "";
                                             checkHumidity = "";
+                                        }
+                                    }
+                                    if (checkSun == "s") {//nếu là dữ liệu cường độ nẵng từ arduino gửi qua
+
+                                        if (count>= 1) {
+                                            value += string;
+                                        }
+                                        count++;
+                                        if (count==4) {
+                                            Time today = new Time(Time.getCurrentTimezone());
+                                            today.setToNow();
+                                            String nowTime = today.format("%k:%M:%S");
+                                            tvSun.setText("Cường độ ánh sáng:" + value);
+                                            tvTimeUpdate.setText("Thời gian cập nhật: " + nowTime);
+                                            count = 0;
+                                            value = "";
+                                            checkSun = "";
                                         }
                                     }
 

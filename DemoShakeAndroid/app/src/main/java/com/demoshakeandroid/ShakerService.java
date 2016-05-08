@@ -1,5 +1,6 @@
 package com.demoshakeandroid;
 
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
@@ -15,13 +16,17 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
+import android.text.format.Time;
 
 /**
  * Created by Administrator on 5/4/2016.
  */
-public class ShakerService extends Service {
+public class ShakerService extends Service implements SensorEventListener {
     /* private static final int FORCE_THRESHOLD = 350;
      private static final int TIME_THRESHOLD = 100;
      private static final int SHAKE_TIMEOUT = 500;
@@ -145,6 +150,14 @@ public class ShakerService extends Service {
     private DevicePolicyManager mDevicePolicyManager;
     private ComponentName mComponentName;
     private PowerManager.WakeLock mWakeLock;
+    SensorManager sensorManager;
+    Sensor camBienTruongGan;
+    Boolean checkScreenOff = false;
+    Context context;
+    public static int count = 0;
+    public static String second1 = "";
+    public static String second2 = "";
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -167,33 +180,115 @@ public class ShakerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         shaker = new Shaker(this);
         mDevicePolicyManager = (DevicePolicyManager) getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
         mComponentName = new ComponentName(this, MyAdminReceiver.class);
+
+        /*Broadcast ScreenOff*/
         BroadCastScreenOff broadCastScreenOff = new BroadCastScreenOff();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.SCREEN_OFF");
-        registerReceiver(broadCastScreenOff, intentFilter);
-      /*  Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mComponentName);
-        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,description);*/
+        IntentFilter intentFilterScreenOff = new IntentFilter();
+        intentFilterScreenOff.addAction("android.intent.action.SCREEN_OFF");
+        registerReceiver(broadCastScreenOff, intentFilterScreenOff);
+
+        /*Broadcast ScreenOn*/
+        BroadCastScreenOn broadCastScreenOn = new BroadCastScreenOn();
+        IntentFilter intentFilterScreenOn = new IntentFilter();
+        intentFilterScreenOn.addAction("android.intent.action.SCREEN_ON");
+        registerReceiver(broadCastScreenOn, intentFilterScreenOn);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        camBienTruongGan = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        sensorManager.registerListener(this, camBienTruongGan, SensorManager.SENSOR_DELAY_NORMAL);
+        context = getApplicationContext();
+
     }
 
+    //proximity sensor
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float giatri = event.values[0];
+        if (giatri == 0) {//when user wave
+            if (checkScreenOff == true) {
+                vibrator.vibrate(400);
+                UnlockScreen();
+            /*    count++;
+                if (count == 1) {
+                    Time today = new Time(Time.getCurrentTimezone());
+                    today.setToNow();
+                    second1 = today.format("%S");
+                    Log.d("test", "" + second1);
+                    //lấy móc thời gian khi count==1
+                }
+                if (count == 2) {
+                    //lấy móc thời gian khi count==2
+                    Time today = new Time(Time.getCurrentTimezone());
+                    today.setToNow();
+                    second2 = today.format("%S");
+                    int subSencond = Integer.parseInt(second1) - Integer.parseInt(second2);
+                    if (subSencond <= 5) {
+                        count=0;
+                        Log.d("test", "" + subSencond);
+                        vibrator.vibrate(400);
+                        UnlockScreen();
+                        58 3-> 59 0 1 2 3
+                    }
+                    else if(subSencond<=0){
+
+                    }
+                    else{
+
+                    }
+
+                }*/
+
+            }
+
+        }
+    }
+
+    public void UnlockScreen() {
+        KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        final KeyguardManager.KeyguardLock kl = km.newKeyguardLock("MyKeyguardLock");
+        kl.disableKeyguard();//mở trực tiếp lên  không hiện mở khóa mặc định của hệ thống
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.ON_AFTER_RELEASE, "MyWakeLock");
+        wakeLock.acquire();
+    }
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    //Broadcast ScreenOff
     class BroadCastScreenOff extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            shaker = new Shaker(context);
-            shaker.setOnShakeListener(new Shaker.OnShakeListener() {
-                @Override
-                public void onShake() {
-                    vibrator.vibrate(400);
-                }
-            });
-            Log.d("test", "screenoff");
+            checkScreenOff = true;
+
         }
+    }
+
+    //Broadcast ScreenOn
+    class BroadCastScreenOn extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            checkScreenOff = false;
+        }
+    }
+
+    //Unclock Screen
+    private void unlockScreen(Context context) {
+
+
     }
 
     @Nullable

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity {
     private Shaker shaker;
     private static final int ADMIN_INTENT = 15;
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mComponentName);
         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,description);
         startActivityForResult(intent, ADMIN_INTENT);
-        startService(new Intent(MainActivity.this,ShakerService.class));
+        startService(new Intent(MainActivity.this, ShakerService.class));
+
     }
 
     @Override

@@ -1,0 +1,1 @@
+Demo chức năng gửi và nhận dữ liệu giữa  server và android

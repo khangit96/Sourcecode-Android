@@ -48,7 +48,7 @@ public class LockscreenService extends Service {
                 .setContentIntent(null)
                 .setOngoing(true)
                 .build();
-        startForeground(9999,notification);
+        startForeground(9999, notification);
     }
 
     // Unregister receiver

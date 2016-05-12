@@ -3,6 +3,8 @@ package com.democustomlockscreen.utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 import com.democustomlockscreen.MainActivity;
 
 /**
@@ -19,6 +21,7 @@ public class LockscreenIntentReceiver extends BroadcastReceiver {
                 || intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             start_lockscreen(context);
         }
+
 
     }
 

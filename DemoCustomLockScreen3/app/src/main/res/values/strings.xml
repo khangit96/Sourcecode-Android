@@ -1,0 +1,7 @@
+<resources>
+    <string name="hello">Hello World, LockScreenAppActivity!</string>
+    <string name="app_name">LockScreenApp</string>
+    <string name="unloack">Unlock</string>
+    <string name="action_settings">Setting</string>
+    <color name="mycolor1">#F5DC49</color>
+</resources>

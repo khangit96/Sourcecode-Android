@@ -27,19 +27,7 @@ public class MainActivity extends AppCompatActivity implements LockscreenUtils.O
     private LockscreenUtils mLockscreenUtils;
 
     // Set appropriate flags to make the screen appear over the keyguard
-    @Override
-    public void onAttachedToWindow() {
-        this.getWindow().setType(
-                WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-        this.getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-        );
 
-        super.onAttachedToWindow();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -191,4 +179,17 @@ public class MainActivity extends AppCompatActivity implements LockscreenUtils.O
     {
         finish();
     }
+  /*      @Override
+    public void onAttachedToWindow() {
+        this.getWindow().setType(
+                WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+        this.getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+        );
+
+        super.onAttachedToWindow();
+    }*/
 }

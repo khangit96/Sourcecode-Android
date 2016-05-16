@@ -2,7 +2,7 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:keyWidth="10%p"
     android:horizontalGap="0px"
-    android:background="#ffffff"
+    android:background="@color/colorAccent"
     android:verticalGap="0px"
     android:keyHeight="60dp" >
 

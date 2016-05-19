@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 taskStackBuilder.addParentStack(DetailActivity.class);
                 taskStackBuilder.addNextIntent(mainIntent);
                 mainIntent.putExtra("messages","Hi, i am Khangit");
-                PendingIntent pendingDetail=taskStackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingDetail=taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
                 Notification notification=new NotificationCompat.Builder(getBaseContext())
                         .setContentTitle("New Message")
                         .setContentText("You got a new message from Khangit")
@@ -82,6 +82,26 @@ public class MainActivity extends AppCompatActivity {
                         .setContentIntent(pendingDetail)
                         .build();
                 notificationManager.notify(4,notification);
+            }
+        });
+        findViewById(R.id.btAction).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent replyIntent=new Intent(getBaseContext(),ReplyActivity.class);
+                replyIntent.putExtra("reply_to","khangit");
+                Intent deleteIntent=new Intent();
+                deleteIntent.setAction("delete_message");
+                PendingIntent pendingDelete=PendingIntent.getBroadcast(getBaseContext(),0,deleteIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingReply=PendingIntent.getActivity(getBaseContext(), 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification=new NotificationCompat.Builder(getBaseContext())
+                        .setContentTitle("New Message")
+                        .setContentText("You got a new message from Khangit")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true)
+                        .addAction(R.mipmap.ic_launcher,"Reply",pendingReply)
+                        .addAction(R.mipmap.ic_launcher, "Delete", pendingDelete)
+                        .build();
+                notificationManager.notify(7,notification);
             }
         });
     }

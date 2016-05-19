@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.demopsimplenotification" >
+    package="com.demoproductapp" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,21 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity"
+            android:name=".ListActivity"
+            android:label="@string/title_activity_list"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".ReplyActivity"
-            android:label="@string/title_activity_reply"
+            android:name=".UpdateProduct"
+            android:label="@string/title_activity_update_product"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <receiver android:name=".DeleteBroadcast">
-            <intent-filter>
-                <action android:name="delete_message"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

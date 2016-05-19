@@ -9,29 +9,30 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
-    <Button
-        android:text="Simple Notification"
-        android:id="@+id/btSimple"
+    <ImageView
+        android:id="@+id/img"
+        android:src="@drawable/images"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/edName"
+        android:hint="Name of product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/edPrice"
+        android:hint="Price of product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:text="Counter Notification"
-        android:id="@+id/btCounter"
+        android:text="Add Product"
+        android:id="@+id/btAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:text="Open App"
-        android:id="@+id/btOpen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="Open Activity With Backstack"
-        android:id="@+id/btOpenActivityWithBackstack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="Add action Notification"
-        android:id="@+id/btAction"
+        android:text="Product List"
+        android:id="@+id/btList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

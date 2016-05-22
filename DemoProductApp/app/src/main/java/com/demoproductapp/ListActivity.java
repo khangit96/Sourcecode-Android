@@ -25,8 +25,12 @@ import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
     ListView lvProduct;
-    ArrayList<Product>productArrayList;
+    ArrayList<Product> productArrayList;
     ProductAdapter productAdapter;
+    int po;
+    int id;
+    String img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +38,38 @@ public class ListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         lvProduct = (ListView) findViewById(R.id.lvProduct);
-        productArrayList=new ArrayList<>();
-        productAdapter=new ProductAdapter(this,productArrayList);
-        new LoadProduct().execute("http://192.168.1.12/code/WebServiceLaravel/public/SanPham");
+        productArrayList = new ArrayList<>();
+        productAdapter = new ProductAdapter(this, productArrayList);
+        new LoadProduct().execute("http://khangit.96.lt/WebServiceLaravel/public/SanPham");
         lvProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent updateIntent=new Intent(ListActivity.this,UpdateProduct.class);
-                startActivity(updateIntent);
+                Intent updateIntent = new Intent(ListActivity.this, UpdateProduct.class);
+                updateIntent.putExtra("name", productArrayList.get(position).TenSP);
+                updateIntent.putExtra("price", productArrayList.get(position).GiaSP);
+                updateIntent.putExtra("image", productArrayList.get(position).HinhAnh);
+                updateIntent.putExtra("id", productArrayList.get(position).id);
+                updateIntent.putExtra("po", position);
+                startActivityForResult(updateIntent, 1);
+                po = position;
+                id = productArrayList.get(position).id;
+                img = productArrayList.get(position).HinhAnh;
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String check=data.getStringExtra("name");
+            if (check==null) {
+               productArrayList.remove(po);
+            } else {
+                productArrayList.set(po, new Product(data.getStringExtra("name"), data.getIntExtra("price",0),img,id));
+            }
+            productAdapter.notifyDataSetChanged();
+        }
     }
 
     class LoadProduct extends AsyncTask<String, Integer, String> {
@@ -59,11 +85,12 @@ public class ListActivity extends AppCompatActivity {
             try {
                 JSONArray jsonArray = new JSONArray(s);
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject=jsonArray.getJSONObject(i);
-                    String name=jsonObject.getString("TenSP");
-                    int price=jsonObject.getInt("Gia");
-                    String img=jsonObject.getString("HinhSP");
-                    productArrayList.add(new Product(name,price,img));
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String name = jsonObject.getString("TenSP");
+                    int price = jsonObject.getInt("Gia");
+                    String img = jsonObject.getString("HinhSP");
+                    int id = jsonObject.getInt("id");
+                    productArrayList.add(new Product(name, price, img, id));
                 }
                 lvProduct.setAdapter(productAdapter);
             } catch (JSONException e) {

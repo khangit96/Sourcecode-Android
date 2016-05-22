@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return POST_URL("http://192.168.1.12/code/WebServiceLaravel/public/SanPham",null);
+            return POST_URL("http://khangit.96.lt/WebServiceLaravel/public/SanPham",null);
         }
 
         @Override

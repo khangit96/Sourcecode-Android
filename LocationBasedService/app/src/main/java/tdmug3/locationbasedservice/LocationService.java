@@ -25,9 +25,10 @@ public class LocationService extends Service {
             public void onLocationChanged(Location location) {
                 double latitude = location.getLatitude();
                 double longtitude = location.getLongitude();
+                Toast.makeText(getApplicationContext(),"la: "+latitude+"long: "+longtitude,Toast.LENGTH_LONG).show();
                 Location home = new Location("home");
-                home.setLatitude(10.832568);
-                home.setLongitude(106.34952);
+                home.setLatitude(10.832513);
+                home.setLongitude(106.35087);
                 double distance = home.distanceTo(location);
                 Toast.makeText(getBaseContext(), "distance: " + distance, Toast.LENGTH_LONG).show();
                  //Log.d("location", "lat: " + latitude + "long: " + longtitude);

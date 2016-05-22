@@ -26,13 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:text="Add Product"
-        android:id="@+id/btAdd"
+        android:text="Update"
+        android:id="@+id/btUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:text="Product List"
-        android:id="@+id/btList"
+        android:text="Delete"
+        android:id="@+id/btDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

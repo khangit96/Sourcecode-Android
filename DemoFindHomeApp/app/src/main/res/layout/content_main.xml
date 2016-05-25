@@ -16,9 +16,18 @@
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/edName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <Button
         android:onClick="Add"
-        android:text="Add"
+        android:text="Add Home Information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="GetDistance"
+        android:text="Get Distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

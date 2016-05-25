@@ -10,26 +10,39 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        tv=(TextView)findViewById(R.id.tv);
 
     }
 
     public void Group(View v) {
-        String[] group = new String[]{"Facebook", "Zalo", "Zing"};
-        boolean[] check = new boolean[]{true, false, true};
+        final String[] group = new String[]{"Facebook", "Zalo", "Zing"};
+        final boolean[] check = new boolean[]{true, false, true};
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Multiple choices")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        String result="";
+                        for(int i=0;i<check.length;i++){
+                            if(check[i]==true){
+                                result+=group[i];
+                                result+="";
+                            }
+                        }
+                        tv.setText(result);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -41,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMultiChoiceItems(group, check, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
+                        check[which]=isChecked;
                     }
                 })
                 .create();

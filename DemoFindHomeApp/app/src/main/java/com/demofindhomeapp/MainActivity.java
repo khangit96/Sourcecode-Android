@@ -39,20 +39,28 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
     TextView tv;
     EditText edName;
-    double latitude;
-    double longtitude;
+    boolean checkFirtTime = true;
+    ArrayList<Home> homeArrayList = new ArrayList<>();
     private GoogleApiClient mGoogleApiClient;
+    private LocationRequest locationRequest;
+    private FusedLocationProviderApi fusedLocationProviderApi;
+    private Location currentLocation = new Location("currentLocation");
     private Location mLocation;
 
     @Override
@@ -62,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tv = (TextView) findViewById(R.id.tv);
-        edName= (EditText) findViewById(R.id.edName);
+        edName = (EditText) findViewById(R.id.edName);
+     //   getLocation();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        new ShowAllHomeInfor().execute();
 
     }
 
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         // Các tham số truyền
         List nameValuePair = new ArrayList(3);
-        nameValuePair.add(new BasicNameValuePair("name",edName.getText().toString()));
+        nameValuePair.add(new BasicNameValuePair("name", edName.getText().toString()));
 
         nameValuePair.add(new BasicNameValuePair("latitude", String.valueOf(mLocation.getLatitude())));
         nameValuePair.add(new BasicNameValuePair("longtitude", String.valueOf(mLocation.getLongitude())));
@@ -111,56 +119,42 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         new AddHomeInfor().execute();
     }
 
-  //Get distance
-    public void GetDistance(View v){
-        Location location=new Location("home");
-        location.setLatitude(latitude);
-        location.setLongitude(longtitude);
-        double distance=mLocation.distanceTo(location);
-        tv.setText(String.valueOf(distance));
+    //Get distance
+    public void GetDistance(View v) {
+        Collections.sort(homeArrayList);
+        String result = "";
+
+        for (int i = 0; i < homeArrayList.size(); i++) {
+
+            result += String.valueOf(homeArrayList.get(i).distance)+homeArrayList.get(i).homeName;
+            result += ",";
+        }
+        tv.setText(result);
     }
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLocation != null) {
-            tv.append("latitude: " + mLocation.getLatitude());
-            tv.append("\n");
-            tv.append("longtitude: " + mLocation.getLongitude());
-        } else {
-            Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
+
+
+    private void getLocation() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(30000);
+        fusedLocationProviderApi = LocationServices.FusedLocationApi;
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
         }
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        //Log.i(TAG, "Connection Suspended");
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        //Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
 
     class AddHomeInfor extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            return POST_URL("http://192.168.1.8/code/FindHomeLaravelWebservice/public/FindHome",null);
+            return POST_URL("http://192.168.1.8/code/FindHomeLaravelWebservice/public/FindHome", null);
         }
 
         @Override
@@ -179,12 +173,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             try {
-                JSONArray jsonArray=new JSONArray(s);
-                JSONObject jsonObject=jsonArray.getJSONObject(0);
-                latitude=jsonObject.getDouble("latitude");
-                longtitude=jsonObject.getDouble("longtitude");
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Location location = new Location("home");
+                    location.setLatitude(jsonObject.getDouble("latitude"));
+                    location.setLongitude(jsonObject.getDouble("longtitude"));
+                    double distance = mLocation.distanceTo(location);
+                    homeArrayList.add(new Home(jsonObject.getString("name"), jsonObject.getDouble("latitude"), jsonObject.getDouble("longtitude"), distance));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -229,5 +228,64 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+      /*  fusedLocationProviderApi.requestLocationUpdates(mGoogleApiClient, locationRequest,this);
+           mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLocation != null) {
+            tv.setText("latitude: " + mLocation.getLatitude() + "\n" + "longtitude: " + mLocation.getLongitude());
+            new ShowAllHomeInfor().execute();
+        } else {
+            Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
+        }*/
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLocation != null) {
+            tv.setText("latitude: " + mLocation.getLatitude() + "\n" + "longtitude: " + mLocation.getLongitude());
+            new ShowAllHomeInfor().execute();
+        } else {
+            Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+   /* @Override
+    public void onLocationChanged(Location location) {
+      *//*  if (checkFirtTime == true) {
+            if (String.valueOf(location.getLatitude()) != null && String.valueOf(location.getLongitude()) != null) {
+                tv.setText("latitude: " + location.getLatitude() + "\n" + "longtitude: " + location.getLongitude());
+                checkFirtTime = false;
+                currentLocation.setLatitude(location.getLatitude());
+                currentLocation.setLongitude(location.getLongitude());
+                new ShowAllHomeInfor().execute();
+            }
+        }*//*
+
+
+    }*/
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

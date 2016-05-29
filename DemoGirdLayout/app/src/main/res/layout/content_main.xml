@@ -1,0 +1,40 @@
+<com.github.channguyen.rl.RectangleGridLayout
+    android:layout_width="200dp"
+    android:layout_height="300dp"
+    android:padding="30dp"
+    app:rgl___column="4"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="a"
+        />
+    <Button
+
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="b"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="c"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="d"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="e"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="f"
+        />
+</com.github.channguyen.rl.RectangleGridLayout>

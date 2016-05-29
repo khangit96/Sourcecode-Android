@@ -47,7 +47,7 @@
         android:layout_toRightOf="@+id/longitude"
         android:textSize="16sp"/>
     <Button
-        android:text="Get distance"
+        android:text="Get current location"
         android:id="@+id/btDistance"
         android:onClick="Get"
         android:layout_width="match_parent"

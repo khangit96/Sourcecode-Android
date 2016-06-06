@@ -114,7 +114,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/tv_highscore_label"
+                android:id="@+id/label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="6"
@@ -125,7 +125,7 @@
                 android:textColor="@color/myoteal" />
 
             <TextView
-                android:id="@+id/tv_highscore"
+                android:id="@+id/tvHighScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
@@ -143,55 +143,100 @@
         android:layout_alignStart="@+id/rl_scoreview_layout"
         android:layout_below="@+id/rl_scoreview_layout"
         android:layout_marginBottom="14dp"
-        android:layout_marginTop="14dp">
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
 
 
-        <ImageButton
-            android:id="@+id/ib_reset"
-            android:layout_width="match_parent"
+        <!--    <ImageButton
+                android:id="@+id/ib_reset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:onClick="Restart"
+                android:layout_weight="1"
+                android:background="@drawable/button_selector"
+                android:padding="7dp"
+                android:src="@drawable/ic_reload"
+                android:textColor="@android:color/white" />-->
+        <Button
+            android:id="@+id/btRestart"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="7dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_selector"
             android:onClick="Restart"
-            android:layout_weight="1"
-            android:background="@drawable/button_selector"
             android:padding="7dp"
-            android:src="@drawable/ic_reload"
-            android:textColor="@android:color/white" />
+            android:text="Restart"
+            android:textColor="@color/myoteal" />
 
 
-        <ImageButton
-            android:id="@+id/ib_myo"
-            android:layout_width="match_parent"
+        <!--  <ImageButton
+              android:id="@+id/ib_myo"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginRight="7dp"
+              android:layout_weight="1"
+              android:background="@drawable/button_selector"
+              android:padding="7dp"
+              android:src="@drawable/ic_myo"
+              android:textColor="@android:color/white" />-->
+        <!--
+
+                <ImageButton
+                    android:id="@+id/ib_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_selector"
+                    android:padding="7dp"
+                    android:src="@drawable/ic_info"
+                    android:textColor="@android:color/white" />
+        -->
+
+        <!--  <ImageButton
+              android:id="@+id/ib_undo"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="7dp"
+              android:layout_weight="1"
+              android:background="@drawable/button_selector"
+              android:padding="7dp"
+              android:src="@drawable/ic_undo"
+              android:textColor="@android:color/white" />-->
+        <Button
+            android:id="@+id/btPause"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="7dp"
             android:layout_weight="1"
             android:background="@drawable/button_selector"
+            android:onClick="Pause"
             android:padding="7dp"
-            android:src="@drawable/ic_myo"
-            android:textColor="@android:color/white" />
+            android:text="Pause"
+            android:textColor="@color/myoteal" />
 
-        <ImageButton
-            android:id="@+id/ib_info"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btContinue"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
             android:layout_weight="1"
             android:background="@drawable/button_selector"
+            android:onClick="Continue"
             android:padding="7dp"
-            android:src="@drawable/ic_info"
-            android:textColor="@android:color/white" />
-
-        <ImageButton
-            android:id="@+id/ib_undo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_selector"
-            android:padding="7dp"
-            android:src="@drawable/ic_undo"
-            android:textColor="@android:color/white" />
-
+            android:text="Continue"
+            android:textColor="@color/myoteal" />
+        <!-- <Button
+             android:text="Back"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="7dp"
+             android:layout_weight="1"
+             android:background="@drawable/button_selector"
+             android:padding="7dp"
+             android:textColor="@color/myoteal" />-->
     </LinearLayout>
 
     <!-- <RelativeLayout
@@ -496,20 +541,31 @@
     </LinearLayout>
 
     <TextView
+        android:layout_marginTop="10dp"
+        android:gravity="center"
         android:id="@+id/tvGameOver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Game Over!"
         android:layout_marginBottom="40dp"
-        android:textColor="#fcfbfb"
-        android:textSize="40sp" />
-   <!-- <ImageView
-        android:src="@drawable/gameover"
-        android:id="@+id/imgGameOver"
+        android:background="@drawable/textview"
+        android:textColor="#ffffff"
+        android:text="Game Over!"
+        android:textSize="30sp" />
+    <!-- <ImageView
+         android:src="@drawable/gameover"
+         android:id="@+id/imgGameOver"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_centerHorizontal="true" />-->
+    <TextView
+        android:id="@+id/tvPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />-->
+        android:layout_centerInParent="true"
+        android:text="PAUSE"
+        android:textColor="@color/myoteal"
+        android:textSize="25sp" />
 </RelativeLayout>

@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:onClick="Play"
+        android:onClick="newGame"
         android:textColor="@color/myoteal"
         android:id="@+id/tv_connect_myo"
         android:layout_width="match_parent"
@@ -22,10 +22,10 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="16dp"
-        android:text="Play"
+        android:text="New Game"
         android:textSize="18sp"/>
 
-    <Button
+   <!-- <Button
         android:onClick="HowToPlay"
         android:id="@+id/tv_setup_myo"
         android:layout_width="match_parent"
@@ -41,9 +41,10 @@
         android:textColor="@color/myoteal"
         android:textSize="18sp"/>
 
+-->
     <Button
-        android:onClick="About"
-        android:id="@+id/tv_when_ready"
+        android:id="@+id/btContinue"
+        android:onClick="Continue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -53,9 +54,24 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="16dp"
-        android:text="About"
+        android:text="Continue"
         android:textColor="@color/myoteal"
         android:textSize="18sp"/>
+     <Button
+         android:onClick="LeaderBoard"
+         android:id="@+id/tv_setup_myo"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+         android:background="@drawable/button_selector"
+         android:fontFamily="sans-serif-light"
+         android:paddingBottom="16dp"
+         android:paddingLeft="30dp"
+         android:paddingRight="30dp"
+         android:paddingTop="16dp"
+         android:text="Leaderboard"
+         android:textColor="@color/myoteal"
+         android:textSize="18sp"/>
 
     <Button
         android:onClick="Exit"

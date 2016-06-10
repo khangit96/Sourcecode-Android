@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="eu.thedarken.myo.twothousandfortyeight.GameFragment">
 
     <RelativeLayout
@@ -53,8 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
             android:layout_weight="35"
             android:indeterminate="false"
             android:progressTint="#ff0600" />
@@ -75,8 +74,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="8dp"
+            android:gravity="center"
             android:background="@drawable/scoreview_background_rectangle_inner"
-            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="5dp">
 
@@ -85,20 +84,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="6"
-                android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:maxEms="6"
                 android:text="@string/score"
-                android:textColor="@color/myoteal" />
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
                 android:text="0"
+                android:textSize="22sp"
                 android:textColor="@android:color/white"
-                android:textSize="22sp" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -118,17 +117,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="6"
-                android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:maxEms="6"
+                android:textStyle="bold"
                 android:text="@string/high_score"
-                android:textColor="@color/myoteal" />
+                android:textColor="#ffffff" />
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/tvHighScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
                 android:text="1337"
                 android:textColor="@android:color/white"
                 android:textSize="22sp" />
@@ -144,6 +143,7 @@
         android:layout_below="@+id/rl_scoreview_layout"
         android:layout_marginBottom="14dp"
         android:layout_marginTop="14dp"
+        android:gravity="right"
         android:orientation="horizontal">
 
 
@@ -168,7 +168,9 @@
             android:onClick="Restart"
             android:padding="7dp"
             android:text="Restart"
-            android:textColor="@color/myoteal" />
+            android:textColor="@color/myoteal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
         <!--  <ImageButton
@@ -215,7 +217,9 @@
             android:onClick="Pause"
             android:padding="7dp"
             android:text="Pause"
-            android:textColor="@color/myoteal" />
+            android:textColor="@color/myoteal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btContinue"
@@ -227,7 +231,9 @@
             android:onClick="Continue"
             android:padding="7dp"
             android:text="Continue"
-            android:textColor="@color/myoteal" />
+            android:textColor="@color/myoteal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <!-- <Button
              android:text="Back"
              android:layout_width="wrap_content"
@@ -295,10 +301,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="180dp"
-        android:background="@drawable/background"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="200dp"
         android:orientation="vertical"
         android:padding="15dp">
 
@@ -541,17 +546,17 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginTop="10dp"
-        android:gravity="center"
         android:id="@+id/tvGameOver"
         android:layout_width="180dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/textview"
-        android:textColor="#ffffff"
+        android:gravity="center"
         android:text="Game Over!"
+        android:textColor="#ffffff"
         android:textSize="30sp" />
     <!-- <ImageView
          android:src="@drawable/gameover"

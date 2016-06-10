@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /*Event*/
     private void addEnvents() {
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 
     /*Listen for location change*/

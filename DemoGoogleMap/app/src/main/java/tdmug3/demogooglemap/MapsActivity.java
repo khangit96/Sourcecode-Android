@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,7 +54,6 @@ public class MapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        btGetCurrentLocation = (Button) findViewById(R.id.btGetCurrentLocation);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Please ait...");
@@ -64,27 +65,38 @@ public class MapsActivity extends AppCompatActivity {
             @Override
             public void onMapLoaded() {
                 progressDialog.dismiss();
+                //Hiển thị zoom
+                mMap.getUiSettings().setZoomControlsEnabled(true);
+                //set Location
+                mMap.setMyLocationEnabled(true);
+                LatLng hcmus = new LatLng(10.762984,106.682329);
+                mMap.addMarker(new MarkerOptions().position(hcmus).title("KHTN"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
+                LatLng dhsg=new LatLng(10.759677,106.682387);
+                mMap.addPolyline(new PolylineOptions().add(
+                        hcmus,
+                        new LatLng(10.761184,106.683331),
+                        new LatLng(10.760710,106.682204),
+                        dhsg)
+                        .width(10)
+                        .color(Color.RED)
+
+                );
 
             }
         });
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //Hiển thị zoom
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        //set Location
-        mMap.setMyLocationEnabled(true);
 
         //Khi location thay đỏi
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-               TuiDangODau();
+
             }
         });
 
     }
 
-    //Hàm xác định vị trí hiện tại
+   /* //Hàm xác định vị trí hiện tại
     private void TuiDangODau() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -195,5 +207,5 @@ public class MapsActivity extends AppCompatActivity {
             return null;
         }
     }
-
+*/
 }

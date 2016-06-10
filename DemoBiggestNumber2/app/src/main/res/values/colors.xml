@@ -9,4 +9,6 @@
     <color name="background1">#232528</color>
     <color name="background3">#111111</color>
     <color name="bordercolor1">#222222</color>
+    <color name="white">#ffffff</color>
+    <color name="text">#777167</color>
 </resources>

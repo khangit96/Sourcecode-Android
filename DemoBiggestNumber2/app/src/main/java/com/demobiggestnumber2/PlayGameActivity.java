@@ -12,6 +12,9 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,6 +62,12 @@ public class PlayGameActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+          // Set fullscreen
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Set No Title
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.content_play_game);
         init();
     }
@@ -146,6 +155,7 @@ public class PlayGameActivity extends AppCompatActivity {
 
     public void Choose(View v) {
         if (Integer.parseInt(bt[Integer.parseInt((String) v.getTag())].getText().toString()) == biggestNumber) {
+            clearText();
             playSuccessSound();
             countQuestion++;
             score += 5;
@@ -175,10 +185,26 @@ public class PlayGameActivity extends AppCompatActivity {
             processRandomButton(8, 100);
         } else if (question >= 22 && question <= 23) {
             processRandomButton(9, 100);
-        } else if (question < 24 || question > 26) {
-            processRandomButton(16, 100);
-        } else {
+        } else if (question>=24&& question<=26) {
             processRandomButton(10, 100);
+        }
+        else if(question>=27&&question<=28){
+            processRandomButton(11, 100);
+        }
+        else if(question>=29&&question<=30){
+            processRandomButton(12,100);
+        }
+        else if(question==31){
+            processRandomButton(13,100);
+        }
+        else if(question==32){
+            processRandomButton(14,100);
+        }
+        else if(question==33){
+            processRandomButton(15,100);
+        }
+        else {
+            processRandomButton(16, 100);
         }
     }
 
@@ -189,6 +215,7 @@ public class PlayGameActivity extends AppCompatActivity {
     public void playGameOverSound() {
         soundPool.play(soundIDGameOver, volume, volume, 1, 0, 1f);
     }
+
     public void playPauseSound() {
         soundPool.play(soundIDPause, volume, volume, 1, 0, 1.0f);
     }
@@ -213,6 +240,7 @@ public class PlayGameActivity extends AppCompatActivity {
             }
             bt[posRandomButtonArray.get(i)].setText(Integer.toString(ranNumber));
             bt[posRandomButtonArray.get(i)].setEnabled(true);
+            bt[posRandomButtonArray.get(i)].setBackgroundResource(R.drawable.button_random);
         }
         for (int i = 0; i < bt.length; i++) {
             if (bt[i].getText().toString() == Integer.toString(biggestNumber)) {
@@ -250,6 +278,23 @@ public class PlayGameActivity extends AppCompatActivity {
         bt[13].setText("");
         bt[14].setText("");
         bt[15].setText("");
+
+        bt[0].setBackgroundResource(R.drawable.button_selector);
+        bt[1].setBackgroundResource(R.drawable.button_selector);
+        bt[2].setBackgroundResource(R.drawable.button_selector);
+        bt[3].setBackgroundResource(R.drawable.button_selector);
+        bt[4].setBackgroundResource(R.drawable.button_selector);
+        bt[5].setBackgroundResource(R.drawable.button_selector);
+        bt[6].setBackgroundResource(R.drawable.button_selector);
+        bt[7].setBackgroundResource(R.drawable.button_selector);
+        bt[8].setBackgroundResource(R.drawable.button_selector);;
+        bt[9].setBackgroundResource(R.drawable.button_selector);
+        bt[10].setBackgroundResource(R.drawable.button_selector);
+        bt[11].setBackgroundResource(R.drawable.button_selector);
+        bt[12].setBackgroundResource(R.drawable.button_selector);
+        bt[13].setBackgroundResource(R.drawable.button_selector);
+        bt[14].setBackgroundResource(R.drawable.button_selector);
+        bt[15].setBackgroundResource(R.drawable.button_selector);
     }
 
     public void disableButton() {
@@ -283,12 +328,12 @@ public class PlayGameActivity extends AppCompatActivity {
             tvHightScore.setText(Integer.toString(score));
         }
 
-
         stopTimer();
         score = 0;
-        bt[posBiggestNumber].setBackgroundResource(R.drawable.button_biggest_number);
+        bt[posBiggestNumber].setBackgroundResource(R.drawable.button_game_over);
         posRandomButtonArray.clear();
         disableButton();
+        tvGameOver.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
         tvGameOver.setVisibility(View.VISIBLE);
         countQuestion = 0;
         biggestNumber = 0;
@@ -296,6 +341,7 @@ public class PlayGameActivity extends AppCompatActivity {
         btPause.setVisibility(View.GONE);
         btContinue.setVisibility(View.GONE);
         playGameOverSound();
+
     }
 
     public void Restart(View v) {
@@ -340,6 +386,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 count = count + 10;
                 progressBar.setProgress(100 - (count * 2));
                 if (count == 50) {
+                    checkGameOver = false;
                     progressBar.setProgress(0);
                     mHandler.obtainMessage(1).sendToTarget();
 
@@ -359,6 +406,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 count = count + 10;
                 progressBar.setProgress(100 - (count * 2));
                 if (count == 50) {
+                    checkGameOver = false;
                     progressBar.setProgress(0);
                     mHandler.obtainMessage(1).sendToTarget();
 

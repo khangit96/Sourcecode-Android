@@ -4,6 +4,7 @@ package com.demobiggestnumber2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +35,9 @@ public class PlayGameActivity extends AppCompatActivity {
     public AudioManager audioManager;
     private int biggestNumber = 0;
     Button[] bt = new Button[16];
-    Button btContinue;
-    Button btPause;
-    Button btRestart;
+    ImageButton btContinue;
+    ImageButton btPause;
+    ImageButton btRestart;
     private boolean checkGameOver = true;
     private int countQuestion = 0;
     float maxVolume;
@@ -62,7 +64,7 @@ public class PlayGameActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          // Set fullscreen
+        // Set fullscreen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -101,18 +103,22 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        btRestart = (Button) findViewById(R.id.btRestart);
-        btPause = (Button) findViewById(R.id.btPause);
-        btContinue = (Button) findViewById(R.id.btContinue);
+        btRestart = (ImageButton) findViewById(R.id.btRestart);
+        btPause = (ImageButton) findViewById(R.id.btPause);
+        btContinue = (ImageButton) findViewById(R.id.btContinue);
         tvScore = (TextView) findViewById(R.id.tvScore);
-        tvPause = (TextView) findViewById(R.id.tvPause);
+        //   tvPause = (TextView) findViewById(R.id.tvPause);
         tvHightScore = (TextView) findViewById(R.id.tvHighScore);
         tvGameOver = (TextView) findViewById(R.id.tvGameOver);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        int color = 0xFF00FF00;
+        //  progressBar.getIndeterminateDrawable().setColorFilter(color,R.color.background);
+        // progressBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        // progressBar.setBackgroundColor(getResources().getColor(R.color.progressBar));
         tvGameOver.setVisibility(View.INVISIBLE);
         btRestart.setVisibility(View.GONE);
         btContinue.setVisibility(View.GONE);
-        tvPause.setVisibility(View.INVISIBLE);
+        //   tvPause.setVisibility(View.INVISIBLE);
         bt[0] = (Button) findViewById(R.id.bt0);
         bt[1] = (Button) findViewById(R.id.bt1);
         bt[2] = (Button) findViewById(R.id.bt2);
@@ -185,25 +191,19 @@ public class PlayGameActivity extends AppCompatActivity {
             processRandomButton(8, 100);
         } else if (question >= 22 && question <= 23) {
             processRandomButton(9, 100);
-        } else if (question>=24&& question<=26) {
+        } else if (question >= 24 && question <= 26) {
             processRandomButton(10, 100);
-        }
-        else if(question>=27&&question<=28){
+        } else if (question >= 27 && question <= 28) {
             processRandomButton(11, 100);
-        }
-        else if(question>=29&&question<=30){
-            processRandomButton(12,100);
-        }
-        else if(question==31){
-            processRandomButton(13,100);
-        }
-        else if(question==32){
-            processRandomButton(14,100);
-        }
-        else if(question==33){
-            processRandomButton(15,100);
-        }
-        else {
+        } else if (question >= 29 && question <= 30) {
+            processRandomButton(12, 100);
+        } else if (question == 31) {
+            processRandomButton(13, 100);
+        } else if (question == 32) {
+            processRandomButton(14, 100);
+        } else if (question == 33) {
+            processRandomButton(15, 100);
+        } else {
             processRandomButton(16, 100);
         }
     }
@@ -287,7 +287,8 @@ public class PlayGameActivity extends AppCompatActivity {
         bt[5].setBackgroundResource(R.drawable.button_selector);
         bt[6].setBackgroundResource(R.drawable.button_selector);
         bt[7].setBackgroundResource(R.drawable.button_selector);
-        bt[8].setBackgroundResource(R.drawable.button_selector);;
+        bt[8].setBackgroundResource(R.drawable.button_selector);
+        ;
         bt[9].setBackgroundResource(R.drawable.button_selector);
         bt[10].setBackgroundResource(R.drawable.button_selector);
         bt[11].setBackgroundResource(R.drawable.button_selector);
@@ -331,6 +332,7 @@ public class PlayGameActivity extends AppCompatActivity {
         stopTimer();
         score = 0;
         bt[posBiggestNumber].setBackgroundResource(R.drawable.button_game_over);
+        //  bt[posBiggestNumber].setTextSize(30);
         posRandomButtonArray.clear();
         disableButton();
         tvGameOver.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
@@ -338,16 +340,19 @@ public class PlayGameActivity extends AppCompatActivity {
         countQuestion = 0;
         biggestNumber = 0;
         btRestart.setVisibility(View.VISIBLE);
-        btPause.setVisibility(View.GONE);
+        btPause.setEnabled(false);
         btContinue.setVisibility(View.GONE);
         playGameOverSound();
 
     }
 
     public void Restart(View v) {
+        // bt[posBiggestNumber].setTextSize(20);
+        tvGameOver.setText("Game Over");
         this.checkGameOver = true;
         this.btRestart.setVisibility(View.GONE);
         this.btPause.setVisibility(View.VISIBLE);
+        btPause.setEnabled(true);
         this.bt[this.posBiggestNumber].setBackgroundResource(R.drawable.button_selector);
         this.tvScore.setText("0");
         this.posBiggestNumber = 0;
@@ -362,7 +367,7 @@ public class PlayGameActivity extends AppCompatActivity {
     public void Pause(View v) {
         clearText();
         disableButton();
-        this.tvPause.setVisibility(View.VISIBLE);
+        //   this.tvPause.setVisibility(View.VISIBLE);
         this.btContinue.setVisibility(View.VISIBLE);
         this.btPause.setVisibility(View.GONE);
         stopTimer();
@@ -372,7 +377,7 @@ public class PlayGameActivity extends AppCompatActivity {
     public void Continue(View v) {
         this.btPause.setVisibility(View.VISIBLE);
         this.btContinue.setVisibility(View.GONE);
-        this.tvPause.setVisibility(View.INVISIBLE);
+        //   this.tvPause.setVisibility(View.INVISIBLE);
         continueTimer(1000);
         processRandomQuestion(this.countQuestion);
         playPressButtonSound();
@@ -399,18 +404,24 @@ public class PlayGameActivity extends AppCompatActivity {
     /*Start timer*/
     public void startTimer(int Speed) {
         count = 0;
+        progressBar.setProgress(100);
+        timer = new Timer();
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                count = count + 10;
-                progressBar.setProgress(100 - (count * 2));
-                if (count == 50) {
-                    checkGameOver = false;
-                    progressBar.setProgress(0);
-                    mHandler.obtainMessage(1).sendToTarget();
+
+                if (count != 0) {
+                    progressBar.setProgress(100 - (count * 3));
+                    if (count == 30) {
+                        checkGameOver = false;
+                        progressBar.setProgress(0);
+                        mHandler.obtainMessage(1).sendToTarget();
+
+                    }
 
                 }
+                count += 10;
 
             }
         }, 1, Speed);//speed coundown time
@@ -420,6 +431,7 @@ public class PlayGameActivity extends AppCompatActivity {
     /*Handler*/
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
+            tvGameOver.setText("Time Out!");
             gameOver();
         }
     };

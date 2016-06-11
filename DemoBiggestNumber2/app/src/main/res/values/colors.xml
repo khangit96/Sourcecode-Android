@@ -11,4 +11,5 @@
     <color name="bordercolor1">#222222</color>
     <color name="white">#ffffff</color>
     <color name="text">#777167</color>
+    <color name="progressBar">#E91E63</color>
 </resources>

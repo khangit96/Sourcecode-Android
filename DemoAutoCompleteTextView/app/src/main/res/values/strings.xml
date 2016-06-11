@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">DemoAutoCompleteTextView</string>
+    <string-array name="provinceList">
+        <item>Long An</item>
+        <item>An Giang</item>
+        <item>Bình Phước</item>
+        <item>Bình Dương</item>
+        <item>Vĩnh Long</item>
+        <item>Long Hồ</item>
+        <item>Bắc Ninh</item>
+    </string-array>
+</resources>

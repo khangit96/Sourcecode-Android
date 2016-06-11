@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -32,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set fullscreen
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Set No Title
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.content_main);
         init();
     }
@@ -102,16 +110,19 @@ public class MainActivity extends AppCompatActivity {
     public void newGame(View v) {
         playPressButtonSound();
         Intent newGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
-        newGameIntent.putExtra("game","new game");
+        newGameIntent.putExtra("game", "new game");
         startActivityForResult(newGameIntent, 0);
     }
 
     /*Continue game*/
     public void Continue(View v) {
         Intent newGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
-        newGameIntent.putExtra("game","continue");
+        newGameIntent.putExtra("game", "continue");
         startActivityForResult(newGameIntent, 0);
     }
+  public void leaderBoard(View v){
+
+  }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,14 +149,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     /*Exit*/
-    public void Exit(View v) {
-        playPressButtonSound();
-        System.exit(0);
+    public void howToPlay(View v) {
+
 
     }
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "Please press Exit button to close game!", Toast.LENGTH_LONG).show();
+       super.onBackPressed();
     }
 }

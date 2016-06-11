@@ -3,62 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/background"
+    android:background="#ffffff"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".MainActivity">
 
     <Button
-        android:onClick="newGame"
-        android:textColor="@color/myoteal"
         android:id="@+id/tv_connect_myo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/button_selector"
-        android:fontFamily="sans-serif-light"
+        android:background="@drawable/button1"
+        android:onClick="newGame"
         android:paddingBottom="16dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="16dp"
         android:text="New Game"
-        android:textSize="18sp"/>
-
-   <!-- <Button
-        android:onClick="HowToPlay"
-        android:id="@+id/tv_setup_myo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_selector"
-        android:fontFamily="sans-serif-light"
-        android:paddingBottom="16dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="16dp"
-        android:text="How To Play"
         android:textColor="@color/myoteal"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
--->
-    <Button
-        android:id="@+id/btContinue"
-        android:onClick="Continue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_selector"
-        android:fontFamily="sans-serif-light"
-        android:paddingBottom="16dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="16dp"
-        android:text="Continue"
-        android:textColor="@color/myoteal"
-        android:textSize="18sp"/>
-     <Button
-         android:onClick="LeaderBoard"
+    <!-- <Button
+         android:onClick="HowToPlay"
          android:id="@+id/tv_setup_myo"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
@@ -69,29 +37,62 @@
          android:paddingLeft="30dp"
          android:paddingRight="30dp"
          android:paddingTop="16dp"
-         android:text="Leaderboard"
+         android:text="How To Play"
          android:textColor="@color/myoteal"
          android:textSize="18sp"/>
 
+ -->
     <Button
-        android:onClick="Exit"
-        android:id="@+id/tv_play_now"
+        android:id="@+id/btContinue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/button_selector"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
+        android:background="@drawable/button1"
+        android:onClick="Continue"
         android:paddingBottom="16dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="16dp"
-        android:text="Exit"
+        android:text="Continue"
         android:textColor="@color/myoteal"
         android:textSize="18sp"
-        android:visibility="visible"/>
+        android:textStyle="bold" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/tv_setup_myo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/button1"
+        android:onClick="leaderBoard"
+        android:paddingBottom="16dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="16dp"
+        android:text="Leaderboard"
+        android:textColor="@color/myoteal"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/tv_play_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/button1"
+        android:gravity="center"
+        android:onClick="howToPlay"
+        android:paddingBottom="16dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="16dp"
+        android:text="HOW TO PLAY"
+        android:textColor="@color/myoteal"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+   <!-- <LinearLayout
         android:id="@+id/ll_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -153,5 +154,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
+-->
 </LinearLayout>

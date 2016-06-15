@@ -3,10 +3,13 @@ package com.demogooglemap5;
 import android.*;
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,25 +28,45 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
+    double latitude, longtitude;
     private GoogleMap mMap;
     EditText ed;
     private ProgressDialog progressDialog;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+    int count = 0;
+    ArrayList<Home> homeArrayList = new ArrayList<>();
+    int check = -1;
     GoogleMap.OnMyLocationChangeListener listener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
-           /* LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
+            count++;
+            LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions().position(hcmus).title("Chỗ tui đứng"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
-            ed.setText(Double.toString(location.getLatitude()) + "," + Double.toString(location.getLongitude()));
-*/
+            if (count == 3) {
+                progressDialog.dismiss();
+                latitude = location.getLatitude();
+                longtitude = location.getLongitude();
+                ed.setText(Double.toString(location.getLatitude()) + "," + Double.toString(location.getLongitude()));
+            }
+
         }
     };
 
@@ -56,6 +79,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        homeArrayList.add(new Home(10.8325733, 106.3512633, "Nhà cô hai ", 0));
+        homeArrayList.add(new Home(10.8326316, 106.3513716, "Nhà bà bảy ", 0));
+        homeArrayList.add(new Home(10.8325966, 106.3508533, "Ghế đá nhà Khang", 0));
+        homeArrayList.add(new Home(10.8325009,106.3493161,"Nhà nội",0));
+        homeArrayList.add(new Home(10.8325433,106.35098,"Nhà tấm Khang",0));
+        homeArrayList.add(new Home(10.8325216,106.3508766,"Bàn máy tính nhà Khang",0));
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang xác định vị trí hiện tại của bạn....");
+        progressDialog.show();
     }
 
 
@@ -104,7 +136,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void Find(View v) {
-        sendRequest();
+        // sendRequest();
+        progressDialog.setMessage("Đang tìm nhà trọ quang đây");
+        progressDialog.show();
+        for (int i = 0; i < homeArrayList.size(); i++) {
+            String location = String.valueOf(homeArrayList.get(i).latitude) + "," + String.valueOf(homeArrayList.get(i).longtitude);
+            new ReadJsonGoogleMap().execute("https://maps.googleapis.com/maps/api/directions/json?origin=" + ed.getText().toString() + "&destination=" + location + "&key=AIzaSyAzxaiKRJ88fKFkSapcaoJG1SDjtn5cPt0");
+
+        }
+    }
+
+    private static String GET_URL(String theUrl) {
+        StringBuilder content = new StringBuilder();
+        try {
+            URL url = new URL(theUrl);
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line + "\n");
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+
+    class ReadJsonGoogleMap extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            return GET_URL(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            JSONObject jsonData = null;
+            try {
+                check++;
+                jsonData = new JSONObject(s);
+                JSONArray jsonRoutes = jsonData.getJSONArray("routes");
+                for (int i = 0; i < jsonRoutes.length(); i++) {
+                    JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
+                    JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
+                    JSONObject jsonLeg = jsonLegs.getJSONObject(0);
+                    JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
+                    JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
+                    JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
+                    JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
+                    int distance = jsonDistance.getInt("value");
+                    //jsonDistance.getString("text"), jsonDistance.getInt("value");
+                    Home home = new Home(homeArrayList.get(check).latitude, homeArrayList.get(check).longtitude, homeArrayList.get(check).name, distance);
+                    homeArrayList.set(check, home);
+                }
+                if (check == homeArrayList.size() - 1) {
+                    progressDialog.dismiss();
+                    Collections.sort(homeArrayList);
+                    Intent intent = new Intent(MapsActivity.this, ResultActivity.class);
+                    intent.putParcelableArrayListExtra("homeArrayList", (ArrayList<? extends Parcelable>) homeArrayList);
+                    startActivity(intent);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void sendRequest() {
@@ -161,7 +260,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
-            ed.setText("Duration:" + route.duration.text + "Distance: "+route.distance.text);
+            ed.setText("Duration:" + route.duration.text + "Distance: " + route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))

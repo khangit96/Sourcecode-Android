@@ -4,10 +4,13 @@ package com.demobiggestnumber2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -111,11 +116,7 @@ public class PlayGameActivity extends AppCompatActivity {
         tvHightScore = (TextView) findViewById(R.id.tvHighScore);
         tvGameOver = (TextView) findViewById(R.id.tvGameOver);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        int color = 0xFF00FF00;
-        //  progressBar.getIndeterminateDrawable().setColorFilter(color,R.color.background);
-        // progressBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        // progressBar.setBackgroundColor(getResources().getColor(R.color.progressBar));
-        tvGameOver.setVisibility(View.INVISIBLE);
+        tvGameOver.setVisibility(View.GONE);
         btRestart.setVisibility(View.GONE);
         btContinue.setVisibility(View.GONE);
         //   tvPause.setVisibility(View.INVISIBLE);
@@ -234,7 +235,7 @@ public class PlayGameActivity extends AppCompatActivity {
             posRandomButtonArray.add(r);
         }
         for (int i = 0; i < posRandomButtonArray.size(); i++) {
-            int ranNumber = random.nextInt(50);
+            int ranNumber = random.nextInt(100);
             if (ranNumber > biggestNumber) {
                 biggestNumber = ranNumber;
             }
@@ -339,11 +340,11 @@ public class PlayGameActivity extends AppCompatActivity {
         tvGameOver.setVisibility(View.VISIBLE);
         countQuestion = 0;
         biggestNumber = 0;
+        btRestart.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
         btRestart.setVisibility(View.VISIBLE);
         btPause.setEnabled(false);
         btContinue.setVisibility(View.GONE);
         playGameOverSound();
-
     }
 
     public void Restart(View v) {
@@ -453,6 +454,40 @@ public class PlayGameActivity extends AppCompatActivity {
         }
         finish();
         super.onBackPressed();
+    }
+
+    private void takeScreenshot() {
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" +".jpg";
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            // openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or OOM
+            e.printStackTrace();
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
     }
 
 

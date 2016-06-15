@@ -11,18 +11,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Button btContinue;
+    Button btRate;
+    Button btHpwToPlay;
     SharedPreferences sp;
-
+    TextView tvQuiz;
     /*Sound*/
     private SoundPool soundPool;
     private int soundIDPressButton, soundIDBackground;
@@ -30,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
     int counter;
+    LinearLayout ln;
+    ImageView imgSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
             btContinue.setVisibility(View.VISIBLE);
         } else {
             btContinue.setVisibility(View.GONE);
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) ln.getLayoutParams();
+            marginParams.setMargins(0, 70, 0, 0);
+           /* ViewGroup.LayoutParams layoutParams = ln.getLayoutParams(); // Step 1.
+            LinearLayout.LayoutParams castLayoutParams = (LinearLayout.LayoutParams) layoutParams; // Step 2.
+            castLayoutParams.gravity = Gravity.CENTER_VERTICAL; // Step 3.*/
+
         }
         playBackgroundSound();
     }
@@ -64,9 +79,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+      //  imgSound = (ImageView) findViewById(R.id.imgSound);
         btContinue = (Button) findViewById(R.id.btContinue);
+        btRate = (Button) findViewById(R.id.btRate);
+        btHpwToPlay = (Button) findViewById(R.id.btHpwToPlay);
         btContinue.setVisibility(View.GONE);
-
+        tvQuiz = (TextView) findViewById(R.id.tvQuiz);
+        ln = (LinearLayout) findViewById(R.id.ln);
     }
 
     /*init sound*/
@@ -96,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void sound(View v) {
+        Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+    }
+
     /*Play press button sound*/
     public void playPressButtonSound() {
         soundPool.play(soundIDPressButton, volume, volume, 1, 0, 1f);
@@ -116,23 +139,30 @@ public class MainActivity extends AppCompatActivity {
 
     /*Continue game*/
     public void Continue(View v) {
+        playPressButtonSound();
         Intent newGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
         newGameIntent.putExtra("game", "continue");
         startActivityForResult(newGameIntent, 0);
     }
-  public void leaderBoard(View v){
 
-  }
+    public void leaderBoard(View v) {
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 0) {
+
+                ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) ln.getLayoutParams();
+                marginParams.setMargins(0, 0, 0, 100);
                 btContinue.setVisibility(View.VISIBLE);
                 putDataSharedPreferences("checkContinue", "ok");
             }
         } else {
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) ln.getLayoutParams();
+            marginParams.setMargins(0, 95, 0, 0);
             btContinue.setVisibility(View.GONE);
             putDataSharedPreferences("checkContinue", "null");
         }
@@ -150,12 +180,17 @@ public class MainActivity extends AppCompatActivity {
 
     /*Exit*/
     public void howToPlay(View v) {
+        playPressButtonSound();
+        startActivity(new Intent(MainActivity.this, HowToPlayActivity.class));
 
+    }
 
+    public void Rate(View v) {
+        playPressButtonSound();
     }
 
     @Override
     public void onBackPressed() {
-       super.onBackPressed();
+        super.onBackPressed();
     }
 }

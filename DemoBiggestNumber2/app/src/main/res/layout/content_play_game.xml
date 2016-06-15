@@ -11,12 +11,12 @@
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="10dp"
+        android:layout_alignParentTop="true"
+        android:indeterminate="false"
+        android:max="100"
         android:maxHeight="10dip"
         android:minHeight="10dip"
-        android:max="100"
-        android:progressDrawable="@drawable/progress_drawable"
-        android:layout_alignParentTop="true"
-        android:indeterminate="false" />
+        android:progressDrawable="@drawable/progress_drawable" />
     <!--  <com.liulishuo.magicprogresswidget.MagicProgressBar
           android:id="@+id/progressBar"
           android:layout_width="match_parent"
@@ -25,6 +25,13 @@
           app:mpb_fill_color="#455A64"
           app:mpb_flat="true" />
   -->
+    <!--   <TextView
+           android:layout_centerInParent="true"
+           android:textSize="40sp"
+           android:textStyle="bold"
+           android:text="Tap to play!"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />-->
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="wrap_content"
@@ -136,7 +143,7 @@
                 android:ems="6"
                 android:gravity="center"
                 android:maxEms="6"
-                android:text="@string/high_score"
+                android:text="BEST"
                 android:textColor="#ffffff"
                 android:textStyle="bold" />
 
@@ -264,7 +271,6 @@
               android:textSize="13sp"
               android:textStyle="bold" />-->
     </LinearLayout>
-
     <!-- <RelativeLayout
          android:id="@+id/rl_game_container"
          android:layout_width="wrap_content"
@@ -319,6 +325,7 @@
 
      </LinearLayout>-->
     <LinearLayout
+
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -521,7 +528,6 @@
                 android:background="@drawable/button_selector"
                 android:onClick="Choose"
                 android:tag="12"
-                android:text=""
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
 
@@ -566,36 +572,39 @@
         </LinearLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:background="@drawable/image_button"
+        android:id="@+id/btRestart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="Restart"
+        android:src="@drawable/restart"
+        android:layout_below="@+id/tvGameOver"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/tvGameOver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
         android:gravity="center"
         android:text="Game Over!"
-        android:textColor="#2196F3"
+        android:textColor="#24ADDE"
         android:textSize="40sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
 
-    <ImageButton
-        android:id="@+id/btRestart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/image_button"
-        android:onClick="Restart"
-        android:src="@drawable/restart" />
 
-    <!-- <TextView
-         android:id="@+id/tvPause"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_centerInParent="true"
-         android:text="PAUSE"
-         android:textColor="@color/myoteal"
-         android:textSize="25sp" />-->
 </RelativeLayout>

@@ -52,15 +52,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Polyline> polylinePaths = new ArrayList<>();
     int count = 0;
     ArrayList<Home> homeArrayList = new ArrayList<>();
+    List<Route> routes = new ArrayList<Route>();
     int check = -1;
     GoogleMap.OnMyLocationChangeListener listener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
             count++;
-            LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(hcmus).title("Chỗ tui đứng"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
+
             if (count == 3) {
+                LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(hcmus).title("Chỗ tui đứng"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
                 progressDialog.dismiss();
                 latitude = location.getLatitude();
                 longtitude = location.getLongitude();
@@ -79,12 +81,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        homeArrayList.add(new Home(10.8325733, 106.3512633, "Nhà cô hai ", 0));
-        homeArrayList.add(new Home(10.8326316, 106.3513716, "Nhà bà bảy ", 0));
-        homeArrayList.add(new Home(10.8325966, 106.3508533, "Ghế đá nhà Khang", 0));
-        homeArrayList.add(new Home(10.8325009,106.3493161,"Nhà nội",0));
-        homeArrayList.add(new Home(10.8325433,106.35098,"Nhà tấm Khang",0));
-        homeArrayList.add(new Home(10.8325216,106.3508766,"Bàn máy tính nhà Khang",0));
+        homeArrayList.add(new Home(10.8325733, 106.3512633, "Nhà cô hai ", 0, routes));
+        homeArrayList.add(new Home(10.8326316, 106.3513716, "Nhà bà bảy ", 0, routes));
+        homeArrayList.add(new Home(10.8325966, 106.3508533, "Ghế đá nhà Khang", 0, routes));
+        homeArrayList.add(new Home(10.8325009, 106.3493161, "Nhà nội", 0, routes));
+        homeArrayList.add(new Home(10.8325433, 106.35098, "Nhà tấm Khang", 0, routes));
+        homeArrayList.add(new Home(10.8325216, 106.3508766, "Bàn máy tính nhà Khang", 0, routes));
+        homeArrayList.add(new Home(10.80954, 106.3669016, "Chợ xã Bình Hòa Nam", 0, routes));
+        homeArrayList.add(new Home(10.828845, 106.3513416, "Nhà Cô Ba", 0, routes));
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang xác định vị trí hiện tại của bạn....");
         progressDialog.show();
@@ -180,7 +184,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 jsonData = new JSONObject(s);
                 JSONArray jsonRoutes = jsonData.getJSONArray("routes");
                 for (int i = 0; i < jsonRoutes.length(); i++) {
+                    Route route = new Route();
                     JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
+                    JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
                     JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
                     JSONObject jsonLeg = jsonLegs.getJSONObject(0);
                     JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
@@ -188,21 +194,116 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
                     JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
                     int distance = jsonDistance.getInt("value");
-                    //jsonDistance.getString("text"), jsonDistance.getInt("value");
-                    Home home = new Home(homeArrayList.get(check).latitude, homeArrayList.get(check).longtitude, homeArrayList.get(check).name, distance);
+                    route.distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
+                    route.duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
+                    route.endAddress = jsonLeg.getString("end_address");
+                    route.startAddress = jsonLeg.getString("start_address");
+                    route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
+                    route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
+                    route.points = decodePolyLine(overview_polylineJson.getString("points"));
+                    routes.add(route);
+                    Home home = new Home(homeArrayList.get(check).latitude, homeArrayList.get(check).longtitude, homeArrayList.get(check).name, distance, routes);
                     homeArrayList.set(check, home);
                 }
                 if (check == homeArrayList.size() - 1) {
                     progressDialog.dismiss();
-                    Collections.sort(homeArrayList);
+                 /*   Collections.sort(homeArrayList);
                     Intent intent = new Intent(MapsActivity.this, ResultActivity.class);
                     intent.putParcelableArrayListExtra("homeArrayList", (ArrayList<? extends Parcelable>) homeArrayList);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                  /*  Toast.makeText(getApplicationContext(), "" + routes.size(), Toast.LENGTH_LONG).show();
+                    drawPolyline(routes);*/
+                    //Toast.makeText(getApplicationContext(),""+homeArrayList.get(0).routeList.size(),Toast.LENGTH_LONG).show();
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**/
+    private List<LatLng> decodePolyLine(final String poly) {
+        int len = poly.length();
+        int index = 0;
+        List<LatLng> decoded = new ArrayList<LatLng>();
+        int lat = 0;
+        int lng = 0;
+
+        while (index < len) {
+            int b;
+            int shift = 0;
+            int result = 0;
+            do {
+                b = poly.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = poly.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            decoded.add(new LatLng(
+                    lat / 100000d, lng / 100000d
+            ));
+        }
+
+        return decoded;
+    }
+
+    public void drawPolyline(List<Route> routes) {
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline : polylinePaths) {
+                polyline.remove();
+            }
+        }
+        /**/
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        for (Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
+                    .title(route.endAddress)
+                    .position(route.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLUE).
+                    width(10);
+
+            for (int i = 0; i < route.points.size(); i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
     }
 

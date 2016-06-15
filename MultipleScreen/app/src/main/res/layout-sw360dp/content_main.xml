@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_main">
     <Button
         android:layout_marginTop="50dp"
-        android:text="320dp"
+        android:text="360dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

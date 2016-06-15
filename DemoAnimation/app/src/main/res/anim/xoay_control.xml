@@ -4,5 +4,4 @@
     android:fromDegrees="0"
     android:repeatMode="reverse"
     android:toDegrees="360">
-
 </rotate>

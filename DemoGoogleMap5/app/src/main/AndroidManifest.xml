@@ -40,6 +40,8 @@
         </activity>
         <activity android:name=".ResultActivity" >
         </activity>
+        <activity android:name=".DrawMapActivity" >
+        </activity>
     </application>
 
 </manifest>

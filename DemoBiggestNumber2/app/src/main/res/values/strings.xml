@@ -48,4 +48,5 @@
     <string name="arm_lost">Arm lost</string>
     <string name="when_ready">Perfect!\nWhen you\'re ready, press play.</string>
     <string name="title_activity_play_game">PlayGameActivity</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3317370381024566/7313557139</string>
 </resources>

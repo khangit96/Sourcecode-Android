@@ -22,4 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Xoay Màn Hình" />
+
+    <Button
+        android:id="@+id/btXoay3sTat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xoay 3s tắt phần mình" />
 </LinearLayout>

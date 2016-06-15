@@ -1,7 +1,11 @@
 package com.demogooglemap5;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,4 +20,5 @@ public class Route {
     public LatLng startLocation;
 
     public List<LatLng> points;
+
 }

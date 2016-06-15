@@ -3,20 +3,25 @@ package com.demogooglemap5;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by Administrator on 6/14/2016.
  */
-public class Home implements Parcelable, Comparable<Home> {
+public class Home implements Parcelable, Comparable<Home>, Serializable {
     public double latitude;
     public double longtitude;
     public String name;
     public int distance;
+    public List<Route> routeList;
 
-    public Home(double latitude, double longtitude, String name, int distance) {
+    public Home(double latitude, double longtitude, String name, int distance, List<Route> routeList) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.name = name;
         this.distance = distance;
+        this.routeList = routeList;
     }
 
     protected Home(Parcel in) {
@@ -49,6 +54,7 @@ public class Home implements Parcelable, Comparable<Home> {
         parcel.writeDouble(longtitude);
         parcel.writeString(name);
         parcel.writeInt(distance);
+      //  parcel.writeList(routeList);
     }
 
     @Override

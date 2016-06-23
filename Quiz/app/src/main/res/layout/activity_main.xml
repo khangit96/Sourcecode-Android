@@ -78,13 +78,13 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btRate"
+                android:id="@+id/btShare"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/button_menu"
                 android:gravity="center"
-                android:onClick="Rate"
+                android:onClick="Share"
                 android:text="Share"
                 android:textColor="@color/white"
                 android:textSize="18sp"

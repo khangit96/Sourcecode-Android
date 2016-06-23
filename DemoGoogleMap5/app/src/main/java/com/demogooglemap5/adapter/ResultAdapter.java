@@ -10,22 +10,23 @@ import android.widget.TextView;
 
 import com.demogooglemap5.Home;
 import com.demogooglemap5.R;
+import com.demogooglemap5.Route;
 
 import java.util.List;
 
 /**
  * Created by Administrator on 6/16/2016.
  */
-public class ResultAdapter extends ArrayAdapter<Home> {
+public class ResultAdapter extends ArrayAdapter<Route> {
     Activity context;
     int resource;
-    List<Home> homeList;
+    List<Route> routeList;
 
-    public ResultAdapter(Activity context, int resource, List<Home> homeList) {
-        super(context, resource, homeList);
+    public ResultAdapter(Activity context, int resource, List<Route> routeList) {
+        super(context, resource, routeList);
         this.context = context;
         this.resource = resource;
-        this.homeList = homeList;
+        this.routeList = routeList;
     }
 
     @Override
@@ -35,8 +36,8 @@ public class ResultAdapter extends ArrayAdapter<Home> {
         TextView tvName, tvDistance;
         tvName = (TextView) row.findViewById(R.id.tvName);
         tvDistance = (TextView) row.findViewById(R.id.tvDistance);
-        tvName.setText(homeList.get(position).name);
-        tvDistance.setText("" + homeList.get(position).distance+"m");
+        tvName.setText(routeList.get(position).name);
+        tvDistance.setText("" + routeList.get(position).distance.value + "m");
         return row;
     }
 }

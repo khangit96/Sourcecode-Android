@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class ResultActivity extends AppCompatActivity {
     ListView lv;
-    ArrayList<Home> homeArrayList = new ArrayList<>();
+    ArrayList<Route> routeArrayList = new ArrayList<>();
     ResultAdapter resultAdapter;
 
     @Override
@@ -26,16 +26,15 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         lv = (ListView) findViewById(R.id.lv);
         Intent intent = getIntent();
-        homeArrayList = intent.getParcelableArrayListExtra("homeArrayList");
-        resultAdapter = new ResultAdapter(this, R.layout.item, homeArrayList);
+        routeArrayList = intent.getParcelableArrayListExtra("routes");
+        resultAdapter = new ResultAdapter(this, R.layout.item,routeArrayList);
         lv.setAdapter(resultAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-             /*   Intent intent1 = new Intent(ResultActivity.this, DrawMapActivity.class);
-                intent1.putExtra("home", (Serializable) homeArrayList.get(i));
-                startActivity(intent1);*/
-                Toast.makeText(getApplicationContext(), "" + homeArrayList.get(i).routeList.size(), Toast.LENGTH_LONG).show();
+                Intent intent1 = new Intent(ResultActivity.this, DrawMapActivity.class);
+                intent1.putExtra("route", (Serializable) routeArrayList.get(i));
+                startActivity(intent1);
             }
         });
     }

@@ -2,6 +2,7 @@ package khangit96.quiz;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -25,6 +26,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppSDK;
+import com.startapp.android.publish.splash.SplashConfig;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -78,11 +82,14 @@ public class PlayGameActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_play_game);
 
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3317370381024566~7562405938");
+     /*   MobileAds.initialize(getApplicationContext(), "ca-app-pub-3317370381024566~7562405938");
 
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
+        StartAppSDK.init(this, "205723865", true);
+        /*StartAppAd.showAd(this);*/
+      //  StartAppAd.showSplash(this, savedInstanceState, new SplashConfig().setTheme(SplashConfig.Theme.GLOOMY));
         init();
     }
 
@@ -452,6 +459,7 @@ public class PlayGameActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
+        StartAppAd.onBackPressed(this);
         stopTimer();
         if (this.checkGameOver) {
             putDataSharedPreferences("score", Integer.toString(this.score));

@@ -14,14 +14,14 @@ public class Home implements Parcelable, Comparable<Home>, Serializable {
     public double longtitude;
     public String name;
     public int distance;
-    public List<Route> routeList;
+    public Route route;
 
-    public Home(double latitude, double longtitude, String name, int distance, List<Route> routeList) {
+    public Home(double latitude, double longtitude, String name, int distance, Route route) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.name = name;
         this.distance = distance;
-        this.routeList = routeList;
+        this.route = route;
     }
 
     protected Home(Parcel in) {
@@ -29,6 +29,7 @@ public class Home implements Parcelable, Comparable<Home>, Serializable {
         longtitude = in.readDouble();
         name = in.readString();
         distance = in.readInt();
+        route = in.readParcelable(getClass().getClassLoader());
     }
 
     public static final Creator<Home> CREATOR = new Creator<Home>() {
@@ -54,7 +55,7 @@ public class Home implements Parcelable, Comparable<Home>, Serializable {
         parcel.writeDouble(longtitude);
         parcel.writeString(name);
         parcel.writeInt(distance);
-      //  parcel.writeList(routeList);
+        parcel.writeParcelable(route, i);
     }
 
     @Override

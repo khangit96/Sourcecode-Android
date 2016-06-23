@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,10 +18,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+
 
 public class MainActivity extends AppCompatActivity {
     Button btContinue;
-    Button btRate;
+    Button btShare;
     Button btHpwToPlay;
     SharedPreferences sp;
     TextView tvQuiz;
@@ -33,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     int counter;
     LinearLayout ln;
     ImageView imgSound;
+    ShareDialog shareDialog;
+    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,26 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         init();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Toast.makeText(getApplicationContext(), "Share successed!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), "Share failed!", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
@@ -76,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         //  imgSound = (ImageView) findViewById(R.id.imgSound);
         btContinue = (Button) findViewById(R.id.btContinue);
-        btRate = (Button) findViewById(R.id.btRate);
+        btShare = (Button) findViewById(R.id.btShare);
         btHpwToPlay = (Button) findViewById(R.id.btHpwToPlay);
         btContinue.setVisibility(View.GONE);
         tvQuiz = (TextView) findViewById(R.id.tvQuiz);
@@ -126,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*Event play game*/
     public void newGame(View v) {
-        playPressButtonSound();
+        // playPressButtonSound();
         Intent newGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
         newGameIntent.putExtra("game", "new game");
         startActivityForResult(newGameIntent, 0);
@@ -134,15 +165,12 @@ public class MainActivity extends AppCompatActivity {
 
     /*Continue game*/
     public void Continue(View v) {
-        playPressButtonSound();
+        //    playPressButtonSound();
         Intent newGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
         newGameIntent.putExtra("game", "continue");
         startActivityForResult(newGameIntent, 0);
     }
 
-    public void leaderBoard(View v) {
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -161,27 +189,25 @@ public class MainActivity extends AppCompatActivity {
             btContinue.setVisibility(View.GONE);
             putDataSharedPreferences("checkContinue", "null");
         }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    /*  *//*High score*//*
-    public void About(View v) {
-        Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_LONG).show();
-    }*/
-/*
-    *//*Instruction *//*
-    public void HowToPlay(View v) {
-        Toast.makeText(getApplicationContext(), "How to play", Toast.LENGTH_LONG).show();
-    }*/
-
-    /*Exit*/
     public void howToPlay(View v) {
-        playPressButtonSound();
+        //    playPressButtonSound();
         startActivity(new Intent(MainActivity.this, HowToPlayActivity.class));
 
     }
 
-    public void Rate(View v) {
-        playPressButtonSound();
+    public void Share(View v) {
+
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            // Ví dụ với link. Video và ảnh tương tự
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=khangit96.quiz"))
+                    .build();
+
+            shareDialog.show(linkContent);
+        }
     }
 
     @Override

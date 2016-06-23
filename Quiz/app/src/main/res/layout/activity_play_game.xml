@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="eu.thedarken.myo.twothousandfortyeight.GameFragment">
 
     <ProgressBar
@@ -574,47 +574,58 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:gravity="center"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:gravity="center">
 
     </RelativeLayout>
 
     <ImageButton
-        android:layout_marginTop="15dp"
-        android:background="@drawable/image_button"
         android:id="@+id/btRestart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="Restart"
-        android:src="@drawable/restart"
         android:layout_below="@+id/tvGameOver"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/image_button"
+        android:onClick="Restart"
+        android:src="@drawable/restart" />
 
     <TextView
         android:id="@+id/tvGameOver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="Game Over!"
         android:textColor="#24ADDE"
         android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+    <!-- <com.google.android.gms.ads.AdView
+         android:id="@+id/adView"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:layout_alignParentBottom="true"
+         ads:adSize="BANNER"
+         ads:adUnitId="@string/banner_ad_unit_id">
+     </com.google.android.gms.ads.AdView>-->
+   <!-- <com.startapp.android.publish.banner.banner3d.Banner3D
+        android:id="@+id/startAppBanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true" />-->
+    <com.startapp.android.publish.banner.Banner
+        android:id="@+id/startAppBanner"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
-    </com.google.android.gms.ads.AdView>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

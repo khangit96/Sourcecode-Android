@@ -52,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Polyline> polylinePaths = new ArrayList<>();
     int count = 0;
     ArrayList<Home> homeArrayList = new ArrayList<>();
-    List<Route> routes = new ArrayList<Route>();
+    ArrayList<Route> routes = new ArrayList<Route>();
     int check = -1;
     GoogleMap.OnMyLocationChangeListener listener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
@@ -81,14 +81,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        homeArrayList.add(new Home(10.8325733, 106.3512633, "Nhà cô hai ", 0, routes));
-        homeArrayList.add(new Home(10.8326316, 106.3513716, "Nhà bà bảy ", 0, routes));
-        homeArrayList.add(new Home(10.8325966, 106.3508533, "Ghế đá nhà Khang", 0, routes));
-        homeArrayList.add(new Home(10.8325009, 106.3493161, "Nhà nội", 0, routes));
-        homeArrayList.add(new Home(10.8325433, 106.35098, "Nhà tấm Khang", 0, routes));
-        homeArrayList.add(new Home(10.8325216, 106.3508766, "Bàn máy tính nhà Khang", 0, routes));
-        homeArrayList.add(new Home(10.80954, 106.3669016, "Chợ xã Bình Hòa Nam", 0, routes));
-        homeArrayList.add(new Home(10.828845, 106.3513416, "Nhà Cô Ba", 0, routes));
+       /* homeArrayList.add(new Home(10.8325733, 106.3512633, "Nhà cô hai ", 0, null));
+        homeArrayList.add(new Home(10.8326316, 106.3513716, "Nhà bà bảy ", 0, null));
+        homeArrayList.add(new Home(10.8325966, 106.3508533, "Ghế đá nhà Khang", 0, null));
+        homeArrayList.add(new Home(10.8325009, 106.3493161, "Nhà nội", 0, null));
+        homeArrayList.add(new Home(10.8325433, 106.35098, "Nhà tấm Khang", 0, null));
+        homeArrayList.add(new Home(10.8325216, 106.3508766, "Bàn máy tính nhà Khang", 0, null));
+        homeArrayList.add(new Home(10.80954, 106.3669016, "Chợ xã Bình Hòa Nam", 0, null));
+        homeArrayList.add(new Home(10.828845, 106.3513416, "Nhà Cô Ba", 0, null));*/
+        routes.add(new Route("Nhà cô hai ", null, null, null, null, null, null, new EndLocation(10.8325733, 106.3512633)));
+        routes.add(new Route("Nhà bà bảy ", null, null, null, null, null, null, new EndLocation(10.8326316, 106.3513716)));
+        routes.add(new Route("Ghế đá nhà Khang", null, null, null, null, null, null, new EndLocation(10.8325966, 106.3508533)));
+        routes.add(new Route("Nhà nội", null, null, null, null, null, null, new EndLocation(10.8325009, 106.3493161)));
+        routes.add(new Route("Nhà tấm Khang", null, null, null, null, null, null, new EndLocation(10.8325433, 106.35098)));
+        routes.add(new Route("Bàn máy tính nhà Khang", null, null, null, null, null, null, new EndLocation(10.8325216, 106.3508766)));
+        routes.add(new Route("Chợ xã Bình Hòa Nam", null, null, null, null, null, null, new EndLocation(10.80954, 106.3669016)));
+        routes.add(new Route("Nhà Cô Ba", null, null, null, null, null, null, new EndLocation(10.828845, 106.3513416)));
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang xác định vị trí hiện tại của bạn....");
         progressDialog.show();
@@ -143,9 +151,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // sendRequest();
         progressDialog.setMessage("Đang tìm nhà trọ quang đây");
         progressDialog.show();
-        for (int i = 0; i < homeArrayList.size(); i++) {
+        /*for (int i = 0; i < homeArrayList.size(); i++) {
             String location = String.valueOf(homeArrayList.get(i).latitude) + "," + String.valueOf(homeArrayList.get(i).longtitude);
             new ReadJsonGoogleMap().execute("https://maps.googleapis.com/maps/api/directions/json?origin=" + ed.getText().toString() + "&destination=" + location + "&key=AIzaSyAzxaiKRJ88fKFkSapcaoJG1SDjtn5cPt0");
+
+        }*/
+        for (int i = 0; i < routes.size(); i++) {
+            String endLocation = String.valueOf(routes.get(i).endLocation.latitude) + "," + String.valueOf(routes.get(i).endLocation.longtitude);
+            new ReadJsonGoogleMap().execute("https://maps.googleapis.com/maps/api/directions/json?origin=" + ed.getText().toString() + "&destination=" + endLocation + "&key=AIzaSyAzxaiKRJ88fKFkSapcaoJG1SDjtn5cPt0");
 
         }
     }
@@ -184,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 jsonData = new JSONObject(s);
                 JSONArray jsonRoutes = jsonData.getJSONArray("routes");
                 for (int i = 0; i < jsonRoutes.length(); i++) {
-                    Route route = new Route();
+
                     JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
                     JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
                     JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
@@ -193,27 +206,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
                     JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
                     JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
-                    int distance = jsonDistance.getInt("value");
-                    route.distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
-                    route.duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
-                    route.endAddress = jsonLeg.getString("end_address");
-                    route.startAddress = jsonLeg.getString("start_address");
-                    route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
-                    route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-                    route.points = decodePolyLine(overview_polylineJson.getString("points"));
-                    routes.add(route);
-                    Home home = new Home(homeArrayList.get(check).latitude, homeArrayList.get(check).longtitude, homeArrayList.get(check).name, distance, routes);
-                    homeArrayList.set(check, home);
+                    //  int distance = jsonDistance.getInt("value");
+                    Distance distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
+                    Duration duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
+                    StartLocation startLocation = new StartLocation(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
+                    //     EndLocation endLocation = new EndLocation(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
+                    Route route = new Route(routes.get(check).name, distance, duration, overview_polylineJson.getString("points"), jsonLeg.getString("start_address"), jsonLeg.getString("end_address"), startLocation, routes.get(check).endLocation);
+                    //  route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
+                    // route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
+                    //  route.points = decodePolyLine(overview_polylineJson.getString("points"));
+                    //  routes.add(route);
+                 /*   Home home = new Home(homeArrayList.get(check).latitude, homeArrayList.get(check).longtitude, homeArrayList.get(check).name, distance, route);
+                    homeArrayList.set(check, home);*/
+                    routes.set(check, route);
                 }
-                if (check == homeArrayList.size() - 1) {
+                if (check == routes.size() - 1) {
                     progressDialog.dismiss();
-                 /*   Collections.sort(homeArrayList);
+                    /*Collections.sort(homeArrayList);
                     Intent intent = new Intent(MapsActivity.this, ResultActivity.class);
                     intent.putParcelableArrayListExtra("homeArrayList", (ArrayList<? extends Parcelable>) homeArrayList);
                     startActivity(intent);*/
-                  /*  Toast.makeText(getApplicationContext(), "" + routes.size(), Toast.LENGTH_LONG).show();
-                    drawPolyline(routes);*/
-                    //Toast.makeText(getApplicationContext(),""+homeArrayList.get(0).routeList.size(),Toast.LENGTH_LONG).show();
+                    Collections.sort(routes);
+                    Intent intent = new Intent(MapsActivity.this, ResultActivity.class);
+                    intent.putParcelableArrayListExtra("routes", (ArrayList<? extends Parcelable>) routes);
+                    startActivity(intent);
 
                 }
             } catch (JSONException e) {
@@ -260,26 +276,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return decoded;
     }
 
-    public void drawPolyline(List<Route> routes) {
+    /*  public void drawPolyline(List<Route> routes) {
 
-        if (originMarkers != null) {
-            for (Marker marker : originMarkers) {
-                marker.remove();
-            }
-        }
+          if (originMarkers != null) {
+              for (Marker marker : originMarkers) {
+                  marker.remove();
+              }
+          }
 
-        if (destinationMarkers != null) {
-            for (Marker marker : destinationMarkers) {
-                marker.remove();
-            }
-        }
+          if (destinationMarkers != null) {
+              for (Marker marker : destinationMarkers) {
+                  marker.remove();
+              }
+          }
 
-        if (polylinePaths != null) {
-            for (Polyline polyline : polylinePaths) {
-                polyline.remove();
-            }
-        }
-        /**/
+          if (polylinePaths != null) {
+              for (Polyline polyline : polylinePaths) {
+                  polyline.remove();
+              }
+          }
+          *//**//*
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
@@ -305,6 +321,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
+    }
+*/
+    public void drawPolyline(Route route) {
+
+       /* if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline : polylinePaths) {
+                polyline.remove();
+            }
+        }
+
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+        originMarkers.add(mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
+                .title(route.startAddress)
+                .position(route.startLocation)));
+        destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
+                .title(route.endAddress)
+                .position(route.endLocation)));
+
+        PolylineOptions polylineOptions = new PolylineOptions().
+                geodesic(true).
+                color(Color.BLUE).
+                width(10);
+
+        for (int i = 0; i < route.points.size(); i++)
+            polylineOptions.add(route.points.get(i));
+
+        polylinePaths.add(mMap.addPolyline(polylineOptions));*/
+
     }
 
     private void sendRequest() {
@@ -352,7 +415,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
-        progressDialog.dismiss();
+       /* progressDialog.dismiss();
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
@@ -381,6 +444,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 polylineOptions.add(route.points.get(i));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
-        }
+        }*/
     }
 }

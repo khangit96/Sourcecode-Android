@@ -91,7 +91,7 @@ public class DirectionFinder {
         JSONObject jsonData = new JSONObject(data);
         JSONArray jsonRoutes = jsonData.getJSONArray("routes");
         for (int i = 0; i < jsonRoutes.length(); i++) {
-            JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
+         /*   JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
             Route route = new Route();
 
             JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
@@ -110,7 +110,7 @@ public class DirectionFinder {
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
             route.points = decodePolyLine(overview_polylineJson.getString("points"));
 
-            routes.add(route);
+            routes.add(route);*/
         }
 
         listener.onDirectionFinderSuccess(routes);

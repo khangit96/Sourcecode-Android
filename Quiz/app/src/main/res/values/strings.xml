@@ -49,4 +49,5 @@
     <string name="when_ready">Perfect!\nWhen you\'re ready, press play.</string>
     <string name="title_activity_play_game">PlayGameActivity</string>
     <string name="banner_ad_unit_id">ca-app-pub-3317370381024566/9039139133</string>
+    <string name="facebook_app_id">870387233090331</string>
 </resources>

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             public void onMapLoaded() {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings();
-          //      mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
                 mMap.setTrafficEnabled(true);
             }
         });
@@ -60,10 +60,34 @@ public class MainActivity extends AppCompatActivity {
                 if (count == 3) {
                     progressDialog.dismiss();
                     LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
-                //    mMap.addMarker(new MarkerOptions().position(hcmus).title("Vị trí hiện tại của bạn"));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(hcmus)
+                            .title("Vị trí hiện tại của bạn"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
                 }
 
+            }
+        });
+        /*Map click listener*/
+      /*  mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_LONG).show();
+            }
+        });*/
+        /*Map long click listener*/
+      /*  mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                Toast.makeText(getApplicationContext(), "Long Clicked", Toast.LENGTH_LONG).show();
+            }
+        });*/
+        /*Maker listener*/
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Toast.makeText(getApplicationContext(),marker.getTitle(), Toast.LENGTH_LONG).show();
+                return true;
             }
         });
         //Initializing NavigationView

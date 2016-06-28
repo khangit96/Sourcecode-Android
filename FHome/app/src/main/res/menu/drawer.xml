@@ -4,6 +4,7 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:actionMenuTextColor="#FFFFFF"
             android:id="@+id/find"
             android:checked="false"
             android:icon="@drawable/ic_inbox_black"
@@ -15,7 +16,7 @@
             android:icon="@drawable/ic_star_black"
             android:title="@string/starred_string" />
 
-        <item
+        <!--<item
             android:id="@+id/sent_mail"
             android:checked="false"
             android:icon="@drawable/ic_send_black"
@@ -43,6 +44,6 @@
             android:checked="false"
             android:icon="@drawable/ic_error_black"
             android:title="@string/spam_string" />
-
+-->
     </group>
 </menu>

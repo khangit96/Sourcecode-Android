@@ -20,7 +20,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,42 +34,42 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
-    //Defining Variables
+
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+
     private GoogleMap mMap;
+
     ProgressDialog progressDialog;
+
+    ArrayList<NhaTro> nhaTroArrayLis;
+
+    TextView tvTenNhaTro;
+
     int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Initializing Toolbar and setting it as the actionbar
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //  toolbar.setLogo(R.drawable.home);
         setSupportActionBar(toolbar);
-        //Map
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMap = mapFragment.getMap();
         mMap.setMyLocationEnabled(true);
-        LatLng hcmus = new LatLng(10.980808, 106.682577);
-        mMap.addMarker(new MarkerOptions()
-                .position(hcmus)
-                .title("Đại Học Thủ Dầu Một"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Đang tìm nhà trọ quanh đây...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+
+        KhoiTaoControl();
+
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 mMap.setMyLocationEnabled(true);
-                //TuiDangODau();
                 mMap.getUiSettings();
                 mMap.setTrafficEnabled(true);
             }
@@ -78,28 +80,26 @@ public class MainActivity extends AppCompatActivity {
                 count++;
                 if (count == 3) {
                     progressDialog.dismiss();
-                    LatLng hcmus = new LatLng(location.getLatitude(), location.getLongitude());
-                    /*mMap.addMarker(new MarkerOptions()
-                            .position(hcmus)
-                            .i
-                            .title("Vị trí hiện tại của bạn"));*/
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
+                    LatLng viTriHienTai = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    for (int i = 0; i < nhaTroArrayLis.size(); i++) {
+                        LatLng viTrinNhaTro = new LatLng(nhaTroArrayLis.get(i).viDo, nhaTroArrayLis.get(i).kinhDo);
+                        mMap.addMarker(new MarkerOptions()
+                                .position(viTrinNhaTro)
+                                .title(nhaTroArrayLis.get(i).tenNhaTro));
+                    }
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriHienTai, 16f));
                 }
 
             }
         });
-        /*Maker listener*/
-       /* mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+      /*Maker listen*/
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(getApplicationContext(), marker.getTitle(), Toast.LENGTH_LONG).show();
+                OpenBottomSheet(marker.getTitle().toString(), "Ok");
                 return true;
-            }
-        });*/
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                OpenBottomSheet();
             }
         });
         //Initializing NavigationView
@@ -113,20 +113,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
 
-                //Checking if the item is in checked state or not, if not make it in checked state
                 if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
 
-                //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
-                //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
-
-
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.find:
-                        return true;
+                   /* case R.id.find:
+                        return true;*/
 
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -142,24 +136,36 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-
                 super.onDrawerOpened(drawerView);
             }
         };
 
-        //Setting the actionbarToggle to drawer layout
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
-
-        //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
+    }
+
+    /*Hàm hởi tạo các control*/
+    public void KhoiTaoControl() {
+        nhaTroArrayLis = new ArrayList<>();
+        nhaTroArrayLis.add(new NhaTro("Nhà trọ Ngọc Lan", "Bình Hòa Nam,Đức Huệ", 10.8325009, 106.3493161));
+        nhaTroArrayLis.add(new NhaTro("Nhà trọ Phương Thảo", "Phú Hòa,Phú Lợi", 10.828845, 106.3513416));
+        nhaTroArrayLis.add(new NhaTro("Nhà trọ Việt Đức", "Phường Chánh Nghĩa,Tp.Thủ Dầu Một,Bình Dương", 10.80954, 106.3669016));
+
+        LatLng hcmus = new LatLng(10.980808, 106.682577);
+        mMap.addMarker(new MarkerOptions()
+                .position(hcmus)
+                .title("Đại Học Thủ Dầu Một"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Đang tìm nhà trọ quanh đây...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
     }
 
     @Override
@@ -171,26 +177,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-     /*   //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
-    public void OpenBottomSheet() {
+    public void OpenBottomSheet(String tenNhaTro, String diaChi) {
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-       /* TextView txtBackup = (TextView)view.findViewById( R.id.txt_backup);
-        TextView txtDetail = (TextView)view.findViewById( R.id.txt_detail);
-        TextView txtOpen = (TextView)view.findViewById( R.id.txt_open);
-        final TextView txtUninstall = (TextView)view.findViewById( R.id.txt_uninstall);*/
-        getWindow().getDecorView().setBackgroundResource(R.color.colorAccent);
+        TextView tvTenNhaTro = (TextView) view.findViewById(R.id.tvTenNhaTro);
+        tvTenNhaTro.setText(tenNhaTro);
         final Dialog mBottomSheetDialog = new Dialog(MainActivity.this,
                 R.style.MaterialDialogSheet);
         mBottomSheetDialog.setContentView(view);
@@ -200,42 +194,6 @@ public class MainActivity extends AppCompatActivity {
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
         mBottomSheetDialog.show();
 
-
-     /*   txtBackup.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Clicked Backup", Toast.LENGTH_SHORT).show();
-                mBottomSheetDialog.dismiss();
-            }
-        });
-
-        txtDetail.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Clicked Detail",Toast.LENGTH_SHORT).show();
-                mBottomSheetDialog.dismiss();
-            }
-        });
-
-        txtOpen.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Clicked Open",Toast.LENGTH_SHORT).show();
-                mBottomSheetDialog.dismiss();
-            }
-        });
-
-        txtUninstall.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Clicked Uninstall",Toast.LENGTH_SHORT).show();
-                mBottomSheetDialog.dismiss();
-            }
-        });*/
     }
 
 }

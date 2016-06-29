@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
 
-        <item
+     <!--   <item
             android:actionMenuTextColor="#FFFFFF"
             android:id="@+id/find"
             android:checked="false"
@@ -15,7 +15,7 @@
             android:checked="false"
             android:icon="@drawable/ic_star_black"
             android:title="@string/starred_string" />
-
+-->
         <!--<item
             android:id="@+id/sent_mail"
             android:checked="false"

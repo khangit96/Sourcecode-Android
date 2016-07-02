@@ -49,16 +49,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="190dp"
-    android:background="#2196F3"
+    android:background="#46CBC6"
     android:gravity="center"
     android:orientation="vertical">
-    <de.hdodenhof.circleimageview.CircleImageView
+   <!-- <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/thudaumot"
-        app:border_color="#FF000000"/>
+        app:border_color="#FF000000"/>-->
       <TextView
           android:layout_marginTop="10dp"
           android:textColor="#fff"

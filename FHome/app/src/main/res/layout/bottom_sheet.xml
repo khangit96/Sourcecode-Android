@@ -10,26 +10,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2196F3"
+        android:background="#46CBC6"
         android:orientation="horizontal"
         android:padding="15dp">
-       <ImageView
-           android:layout_gravity="center_vertical"
-           android:src="@drawable/maker"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
-        <LinearLayout
-            android:layout_marginLeft="10dp"
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/maker" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/tvTenNhaTro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nhà Trọ Ngọc Lan"
                 android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:id="@+id/tvTenNhaTro" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,13 +42,14 @@
                 android:textColor="#ffffff"
                 android:textSize="13sp" />
         </LinearLayout>
+
         <TextView
-            android:layout_marginLeft="45dp"
-            android:layout_gravity="center_vertical"
-            android:textColor="#ffffff"
-            android:text="4.3 km"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="45dp"
+            android:text="4.3 km"
+            android:textColor="#ffffff" />
 
 
     </LinearLayout>
@@ -58,7 +62,9 @@
         android:orientation="horizontal"
         android:padding="15dp">
 
+        <!--Layout chỉ đường-->
         <LinearLayout
+            android:id="@+id/lnChiDuong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -66,8 +72,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:src="@drawable/way" />
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/gps" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,13 +81,15 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:text="Chỉ đường"
-                android:textColor="#2196F3"
+                android:textColor="#46CBC6"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
-        <!---->
+
+        <!---Layout chia sẻ-->
         <LinearLayout
+            android:id="@+id/lnChiaSe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -99,13 +107,15 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:text="Chia sẻ"
-                android:textColor="#2196F3"
+                android:textColor="#46CBC6"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
-        <!---->
+
+        <!--Layout lưu-->
         <LinearLayout
+            android:id="@+id/lnLuu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
@@ -115,15 +125,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
-                android:src="@drawable/star" />
+                android:src="@drawable/save" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="35dp"
                 android:layout_marginTop="10dp"
                 android:text="Lưu"
-                android:textColor="#2196F3"
+                android:textColor="#46CBC6"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -146,13 +156,13 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/price_usd" />
+            android:src="@drawable/price" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:text="Giá: 450000 vnđ/tháng" />
+            android:text="Giá phòng: 950000 vnđ/tháng" />
     </LinearLayout>
 
     <LinearLayout
@@ -165,7 +175,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/status" />
+            android:src="@drawable/state" />
 
         <TextView
             android:layout_width="wrap_content"

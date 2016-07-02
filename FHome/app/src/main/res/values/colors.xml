@@ -3,7 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="PrimaryColor">#2196F3</color>
+    <color name="PrimaryColor">#46CBC6</color>
     <color name="PrimaryDarkColor">#1976D2</color>
     <color name="white">#ffffff</color>
+    <color name="makerTextColor">#455A64</color>
+ <!--   <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="PrimaryColor">#9E9A95</color>
+    <color name="PrimaryDarkColor">#1976D2</color>
+    <color name="white">#ffffff</color>-->
+
 </resources>

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|center"
     android:background="#ffffff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,21 +36,33 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tvKhoangCach"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Bình Hòa Nam,Đức Huệ"
-                android:textColor="#ffffff"
-                android:textSize="13sp" />
+                android:layout_gravity="center_vertical"
+                android:text="4.3 km"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="45dp"
-            android:text="4.3 km"
-            android:textColor="#ffffff" />
+            android:layout_gravity="right"
+            android:layout_marginLeft="25dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/walking" />
+
+            <TextView
+                android:id="@+id/tvThoiGian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6 phút"
+                android:textColor="#ffffff" />
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -159,6 +172,7 @@
             android:src="@drawable/price" />
 
         <TextView
+            android:id="@+id/tvGia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
@@ -182,6 +196,28 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:text="Tình trạng: Còn phòng" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/address" />
+
+        <TextView
+            android:id="@+id/tvDiaChi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:paddingRight="15dp"
+            android:text="Địa chỉ: Ấp 3 xã Bình Hòa Nam,Đức Huệ,Long An" />
 
     </LinearLayout>
 

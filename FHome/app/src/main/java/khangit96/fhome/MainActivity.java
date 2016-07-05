@@ -3,7 +3,10 @@ package khangit96.fhome;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,19 +33,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -59,6 +56,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,16 +68,19 @@ public class MainActivity extends AppCompatActivity {
     private GoogleMap mMap;
 
     ProgressDialog progressDialog;
-
+    ImageView imgNhaTroTiepTheo;
     TextView tvThongBao;
 
     public static int count = 0;
     public int check = -1;
+    public static int countNhaTroTiepTheo = 0;
 
     LatLng viTriHienTai;
     Location loHienTai;
 
     ArrayList<Route> routes = new ArrayList<Route>();
+
+    /*Hàm nhận biết khi vị trí của người dùng thay đổi*/
     GoogleMap.OnMyLocationChangeListener listener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
@@ -87,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
             loHienTai = location;
             if (count == 3) {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriHienTai, 16f));
-             /*   CameraPosition cameraPosition = new CameraPosition.Builder()
+                CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .zoom(13)                   // Sets the zoom
+                        .zoom(16)                   // Sets the zoom
                         .bearing(90)                // Sets the orientation of the camera to east
                         .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 tvThongBao.setText("Chạm vào icon tìm kiếm để tìm kiếm nhà trọ.");
             } else if (count < 3) {
                 tvThongBao.setText("Đang xác định vị trí hiện tại của bạn.");
@@ -127,33 +129,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    /*    mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                count++;
-                viTriHienTai = new LatLng(location.getLatitude(), location.getLongitude());
-                if (count == 3) {
-                    loHienTai = location;
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriHienTai, 13f));
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .zoom(13)                   // Sets the zoom
-                            .bearing(90)                // Sets the orientation of the camera to east
-                            .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                            .build();                   // Creates a CameraPosition from the builder
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    tvThongBao.setText("Chạm vào icon tìm kiếm để tìm kiếm nhà trọ.");
-                } else if (count < 3) {
-                    tvThongBao.setText("Đang xác định vị trí hiện tại của bạn.");
-                }
-            }
-        });*/
-
-      /*Maker listen*/
+      /*Sự kiện click vào mỗi nhà trọ để xem chit tiết*/
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                OpenBottomSheet(marker.getTitle().toString(), "Ok");
+                OpenBottomSheet(routes.get(countNhaTroTiepTheo));
                 return true;
             }
         });
@@ -202,12 +182,18 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+        BroadcastGPSChange broadcastGPS = new BroadcastGPSChange();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.location.PROVIDERS_CHANGED");
+        registerReceiver(broadcastGPS, intentFilter);
     }
 
 
     /*Hàm hởi tạo các control*/
     public void KhoiTaoControl() {
         tvThongBao = (TextView) findViewById(R.id.tvThongBao);
+        imgNhaTroTiepTheo = (ImageView) findViewById(R.id.nhaTroTiepTheo);
         LatLng hcmus = new LatLng(10.980808, 106.682577);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 16f));
         if (KiemTraTinhTrangGPS() == false) {
@@ -256,10 +242,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void OpenBottomSheet(String tenNhaTro, String diaChi) {
+    /*Hàm mở thông tin chi tiết về nhà trọ*/
+    public void OpenBottomSheet(Route route) {
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
         TextView tvTenNhaTro = (TextView) view.findViewById(R.id.tvTenNhaTro);
+        TextView tvDiaChi = (TextView) view.findViewById(R.id.tvDiaChi);
+        TextView tvKhoangCach = (TextView) view.findViewById(R.id.tvKhoangCach);
+        TextView tvThoiGian = (TextView) view.findViewById(R.id.tvThoiGian);
+        TextView tvGia = (TextView) view.findViewById(R.id.tvGia);
         LinearLayout lnChiDuong = (LinearLayout) view.findViewById(R.id.lnChiDuong);
         LinearLayout lnChiaSe = (LinearLayout) view.findViewById(R.id.lnChiaSe);
         LinearLayout lnLuu = (LinearLayout) view.findViewById(R.id.lnLuu);
@@ -283,7 +274,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tvTenNhaTro.setText(tenNhaTro);
+        tvTenNhaTro.setText(route.name);
+        double khoangCach = (double) route.distance.value / 1000;
+        tvKhoangCach.setText("" + khoangCach + " km");
+        tvDiaChi.setText("Địa chỉ: " + route.address);
+        tvThoiGian.setText(route.duration.text);
+        tvGia.setText("Giá phòng: " + route.price);
         final Dialog mBottomSheetDialog = new Dialog(MainActivity.this,
                 R.style.MaterialDialogSheet);
         mBottomSheetDialog.setContentView(view);
@@ -306,24 +302,15 @@ public class MainActivity extends AppCompatActivity {
         Location lastLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (lastLocation != null) {
             LatLng latLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
-            // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriHienTai, 16f));
-          /*  CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()))
-                    .zoom(13)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
         }
     }
 
-    /*Hàm vẽ vị trí các nhà trọ*/
+    /*Hàm vẽ vị trí các nhà khi tìm được trọ*/
     public void VeNhaTro() {
         mMap.clear();
         if (count >= 3) {
-
+            countNhaTroTiepTheo = 0;
             check = -1;
             DanhSachNhaTro();
             progressDialog = new ProgressDialog(MainActivity.this);
@@ -336,36 +323,9 @@ public class MainActivity extends AppCompatActivity {
                 String viTriNhaTro = String.valueOf(routes.get(i).endLocation.latitude) + "," + String.valueOf(routes.get(i).endLocation.longtitude);
                 new ReadJsonGoogleMap().execute("https://maps.googleapis.com/maps/api/directions/json?origin=" + viTriHienTai + "&destination=" + viTriNhaTro + "&key=AIzaSyBQi4eaAMVe-u4BjL3ntmjAtoRnup-BdJk");
             }
-            for (int i = 0; i < routes.size(); i++) {
-                LatLng viTriNhaTro = new LatLng(routes.get(i).endLocation.latitude, routes.get(i).endLocation.longtitude);
-                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(300, 100, conf);
-                Canvas canvas1 = new Canvas(bmp);
-
-                Paint color = new Paint();
-                color.setFakeBoldText(true);
-                color.setTextSize(15);
-                color.setColor(Color.GRAY);
-                /*Typeface plain = Typeface.createFromAsset(assetManager, pathToFont);
-                Typeface bold = Typeface.create(plain, Typeface.DEFAULT_BOLD)
-                Paint paint = new Paint();
-                paint.setTypeface(bold);
-                canvas.drawText("Sample text in bold", 0, 0, paint);*/
-
-                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.home_maker2), 0, 0, color);
-                canvas1.drawText(routes.get(i).name, 3, 63, color);
-
-                mMap.addMarker(new MarkerOptions().position(viTriNhaTro)
-                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .title(routes.get(i).name)
-                        .anchor(0.5f, 1));
-            }
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriHienTai, 16f));
-            progressDialog.dismiss();
             Toast.makeText(getApplicationContext(), "Tìm được " + routes.size() + " nhà trọ.", Toast.LENGTH_LONG).show();
             tvThongBao.setText("Chạm vào vị trí nhà trọ để xem chi tiết.");
-
+            imgNhaTroTiepTheo.setVisibility(View.VISIBLE);
         }
     }
 
@@ -382,56 +342,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*Hàm thực hiện lấy dữ liệu từ server google map*/
-    public void PhanTichDuLieu(String serverUrl) {
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                PhanTichJson(response);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(stringRequest);
-    }
-
-    /*Lấy json*/
-    public void PhanTichJson(String response) {
-        JSONObject jsonData = null;
-        try {
-            check++;
-            jsonData = new JSONObject(response);
-            JSONArray jsonRoutes = jsonData.getJSONArray("routes");
-            for (int i = 0; i < jsonRoutes.length(); i++) {
-
-                JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
-                JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
-                JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
-                JSONObject jsonLeg = jsonLegs.getJSONObject(0);
-                JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
-                JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
-                JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
-                JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
-                Distance distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
-                Duration duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
-                StartLocation startLocation = new StartLocation(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
-                Route route = new Route(routes.get(check).name, distance, duration, overview_polylineJson.getString("points"), jsonLeg.getString("start_address"), jsonLeg.getString("end_address"), startLocation, routes.get(check).endLocation);
-                routes.set(check, route);
-            }
-            if (check == 0) {
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "" + routes.get(0).distance.value, Toast.LENGTH_LONG).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /*Hàm xử lí khi người dùng nhấn nút back*/
     @Override
     public void onBackPressed() {
         count = 0;
@@ -441,16 +352,14 @@ public class MainActivity extends AppCompatActivity {
     /*Hàm khởi tạo danh sách nhà trọ fake*/
     public void DanhSachNhaTro() {
         routes.clear();
-        routes.add(new Route("Nhà cô hai ", null, null, null, null, null, null, new EndLocation(10.8325733, 106.3512633)));
-       // routes.add(new Route("Nhà bà bảy ", null, null, null, null, null, null, new EndLocation(10.8326316, 106.3513716)));
-      //  routes.add(new Route("Ghế đá nhà Khang", null, null, null, null, null, null, new EndLocation(10.8325966, 106.3508533)));
-        routes.add(new Route("Nhà nội", null, null, null, null, null, null, new EndLocation(10.8325009, 106.3493161)));
-      //  routes.add(new Route("Nhà tấm Khang", null, null, null, null, null, null, new EndLocation(10.8325433, 106.35098)));
-        //routes.add(new Route("Bàn máy tính nhà Khang", null, null, null, null, null, null, new EndLocation(10.8325216, 106.3508766)));
-        routes.add(new Route("Chợ xã Bình Hòa Nam", null, null, null, null, null, null, new EndLocation(10.80954, 106.3669016)));
-        routes.add(new Route("Nhà Cô Ba", null, null, null, null, null, null, new EndLocation(10.828845, 106.3513416)));
+        routes.add(new Route("Nhà trọ Cẩm Tiên", "1500.000 vnđ/tháng", null, null, null, "Trần Văn Ơn,Thủ Dầu Một,Bình Dương", null, new EndLocation(10.980560, 106.675101)));
+        routes.add(new Route("Nhà trọ Phương Hồng", "850.000 vnđ/tháng", null, null, null, "504,,Đại lộ Bình Dương,Hiệp Thành, Thủ Dầu Một,Bình Dương", null, new EndLocation(10.989729, 106.664121)));
+        routes.add(new Route("Nhà trọ Ngọc Lan  ", "950.000 vnđ/tháng", null, null, null, "530 Đại lộ Bình Dương, phường Hiệp Thành, Thị xã Thủ Dầu Một", null, new EndLocation(10.991341, 106.663510)));
+        routes.add(new Route("Nhà trọ Phương Trang", "450.000 vnđ/tháng", null, null, null, "Ba Mươi Tháng Tư,Chánh Nghĩa,Thủ Dầu Một,Bình Dương", null, new EndLocation(10.966067, 106.668862)));
+
     }
 
+    /*Hàm đọc nội dung 1 URL*/
     private static String GET_URL(String theUrl) {
         StringBuilder content = new StringBuilder();
         try {
@@ -468,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
         return content.toString();
     }
 
-    /**/
+    /*Hàm phân tích dữ liệu tính thời gian,khoảng cách dựa vào server google map và kết quả trả về dạng json*/
     class ReadJsonGoogleMap extends AsyncTask<String, Void, String> {
 
         @Override
@@ -498,12 +407,39 @@ public class MainActivity extends AppCompatActivity {
                     Distance distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
                     Duration duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
                     StartLocation startLocation = new StartLocation(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
-                    Route route = new Route(routes.get(check).name, distance, duration, overview_polylineJson.getString("points"), jsonLeg.getString("start_address"), jsonLeg.getString("end_address"), startLocation, routes.get(check).endLocation);
+                    Route route = new Route(routes.get(check).name, routes.get(check).price, distance, duration, overview_polylineJson.getString("points"), routes.get(check).address, startLocation, routes.get(check).endLocation);
                     routes.set(check, route);
                 }
                 if (check == routes.size() - 1) {
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "" + routes.get(0).distance.value, Toast.LENGTH_LONG).show();
+                    Collections.sort(routes);
+                    LatLng viTriNhaTro = new LatLng(routes.get(countNhaTroTiepTheo).endLocation.latitude, routes.get(countNhaTroTiepTheo).endLocation.longtitude);
+                    Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+                    Bitmap bmp = Bitmap.createBitmap(300, 100, conf);
+                    Canvas canvas1 = new Canvas(bmp);
+
+                    Paint color = new Paint();
+                    color.setFakeBoldText(true);
+                    color.setTextSize(20);
+                    color.setColor(getResources().getColor(R.color.PrimaryColor));
+                    color.setLinearText(true);
+                    canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                            R.drawable.home_maker2), 0, 0, color);
+                    canvas1.drawText(routes.get(countNhaTroTiepTheo).name, 1, 70, color);
+
+                    mMap.addMarker(new MarkerOptions().position(viTriNhaTro)
+                            .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                            .title(routes.get(countNhaTroTiepTheo).name)
+                            .anchor(0.5f, 1));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriNhaTro, 16f));
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(routes.get(countNhaTroTiepTheo).endLocation.latitude, routes.get(countNhaTroTiepTheo).endLocation.longtitude))
+                            .zoom(16)                   // Sets the zoom
+                            .bearing(90)                // Sets the orientation of the camera to east
+                            .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -512,5 +448,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*Hàm click để đến nhà trọ tiếp theo*/
+    public void TiepTheo(View v) {
+        mMap.clear();
+        countNhaTroTiepTheo++;
+
+        LatLng viTriNhaTro = new LatLng(routes.get(countNhaTroTiepTheo).endLocation.latitude, routes.get(countNhaTroTiepTheo).endLocation.longtitude);
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(300, 100, conf);
+        Canvas canvas1 = new Canvas(bmp);
+
+        Paint color = new Paint();
+        color.setFakeBoldText(true);
+        color.setTextSize(20);
+        color.setColor(getResources().getColor(R.color.PrimaryColor));
+        color.setLinearText(true);
+        canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.home_maker2), 0, 0, color);
+        canvas1.drawText(routes.get(countNhaTroTiepTheo).name, 1, 70, color);
+
+        mMap.addMarker(new MarkerOptions().position(viTriNhaTro)
+                .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                .title(routes.get(countNhaTroTiepTheo).name)
+                .anchor(0.5f, 1));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viTriNhaTro, 16f));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(routes.get(countNhaTroTiepTheo).endLocation.latitude, routes.get(countNhaTroTiepTheo).endLocation.longtitude))
+                .zoom(16)                   // Sets the zoom
+                .bearing(90)                // Sets the orientation of the camera to east
+                .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        if (countNhaTroTiepTheo == routes.size() - 1) {
+            imgNhaTroTiepTheo.setVisibility(View.GONE);
+        }
+
+    }
+
+    /*Broadcast receiver khi gps change*/
+    class BroadcastGPSChange extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (KiemTraTinhTrangGPS() == true) {
+            } else {
+                count = 0;
+                tvThongBao.setText("Vui lòng bật GPS và thử lại!");
+            }
+        }
+    }
 
 }

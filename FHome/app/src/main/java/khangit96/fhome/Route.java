@@ -13,36 +13,32 @@ public class Route implements Parcelable, Serializable, Comparable<Route> {
     public Distance distance;
     public Duration duration;
     public String points;
-    public String endAddress;
-    //public LatLng endLocation;
-    public String startAddress;
-    // public LatLng startLocation;
+    public String address;
     public StartLocation startLocation;
     public EndLocation endLocation;
+    public String price;
 
-    //   public List<LatLng> points;
 
-
-    public Route(String name, Distance distance, Duration duration, String points, String startAddress, String endAddress, StartLocation startLocation, EndLocation endLocation) {
+    public Route(String name, String price, Distance distance, Duration duration, String points, String address, StartLocation startLocation, EndLocation endLocation) {
         this.name = name;
         this.distance = distance;
         this.duration = duration;
         this.points = points;
-        this.startAddress = startAddress;
-        this.endAddress = endAddress;
+        this.address = address;
+        this.price = price;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
     }
 
     protected Route(Parcel in) {
         name = in.readString();
+        price = in.readString();
         distance = in.readParcelable(getClass().getClassLoader());
         duration = in.readParcelable(getClass().getClassLoader());
         startLocation = in.readParcelable(getClass().getClassLoader());
         endLocation = in.readParcelable(getClass().getClassLoader());
         points = in.readString();
-        startAddress = in.readString();
-        endAddress = in.readString();
+        address = in.readString();
 
     }
 
@@ -71,8 +67,8 @@ public class Route implements Parcelable, Serializable, Comparable<Route> {
         parcel.writeParcelable((Parcelable) startLocation, i);
         parcel.writeParcelable(endLocation, i);
         parcel.writeString(points);
-        parcel.writeString(startAddress);
-        parcel.writeString(endAddress);
+        parcel.writeString(address);
+        parcel.writeString(price);
     }
 
     @Override

@@ -62,13 +62,14 @@ public class Route implements Parcelable, Serializable, Comparable<Route> {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
+        parcel.writeString(price);
         parcel.writeParcelable((Parcelable) distance, i);
         parcel.writeParcelable((Parcelable) duration, i);
         parcel.writeParcelable((Parcelable) startLocation, i);
         parcel.writeParcelable(endLocation, i);
         parcel.writeString(points);
         parcel.writeString(address);
-        parcel.writeString(price);
+
     }
 
     @Override

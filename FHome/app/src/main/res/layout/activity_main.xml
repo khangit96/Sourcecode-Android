@@ -29,18 +29,6 @@
                 android:layout_height="match_parent"
                 tools:context="khangit96.fhome.MapsActivity" />
 
-            <!--  <Button
-                  android:textAllCaps="false"
-                  android:layout_marginRight="7dp"
-                  android:layout_marginTop="1dp"
-                  android:padding="10dp"
-                  android:layout_gravity="right"
-                  android:background="@drawable/shape_textview"
-                  android:textColor="#ffffff"
-                  android:textSize="18sp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Tiếp theo" />-->
             <ImageView
                 android:id="@+id/nhaTroTiepTheo"
                 android:layout_width="wrap_content"

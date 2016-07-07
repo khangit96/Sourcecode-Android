@@ -53,6 +53,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*Hàm mở thông tin chi tiết về nhà trọ*/
-    public void OpenBottomSheet(Route route) {
+    public void OpenBottomSheet(final Route route) {
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
         TextView tvTenNhaTro = (TextView) view.findViewById(R.id.tvTenNhaTro);
@@ -258,7 +259,9 @@ public class MainActivity extends AppCompatActivity {
         lnChiDuong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, DirectionActivity.class);
+                intent.putExtra("route", (Serializable) route);
+                startActivity(intent);
             }
         });
         lnChiaSe.setOnClickListener(new View.OnClickListener() {
@@ -323,9 +326,6 @@ public class MainActivity extends AppCompatActivity {
                 String viTriNhaTro = String.valueOf(routes.get(i).endLocation.latitude) + "," + String.valueOf(routes.get(i).endLocation.longtitude);
                 new ReadJsonGoogleMap().execute("https://maps.googleapis.com/maps/api/directions/json?origin=" + viTriHienTai + "&destination=" + viTriNhaTro + "&key=AIzaSyBQi4eaAMVe-u4BjL3ntmjAtoRnup-BdJk");
             }
-            Toast.makeText(getApplicationContext(), "Tìm được " + routes.size() + " nhà trọ.", Toast.LENGTH_LONG).show();
-            tvThongBao.setText("Chạm vào vị trí nhà trọ để xem chi tiết.");
-            imgNhaTroTiepTheo.setVisibility(View.VISIBLE);
         }
     }
 
@@ -404,6 +404,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
                     JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
                     JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
+                    JSONArray jsonSteps = jsonLeg.getJSONArray("steps");
+
                     Distance distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
                     Duration duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
                     StartLocation startLocation = new StartLocation(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
@@ -412,6 +414,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (check == routes.size() - 1) {
                     progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Tìm được " + routes.size() + " nhà trọ.", Toast.LENGTH_LONG).show();
+                    tvThongBao.setText("Chạm vào vị trí nhà trọ để xem chi tiết.");
+                    imgNhaTroTiepTheo.setVisibility(View.VISIBLE);
                     Collections.sort(routes);
                     LatLng viTriNhaTro = new LatLng(routes.get(countNhaTroTiepTheo).endLocation.latitude, routes.get(countNhaTroTiepTheo).endLocation.longtitude);
                     Bitmap.Config conf = Bitmap.Config.ARGB_4444;
@@ -424,8 +429,8 @@ public class MainActivity extends AppCompatActivity {
                     color.setColor(getResources().getColor(R.color.PrimaryColor));
                     color.setLinearText(true);
                     canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                            R.drawable.home_maker2), 0, 0, color);
-                    canvas1.drawText(routes.get(countNhaTroTiepTheo).name, 1, 70, color);
+                            R.drawable.home3), 0, 0, color);
+                   canvas1.drawText(routes.get(countNhaTroTiepTheo).name, 1, 70, color);
 
                     mMap.addMarker(new MarkerOptions().position(viTriNhaTro)
                             .icon(BitmapDescriptorFactory.fromBitmap(bmp))
@@ -464,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         color.setColor(getResources().getColor(R.color.PrimaryColor));
         color.setLinearText(true);
         canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.home_maker2), 0, 0, color);
+                R.drawable.home3), 0, 0, color);
         canvas1.drawText(routes.get(countNhaTroTiepTheo).name, 1, 70, color);
 
         mMap.addMarker(new MarkerOptions().position(viTriNhaTro)

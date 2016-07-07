@@ -12,8 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#46CBC6"
+        android:gravity="right"
+        android:paddingRight="30dp"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/walking" />
+
+        <TextView
+            android:id="@+id/tvThoiGian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6 phút"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#46CBC6"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -40,31 +63,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
                 android:text="4.3 km"
                 android:textColor="#ffffff" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="25dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/walking" />
-
-            <TextView
-                android:id="@+id/tvThoiGian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6 phút"
-                android:textColor="#ffffff" />
-        </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout

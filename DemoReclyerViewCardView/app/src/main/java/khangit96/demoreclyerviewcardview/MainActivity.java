@@ -39,10 +39,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                if(lastVisibleItemPosition==recyclerView.getAdapter().getItemCount()-1)
-                Toast.makeText(getApplicationContext(),"End",Toast.LENGTH_LONG).show();
-           }
-       });
+                if (lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
+                    itemArrayList.add(new Item("Thùy Linh", 20));
+                    itemArrayList.add(new Item("Thùy Linh", 20));
+                    itemArrayList.add(new Item("Thùy Linh", 20));
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "End", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
     }
 
 
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         itemArrayList = new ArrayList<>();
         itemArrayList.add(new Item("Khang", 19));
         itemArrayList.add(new Item("Duy Khang", 30));
+       /* itemArrayList.add(new Item("Duy Khang", 30));
         itemArrayList.add(new Item("Duy Khang", 30));
         itemArrayList.add(new Item("Duy Khang", 30));
         itemArrayList.add(new Item("Duy Khang", 30));
@@ -58,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
         itemArrayList.add(new Item("Duy Khang", 30));
         itemArrayList.add(new Item("Duy Khang", 30));
         itemArrayList.add(new Item("Duy Khang", 30));
-        itemArrayList.add(new Item("Duy Khang", 30));
-
+*/
     }
 
     public void showData() {

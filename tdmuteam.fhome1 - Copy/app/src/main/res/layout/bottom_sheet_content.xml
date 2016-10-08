@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDDFE2"
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_sheet_peek_height"
+    android:background="#3498db"
+    android:paddingBottom="8dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Phường Phú Lợi,Tp.Thủ Dầu Một"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_contact_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="Liên Hệ"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/establecimiento_layout_favoritos_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button2"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_share_black_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chia Sẻ"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/establecimiento_share_button"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_favorite_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="Yêu Thích"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+
+<!--
+
+    <RelativeLayout
+        android:paddingBottom="12dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_bottom">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Thông tin chi tiết"
+                android:textSize="18sp" />
+
+            &lt;!&ndash;   <FrameLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="48dp">
+
+                   <Button
+                       android:textStyle="bold"
+                       android:id="@+id/establecimiento_sucursal_row_button"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:background="?attr/selectableItemBackgroundBorderless"
+                       android:text="Thông Tin Chi Tiết"
+                       android:textAllCaps="false"
+                       android:textColor="@color/colorPrimary"
+                       android:textSize="18sp" />
+               </FrameLayout>
+   &ndash;&gt;
+            &lt;!&ndash; <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+                 <Button
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_horizontal"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:text="Giá  phòng:450000vnđ/tháng"
+                     android:textAllCaps="false"
+                     android:textStyle="bold"
+                     android:textColor="@android:color/darker_gray" />
+             </FrameLayout>
+
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+                 <Button
+                     android:textStyle="bold"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_horizontal"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:text="Giá  điện:2000vnđ/kw."
+                     android:textAllCaps="false"
+                     android:textColor="@android:color/darker_gray" />
+
+             </FrameLayout>&ndash;&gt;
+        </LinearLayout>
+
+    </RelativeLayout>
+-->
+
+ <!--   <LinearLayout
+        android:paddingBottom="12dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Bình Luận"
+            android:textSize="18sp" />
+    </LinearLayout>-->
+
+</LinearLayout>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DDDFE2"
+    android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
@@ -87,8 +87,7 @@
                 android:layout_alignParentBottom="true"
                 android:text="Liên Hệ"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
         </RelativeLayout>
 
 
@@ -114,8 +113,7 @@
                 android:layout_height="wrap_content"
                 android:text="Chia Sẻ"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -137,8 +135,7 @@
                 android:layout_alignParentBottom="true"
                 android:text="Yêu Thích"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -218,14 +215,18 @@
 
     </RelativeLayout>
 -->
-
- <!--   <LinearLayout
+<View
+    android:background="#E2E2E2"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"/>
+    <LinearLayout
         android:paddingBottom="12dp"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="400dp"
         android:layout_marginEnd="10dp"
+        android:orientation="vertical"
         android:layout_marginStart="10dp">
 
         <TextView
@@ -233,8 +234,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Bình Luận"
-            android:textSize="18sp" />
-    </LinearLayout>-->
+            android:text="Thông tin chi tiết"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Giá phòng: 350vnđ/tháng"
+            android:textSize="15sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Giá điện: 3000vnđ/kw"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

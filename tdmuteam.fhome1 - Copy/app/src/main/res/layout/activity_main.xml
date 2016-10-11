@@ -1,158 +1,152 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorlayout"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true">
 
-
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/drawer_layout"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/anchor_point"
+                android:background="@color/colorAccent"
+                android:fitsSystemWindows="true"
+                android:visibility="gone"
+                app:behavior_backdrop_peekHeight="@dimen/bottom_sheet_peek_height"
+                app:layout_behavior="@string/BackDropBottomSheetBehavior">
+
+            </android.support.v4.view.ViewPager>
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity" />
+                android:fitsSystemWindows="true"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:anchorPoint="@dimen/anchor_point"
+                app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+                app:layout_behavior="@string/BottomSheetBehaviorGoogleMapsLike">
 
-            <com.arlib.floatingsearchview.FloatingSearchView
-                android:id="@+id/floating_search_view"
+                <include
+                    layout="@layout/bottom_sheet_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true" />
+            </android.support.v4.widget.NestedScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabDirection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:floatingSearch_close_search_on_keyboard_dismiss="false"
-                app:floatingSearch_dimBackground="false"
-                app:floatingSearch_dismissOnOutsideTouch="true"
-                app:floatingSearch_leftActionMode="showHamburger"
-                app:floatingSearch_menu="@menu/menu_search_view"
-                app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
-                app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
-                app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
-                app:floatingSearch_searchHint="Tìm nhà trọ..."
-                app:floatingSearch_showSearchKey="true"
-                app:floatingSearch_suggestionsListAnimDuration="250" />
-
-        </FrameLayout>
+                android:layout_marginBottom="30dp"
+                android:clickable="true"
+                android:src="@drawable/ic_action_go"
+                android:tint="@color/colorPrimary"
+                android:visibility="gone"
+                app:layout_anchor="@id/bottom_sheet"
+                app:layout_anchorGravity="top|right|end"
+                app:layout_behavior="@string/ScrollAwareFABBehavior" />
 
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/nav_header_main"
-            app:menu="@menu/menu_app" />
-    </android.support.v4.widget.DrawerLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/anchor_point"
-        android:background="@color/colorAccent"
-        android:fitsSystemWindows="true"
-        android:visibility="gone"
-        app:behavior_backdrop_peekHeight="@dimen/bottom_sheet_peek_height"
-        app:layout_behavior="@string/BackDropBottomSheetBehavior">
-
-    </android.support.v4.view.ViewPager>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:anchorPoint="@dimen/anchor_point"
-        app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
-        app:layout_behavior="@string/BottomSheetBehaviorGoogleMapsLike">
-
-        <include
-            layout="@layout/bottom_sheet_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true" />
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabDirection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:clickable="true"
-        android:src="@drawable/ic_action_go"
-        android:tint="@color/colorPrimary"
-        android:visibility="gone"
-        app:layout_anchor="@id/bottom_sheet"
-        app:layout_anchorGravity="top|right|end"
-        app:layout_behavior="@string/ScrollAwareFABBehavior" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="90dp"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
+                android:src="@drawable/ic_my_location_white_24dp"
+                android:tint="@color/colorPrimary" />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="90dp"
-        android:layout_marginRight="10dp"
-        android:clickable="true"
-        app:rippleColor="#F06292"
-        android:src="@drawable/ic_my_location_white_24dp"
-        android:tint="@color/colorPrimary" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
+                android:src="@drawable/ic_search_black_24dp"
+                android:theme="@style/MapButton"
+                android:tint="@android:color/white" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp"
-        android:clickable="true"
-        android:src="@drawable/ic_search_black_24dp"
-        android:theme="@style/MapButton"
-        android:tint="@android:color/white" />
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/merged_appbarlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:tag="modal-appbar"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:visibility="gone"
-        app:behavior_merged_appbar_anchor_point="@dimen/anchor_point"
-        app:layout_behavior="@string/MergedAppBarLayoutBehavior">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <View
-                android:id="@+id/background"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/merged_appbarlayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="bottom"
-                android:background="#3498db" />
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/expanded_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                app:title="@string/key_binding_default_toolbar_name" />
-        </FrameLayout>
-    </android.support.design.widget.AppBarLayout>
-</android.support.design.widget.CoordinatorLayout>
+                android:tag="modal-appbar"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                android:visibility="gone"
+                app:behavior_merged_appbar_anchor_point="@dimen/anchor_point"
+                app:layout_behavior="@string/MergedAppBarLayoutBehavior">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <View
+                        android:id="@+id/background"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="bottom"
+                        android:background="#3498db" />
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/expanded_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@android:color/transparent"
+                        app:title="@string/key_binding_default_toolbar_name" />
+                </FrameLayout>
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:floatingSearch_close_search_on_keyboard_dismiss="false"
+            app:floatingSearch_dimBackground="false"
+            app:floatingSearch_dismissOnOutsideTouch="true"
+            app:floatingSearch_leftActionMode="showHamburger"
+            app:floatingSearch_menu="@menu/menu_search_view"
+            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+            app:floatingSearch_searchHint="Tìm nhà trọ..."
+            app:floatingSearch_showSearchKey="true"
+            app:floatingSearch_suggestionsListAnimDuration="250" />
+
+    </FrameLayout>
+
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/menu_app" />
+
+</android.support.v4.widget.DrawerLayout>

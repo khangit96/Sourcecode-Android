@@ -114,7 +114,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
 
     private int mMaxOffset;
 
-    private static final int DEFAULT_ANCHOR_POINT = 700;
+    private static final int DEFAULT_ANCHOR_POINT = 900;
     public int mAnchorPoint;
 
     private boolean mHideable;

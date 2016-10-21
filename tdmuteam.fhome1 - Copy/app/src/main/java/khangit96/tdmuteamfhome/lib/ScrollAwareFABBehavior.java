@@ -6,8 +6,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.text.LoginFilter;
 import android.util.AttributeSet;
 import android.view.View;
+import android.util.Log;
 
 /*
  * Copyright 2015 The Android Open Source Project
@@ -27,6 +29,7 @@ import android.view.View;
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     float offset;
+   static boolean check=false;
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
@@ -37,9 +40,11 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final FloatingActionButton child,
                                        final View directTargetChild, final View target, final int nestedScrollAxes) {
         // Ensure we react to vertical scrolling
+       // child.hide();
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
                 || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
     }
+
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
@@ -49,14 +54,26 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
 
-        if (offset == 0)
+       /* if (offset == 0)
             setOffsetValue(parent);
 
         if (dependency.getY() <=0)
-            return false;
+            return false;*/
+        Log.d("test","ok:"+child.getY());
+        if(check==false){
+            if(child.getY()<=100){
+                child.hide();
+                check=true;
+            }
+        }
 
-        if (child.getY() <= (offset + child.getHeight()) && child.getVisibility() == View.VISIBLE)
-            child.hide();
+       /* if (child.getY() <= (offset + child.getHeight()) && child.getVisibility() == View.VISIBLE){
+
+
+
+            return false;
+        }
+*/
         else if (child.getY() > offset && child.getVisibility() != View.VISIBLE)
             child.show();
 

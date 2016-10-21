@@ -1,23 +1,32 @@
 package khangit96.tdmuteamfhome;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +38,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
@@ -62,6 +72,11 @@ public class MainActivity extends AppCompatActivity
     FloatingSearchView floatingSearchView;
     int count = 0;
     ViewPager viewPager;
+    ArrayList<Location> locationArrayList = new ArrayList<>();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    boolean checkDrag=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +90,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         floatingSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        floatingSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         bottomSheet = (View) findViewById(R.id.bottom_sheet);
-        floatingSearchView.setOnLeftMenuClickListener(new FloatingSearchView.OnLeftMenuClickListener() {
+        fabDirection = (FloatingActionButton) findViewById(R.id.fabDirection);
+        fabDirection.setVisibility(View.VISIBLE);
+        fabSearch = (FloatingActionButton) findViewById(R.id.fabSearch);
+        fabLocation = (FloatingActionButton) findViewById(R.id.fabLocation);
+        mergedAppBarLayout = (AppBarLayout) findViewById(R.id.merged_appbarlayout);
+        mergedAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
-            public void onMenuOpened() {
-                floatingSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
-            }
-
-            @Override
-            public void onMenuClosed() {
-                floatingSearchView.detachNavigationDrawerFromMenuButton(mDrawerLayout);
-
-
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+               // if(appBarLayout.){
+                    Toast.makeText(getApplicationContext(),"ok",Toast.LENGTH_LONG).show();
+               // }
             }
         });
         final BottomSheetBehaviorGoogleMapsLike behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
@@ -96,9 +112,11 @@ public class MainActivity extends AppCompatActivity
                 switch (newState) {
                     case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
                         floatingSearchView.setVisibility(View.VISIBLE);
+                       // fabDirection.setVisibility(View.VISIBLE);
                         break;
                     case BottomSheetBehaviorGoogleMapsLike.STATE_DRAGGING:
                         floatingSearchView.setVisibility(View.GONE);
+                       // fabDirection.setVisibility(View.GONE);
                         break;
                     case BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED:
 
@@ -114,13 +132,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                fabDirection.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(1).start();
+                //fabDirection.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(1).start();
+                // fabDirection.animate().setDuration(2).start();
             }
         });
-        fabDirection = (FloatingActionButton) findViewById(R.id.fabDirection);
-        fabSearch = (FloatingActionButton) findViewById(R.id.fabSearch);
-        fabLocation = (FloatingActionButton) findViewById(R.id.fabLocation);
-        mergedAppBarLayout = (AppBarLayout) findViewById(R.id.merged_appbarlayout);
         mergedAppBarLayoutBehavior = MergedAppBarLayoutBehavior.from(mergedAppBarLayout);
         mergedAppBarLayoutBehavior.setToolbarTitle("Nhà trọ Ngọc Lan");
         toolbarExpanded = (Toolbar) findViewById(R.id.expanded_toolbar);
@@ -140,6 +155,7 @@ public class MainActivity extends AppCompatActivity
         tvTime = (TextView) bottomSheet.findViewById(R.id.tvTime);
         tvName.setText("Nhà Trọ Ngọc Lan");
         tvTime.setText("Chỉ đường");
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         fabLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +166,7 @@ public class MainActivity extends AppCompatActivity
         fabDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+                //behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
                 hideBotoomSheet();
 
             }
@@ -159,6 +175,9 @@ public class MainActivity extends AppCompatActivity
         params.setAnchorId(View.NO_ID);
         fabDirection.setLayoutParams(params);
         fabDirection.setVisibility(View.GONE);
+        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setProgressViewOffset(true, 0, 150);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
     }
 
 
@@ -170,12 +189,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         switch (menuItem.getItemId()) {
-            case R.id.sliding_list_example:
-                // showFragment(new SlidingSearchResultsExampleFragment());
+           /* case R.id.sliding_list_example:
                 return true;
             case R.id.sliding_search_bar_example:
-                // showFragment(new SlidingSearchViewExampleFragment());
-                return true;
+                return true;*/
             default:
                 return true;
         }
@@ -207,23 +224,55 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getApplicationContext(), "Ứng dụng cần quyền truy câp vị trí của bạn!", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            Toast.makeText(getApplicationContext(), "Bạn đã cho phép ứng dụng truy cập vịt trí.", Toast.LENGTH_LONG).show();
+            mMap.setMyLocationEnabled(true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    enableMyLocation();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bạn phải cấp quyền cho ứng dụng truy cập vị trí.", Toast.LENGTH_LONG).show();
+                    System.exit(1);
+                    return;
+                }
+                break;
+        }
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng tdmu = new LatLng(10.980568, 106.674618);
-        mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tdmu, 14f));
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                showBootomSheet();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                enableMyLocation();
+
+            } else {
+                mMap.setMyLocationEnabled(true);
+                Toast.makeText(getApplicationContext(), "Bạn đã cho phép ứng dụng truy cập vịt trí.", Toast.LENGTH_LONG).show();
             }
-        });
+
+        } else {
+            mMap.setMyLocationEnabled(true);
+        }
+
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -236,8 +285,6 @@ public class MainActivity extends AppCompatActivity
                 count++;
                 currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (count == 3) {
-
-                    initMarkers();
                     getCurrentLocation(14f);
                 }
 
@@ -247,78 +294,63 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 mMap.clear();
-               /* IconGenerator tc = new IconGenerator(MainActivity.this);
-                tc.setStyle(IconGenerator.STYLE_BLUE);
-                Bitmap bmp = tc.makeIcon("350k");
-
+                swipeRefreshLayout.setRefreshing(true);
                 Location centerLocation = setLocation(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                Location tdmuLocation = setLocation(10.980604, 106.675832);
-                Location bdLocation = setLocation(10.990218, 106.664481);
-                Location bxLocation = setLocation(10.966098, 106.669034);
-                Location laLocation = setLocation(10.539056, 106.409336);
                 LatLngBounds latLngBounds = mMap.getProjection().getVisibleRegion().latLngBounds;
                 Location bottomLeftLocation = setLocation(latLngBounds.southwest.latitude, latLngBounds.southwest.longitude);
-
-                ArrayList<Location> locationArrayList = new ArrayList<Location>();
-                locationArrayList.add(tdmuLocation);
-                locationArrayList.add(bdLocation);
-                locationArrayList.add(bxLocation);
-                locationArrayList.add(laLocation);
-                int count = 0;
-                for (int i = 0; i < locationArrayList.size(); i++) {
-                    double distaneFromCenterToTdmu = centerLocation.distanceTo(locationArrayList.get(i));
-                    double distanceFromCenterToBottomLeft = centerLocation.distanceTo(bottomLeftLocation);
-                    if (distaneFromCenterToTdmu < distanceFromCenterToBottomLeft) {
-                        count++;
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude()))
-                                .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        );
-                    }
-                }*/
-
-
+                try {
+                    initMarkers(centerLocation, bottomLeftLocation);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(getApplicationContext(), "clicked marker", Toast.LENGTH_LONG).show();
+                showBootomSheet();
                 return true;
             }
         });
     }
 
-    private void initMarkers() {
+    private void initMarkers(Location centerLocation, Location bottomLeftLocation) throws InterruptedException {
         IconGenerator icon = new IconGenerator(getApplicationContext());
+       // icon.setTextAppearance(R.style.iconGenText);
         icon.setStyle(IconGenerator.STYLE_BLUE);
-        Bitmap bitmap = icon.makeIcon("1Triệu");
-
-//        ClusterManager clusterManager = new ClusterManager<>(getApplicationContext(), mMap);
-        ClusterManager<Person> clusterManager = new ClusterManager<Person>( this, mMap );
-
-        mMap.setOnCameraChangeListener(clusterManager);
+        Bitmap bitmap = icon.makeIcon("300k");
+        ClusterManager<Person> clusterManager = new ClusterManager<Person>(this, mMap);
         PersonRender personRender = new PersonRender(getApplicationContext(), mMap, clusterManager);
 
-        ArrayList<Location> locationArrayList = new ArrayList<>();
-        locationArrayList.add(setLocation(10.981716, 106.683973));
-        locationArrayList.add(setLocation(10.982970, 106.682364));
-        locationArrayList.add(setLocation(10.981748, 106.684928));
-        locationArrayList.add(setLocation(10.981632, 106.683780));
+        ArrayList<Location> curLocationArrayList = new ArrayList<>();
+        curLocationArrayList.add(setLocation(10.981716, 106.683973));
+        curLocationArrayList.add(setLocation(10.982970, 106.682364));
+        curLocationArrayList.add(setLocation(10.981748, 106.684928));
+        curLocationArrayList.add(setLocation(10.981632, 106.683780));
+        curLocationArrayList.add(setLocation(10.966088, 106.668197));
+        int count = 0;
+        for (int i = 0; i < curLocationArrayList.size(); i++) {
 
-        for (int i = 0; i < locationArrayList.size(); i++) {
-            MarkerOptions m1 = new MarkerOptions()
-                    .position(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            double distaneFromCenterToTdmu = centerLocation.distanceTo(curLocationArrayList.get(i));
+            double distanceFromCenterToBottomLeft = centerLocation.distanceTo(bottomLeftLocation);
+            if (distaneFromCenterToTdmu < distanceFromCenterToBottomLeft) {
+                locationArrayList.add(curLocationArrayList.get(i));
+                MarkerOptions m1 = new MarkerOptions()
+                        .position(new LatLng(curLocationArrayList.get(i).getLatitude(), curLocationArrayList.get(i).getLongitude()))
+                        .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                Person person = new Person(m1);
+                clusterManager.addItem(person);
+            }
 
-            Person person = new Person(m1);
-            clusterManager.addItem(person);
+
         }
         clusterManager.cluster();
+        //  swipeRefreshLayout.setRefreshing(false);
 
     }
 
     private class PersonRender extends DefaultClusterRenderer<Person> {
+         IconGenerator mClusterIconGenerator = new IconGenerator(getApplicationContext());
 
         public PersonRender(Context context, GoogleMap map, ClusterManager<Person> clusterManager) {
             super(context, map, clusterManager);
@@ -332,7 +364,31 @@ public class MainActivity extends AppCompatActivity
             }
             markerOptions.visible(true);
         }
-        
+
+
+        @Override
+        protected void onBeforeClusterRendered(Cluster<Person> cluster, MarkerOptions markerOptions) {
+            final Drawable clusterIcon = getResources().getDrawable(R.drawable.ic_oval_fix);
+            clusterIcon.setColorFilter(getResources().getColor(android.R.color.holo_orange_light), PorterDuff.Mode.SRC_ATOP);
+          //  mClusterIconGenerator.setStyle(R.style.iconGenText);
+           mClusterIconGenerator.setTextAppearance(R.style.clusterStyle);
+            mClusterIconGenerator.setBackground(clusterIcon);
+
+
+/*
+            if (cluster.getSize() < 10) {
+                mClusterIconGenerator.setContentPadding(40, 20, 0, 0);
+            }
+            else {
+                mClusterIconGenerator.setContentPadding(30, 20, 0, 0);
+            }*/
+
+
+            Bitmap icon = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        }
+
+
         @Override
         protected boolean shouldRenderAsCluster(Cluster<Person> cluster) {
             return cluster.getSize() > 1;
@@ -347,4 +403,8 @@ public class MainActivity extends AppCompatActivity
         return location;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

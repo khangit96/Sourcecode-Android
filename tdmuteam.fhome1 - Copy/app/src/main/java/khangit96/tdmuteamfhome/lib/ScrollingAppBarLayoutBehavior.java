@@ -90,7 +90,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
             mAppBarYValueAnimator = ValueAnimator.ofFloat(
                     (int) appBarLayout.getY(),
                     visible ? (int) appBarLayout.getY() + appBarLayout.getHeight() + getStatusBarHeight() :
-                              (int) appBarLayout.getY() - appBarLayout.getHeight() - getStatusBarHeight());
+                            (int) appBarLayout.getY() - appBarLayout.getHeight() - getStatusBarHeight());
             mAppBarYValueAnimator.setDuration(mContext.getResources().getInteger(android.R.integer.config_shortAnimTime));
             mAppBarYValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -165,8 +165,8 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
             out.writeByte((byte) (mVisible ? 1 : 0));
         }
 
-        public static final Creator<SavedState> CREATOR =
-                new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
                     @Override
                     public SavedState createFromParcel(Parcel source) {
                         return new SavedState(source);

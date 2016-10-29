@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_favorite"
+        android:icon="@drawable/ic_star_24dp"
+        android:title="Nhà trọ yêu thích" />
+
+    <item
+        android:id="@+id/navigation_item_2"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="Chia sẻ ứng dụng" />
+    <item
+        android:id="@+id/navigasdtion_item_2"
+        android:icon="@drawable/ic_feedback_24dp"
+        android:title="Phản hồi" />
+    <item
+        android:id="@+id/navigation_ietem_2"
+        android:icon="@drawable/ic_info_24dp"
+        android:title="Giới thiệu ứng dụng" />
+
+</menu>

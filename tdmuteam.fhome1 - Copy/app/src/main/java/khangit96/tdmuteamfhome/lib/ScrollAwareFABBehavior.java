@@ -29,7 +29,6 @@ import android.util.Log;
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     float offset;
-   static boolean check=false;
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
@@ -40,40 +39,41 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final FloatingActionButton child,
                                        final View directTargetChild, final View target, final int nestedScrollAxes) {
         // Ensure we react to vertical scrolling
-       // child.hide();
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
                 || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
     }
-
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
         return dependency instanceof NestedScrollView;
     }
-
     @Override
+    public void onNestedScroll(final CoordinatorLayout coordinatorLayout, final FloatingActionButton child,
+                               final View target, final int dxConsumed, final int dyConsumed,
+                               final int dxUnconsumed, final int dyUnconsumed) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+        if (dyConsumed > 10 && child.getVisibility() == View.VISIBLE) {
+            // User scrolled down and the FAB is currently visible -> hide the FAB
+            child.hide();
+        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+            // User scrolled up and the FAB is currently not visible -> show the FAB
+            child.show();
+        }
+    }
+
+    /*@Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
 
-       /* if (offset == 0)
+        if (offset == 0)
             setOffsetValue(parent);
 
         if (dependency.getY() <=0)
-            return false;*/
-        Log.d("test","ok:"+child.getY());
-        if(check==false){
-            if(child.getY()<=100){
-                child.hide();
-                check=true;
-            }
-        }
-
-       /* if (child.getY() <= (offset + child.getHeight()) && child.getVisibility() == View.VISIBLE){
-
-
-
             return false;
+
+        if (child.getY() <= (offset + child.getHeight()) && child.getVisibility() == View.VISIBLE){
+            child.hide();
         }
-*/
+
         else if (child.getY() > offset && child.getVisibility() != View.VISIBLE)
             child.show();
 
@@ -94,5 +94,5 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                 }
             }
         }
-    }
+    }*/
 }

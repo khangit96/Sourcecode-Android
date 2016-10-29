@@ -19,6 +19,7 @@ public class Person implements ClusterItem {
         this.title = markerOptions.getTitle();
         this.snippet = markerOptions.getSnippet();
         this.icon = markerOptions.getIcon();
+        this.title=markerOptions.getTitle();
     }
 
     @Override

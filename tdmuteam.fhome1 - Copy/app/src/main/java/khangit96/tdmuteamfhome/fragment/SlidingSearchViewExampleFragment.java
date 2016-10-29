@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.util.Log;
@@ -30,6 +29,8 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
 
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import   khangit96.tdmuteamfhome.R;
 import   khangit96.tdmuteamfhome.data.ColorSuggestion;

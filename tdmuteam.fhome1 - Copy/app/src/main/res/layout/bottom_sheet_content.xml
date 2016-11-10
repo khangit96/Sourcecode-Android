@@ -23,22 +23,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/textview_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nhà trọ Ngọc Lan"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="19sp" />
 
             <TextView
-                android:id="@+id/tvAddress"
+                android:id="@+id/textview_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Phường Phú Lợi,Tp.Thủ Dầu Một"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
@@ -49,16 +46,16 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingTop="8dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
+        <!--
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />-->
 
     </RelativeLayout>
 
@@ -85,97 +82,81 @@
             android:paddingStart="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Thông tin chi tiết"
+                android:text="@string/detailInformation"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_housePrice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Giá phòng: 350vnđ/tháng"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_electricPrice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Giá điện: 3000vnđ/kw"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_waterPrice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Giá nước: 3000vnđ/khối"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_houseStatus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Diện tích: 100m2"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/textview_sizeOfHouse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_addressDetail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Địa chỉ: 32A Huỳnh Văn Luỹ,TDM,Bình Dương"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_nameOfOwnHouse"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Tên chủ hộ: Nguyễn Văn A"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_phone"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_timeOpen"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_timeClose"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
                 android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Số điệnt thoại: 0976671809"
-                android:textSize="15sp" />
-
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -204,7 +185,7 @@
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/button1"
+                    android:id="@+id/button_contact"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
@@ -216,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:text="Liên Hệ"
+                    android:text="@string/contact"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -232,7 +213,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/button2"
+                    android:id="@+id/button_share"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
@@ -243,7 +224,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chia Sẻ"
+                    android:text="@string/share"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -254,19 +235,19 @@
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/establecimiento_share_button"
+                    android:id="@+id/button_comment"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_star_24dp"
+                    android:src="@drawable/ic_comment_24dp"
                     android:tint="@color/colorPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:text="Yêu Thích"
+                    android:text="@string/review"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />

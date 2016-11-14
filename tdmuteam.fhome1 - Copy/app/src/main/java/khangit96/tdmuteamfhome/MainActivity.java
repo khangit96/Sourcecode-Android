@@ -3,6 +3,7 @@ package khangit96.tdmuteamfhome;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,9 +64,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.android.clustering.Cluster;
@@ -83,6 +90,8 @@ import khangit96.tdmuteamfhome.lib.BottomSheetBehaviorGoogleMapsLike;
 import khangit96.tdmuteamfhome.lib.MergedAppBarLayoutBehavior;
 import me.relex.circleindicator.CircleIndicator;
 
+import static khangit96.tdmuteamfhome.R.string.phone;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
     private GoogleMap mMap;
@@ -93,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FloatingSearchView floatingSearchView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int CALLPHONE_PERMISSION_REQUEST_CODE = 2;
     boolean checkHideBottomSheet = true;
     ViewStub stub;
     View view;
@@ -108,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ClusterManager<HouseCluster> clusterManager;
     HomeRender homeRender;
     boolean checkFirstTimeLocationChange = true;
+    List<Marker> originMarkers = new ArrayList<>();
+    List<Marker> destinationMarkers = new ArrayList<>();
+    List<Polyline> polylinePaths = new ArrayList<>();
+    boolean checkIfGetDataHouseFireBaseSuccess = false;
+    String phoneNumber = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         client.disconnect();
+        clusterManager.clearItems();
     }
 
     /*
@@ -263,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkIsNullBeforeSetText(textview_waterPrice, String.format(getString(R.string.waterPrice), house.giaNuoc));
         checkIsNullBeforeSetText(textview_addressDetail, String.format(getString(R.string.address), house.diaChi));
         checkIsNullBeforeSetText(textview_nameOfOwnHouse, String.format(getString(R.string.nameOfOwnHouse), house.tenChuHo));
-        checkIsNullBeforeSetText(textview_phone, String.format(getString(R.string.phone), house.sdt));
+        checkIsNullBeforeSetText(textview_phone, String.format(getString(phone), house.sdt));
         checkIsNullBeforeSetText(textview_houseStatus, String.format(getString(R.string.housetStatus), house.tinhTrang));
 
         //not update in database
@@ -320,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getDataFromGoogleMapServer(String.valueOf(house.viDo) + "," + house.kinhDo)) {
+                if (getDataFromGoogleMapServer(house)) {
                     behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
                     hideBottomSheet();
                 }
@@ -330,12 +346,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDirection1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getDataFromGoogleMapServer(String.valueOf(house.viDo) + "," + house.kinhDo)) {
+                if (getDataFromGoogleMapServer(house)) {
                     behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
                     hideBottomSheet();
                 }
             }
         });
+
+        //button contact click
+        ImageButton button_contact = (ImageButton) findViewById(R.id.button_contact);
+        button_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phoneNumber = "tel:" + house.sdt;
+                callPhone();
+            }
+        });
+
+    }
+
+    /**
+     * event call phone
+     */
+    public void callPhone() {
+        if (phoneNumber == null) {
+            showToast("Hiện tại chưa có thông tin liên hệ!");
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                        Manifest.permission.CALL_PHONE
+                }, CALLPHONE_PERMISSION_REQUEST_CODE);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(phoneNumber));
+                startActivity(intent);
+            }
+        } else {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse(phoneNumber));
+            startActivity(intent);
+        }
+
     }
 
     /*
@@ -359,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     *
     * */
     @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
+    public boolean onNavigationItemSelected(MenuItem mRenuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
       /*  switch (menuItem.getItemId()) {
             case R.id.s:
@@ -400,6 +454,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     System.exit(1);
                     return;
                 }
+            case CALLPHONE_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callPhone();
+                } else {
+                    showToast("Bạn phải cấp quyền gọi điện cho ứng dụng!");
+                }
                 break;
         }
     }
@@ -422,10 +482,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (previousMaker != null) {
-                    previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_default));
+                    //  previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_share_24dp));
                 }
                 previousMaker = marker;
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected));
+
                 showBottonSheet(houseList.get(Integer.parseInt(marker.getTitle())));
                 return true;
             }
@@ -434,6 +495,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onClusterClick(Cluster<HouseCluster> cluster) {
                 return true;
+            }
+        });
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                clusterManager.onCameraChange(cameraPosition);
+                Location centerLocation = new Location("centerLocation");
+                centerLocation.setLatitude(cameraPosition.target.latitude);
+                centerLocation.setLongitude(cameraPosition.target.longitude);
+
+                LatLngBounds curScreen = mMap.getProjection().getVisibleRegion().latLngBounds;
+                Location leftBottomLocation = new Location("leftBottomLocation");
+                leftBottomLocation.setLatitude(curScreen.southwest.latitude);
+                leftBottomLocation.setLongitude(curScreen.southwest.longitude);
+
+                if (checkIfGetDataHouseFireBaseSuccess)
+                    checkIfAreaHasHouse(centerLocation, leftBottomLocation);
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -447,13 +526,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mMap.setMyLocationEnabled(true);
         }
 
-
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
                 currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (checkFirstTimeLocationChange) {
-                    getCurrentLocation(14f);
+                    getCurrentLocation(15f);
                     checkFirstTimeLocationChange = false;
                 }
 
@@ -462,6 +540,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+    /*
+    *
+    * */
+    public void checkIfAreaHasHouse(Location centerLocation, Location leftBottomLocation) {
+        swipeRefreshLayout.setRefreshing(true);
+        double distanceFromCenterToLeftTop = centerLocation.distanceTo(leftBottomLocation);
+
+        for (int i = 0; i < houseList.size(); i++) {
+            Location houseLocation = new Location("houseLocation");
+            houseLocation.setLatitude(houseList.get(i).viDo);
+            houseLocation.setLongitude(houseList.get(i).kinhDo);
+
+            double distanceFromCenterToHouse = centerLocation.distanceTo(houseLocation);
+            if (distanceFromCenterToHouse < distanceFromCenterToLeftTop) {
+                swipeRefreshLayout.setRefreshing(false);
+                return;
+            }
+        }
+        swipeRefreshLayout.setRefreshing(false);
+        showToast("Khu vực này hiện tại chưa có nhà trọ!");
+
+
+    }
 
     /*
     * ask For GPS if GPS is disabled
@@ -481,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     final Status status = result.getStatus();
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
-                            getCurrentLocation(14);
+                            getCurrentLocation(15f);
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             try {
@@ -497,7 +599,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         } else {
             if (currentLatLng != null) {
-                getCurrentLocation(14);
+                getCurrentLocation(15f);
             }
         }
 
@@ -587,6 +689,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Gson gson = new GsonBuilder().create();
                     houseList = Arrays.asList(gson.fromJson(jsonArray.toString(), House[].class));
                     requestQueue.stop();
+                    checkIfGetDataHouseFireBaseSuccess = true;
                     new ThreadInitMaker().start();
 
                 }
@@ -609,18 +712,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*
     * Parse JSon get direction from google map server
     * */
-    public boolean getDataFromGoogleMapServer(String destinationLocation) {
+    public boolean getDataFromGoogleMapServer(House house) {
         if (currentLatLng == null || !isNetworkAvailable()) {
             showToast("Vui lòng kiểm tra lại kết nối! ");
             return false;
         }
+        String strDestinationLocation = String.valueOf(house.viDo) + "," + String.valueOf(house.kinhDo);
+        final Location destinationLocation = new Location("destinationLocation");
+        destinationLocation.setLatitude(house.viDo);
+        destinationLocation.setLongitude(house.kinhDo);
 
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Đang lấy thông tin đường đi...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         String currentLocation = String.valueOf(currentLatLng.latitude) + "," + String.valueOf(currentLatLng.longitude);
-        String SERVER_GOOGLEMAP = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLocation + "&destination=" + destinationLocation + "&key=AIzaSyD5Xzis5_DOGW2XLYvOQ7FCVvFzLsym9aA";
+        String SERVER_GOOGLEMAP = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLocation + "&destination=" + strDestinationLocation + "&key=AIzaSyD5Xzis5_DOGW2XLYvOQ7FCVvFzLsym9aA";
+
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, SERVER_GOOGLEMAP, null, new Response.Listener<JSONObject>() {
@@ -633,8 +741,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
                             JSONObject jsonLeg = jsonLegs.getJSONObject(0);
                             JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
-                            //      JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
-                            showToast(jsonDistance.getString("value"));
+                            String points = overview_polylineJson.getString("points");
+                            drawPolyline(destinationLocation, decodePolyLine(points));
                             progressDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -744,5 +852,105 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String provider = LocationManager.GPS_PROVIDER;
         return locationManager.isProviderEnabled(provider);
+    }
+
+    /*
+    *
+    * */
+
+    public void drawPolyline(Location location, List<LatLng> points) {
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline : polylinePaths) {
+                polyline.remove();
+            }
+        }
+
+        polylinePaths = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        LatLng endLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(endLocation)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected)));
+        destinationMarkers.add(marker);
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .geodesic(true)
+                .color(getResources().getColor(R.color.colorPrimary))
+                .width(15);
+
+        for (int i = 0; i < points.size(); i++)
+            polylineOptions.add(points.get(i));
+        polylinePaths.add(mMap.addPolyline(polylineOptions));
+        getCurrentLocation(15f);
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.getTitle() != null) {
+                    showBottonSheet(houseList.get(Integer.parseInt(marker.getTitle())));
+                }
+                if (previousMaker != null) {
+                    //previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_default));
+
+                }
+                previousMaker = marker;
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected));
+
+                return true;
+            }
+        });
+    }
+
+    /*
+    *
+    * */
+    private List<LatLng> decodePolyLine(final String poly) {
+        int len = poly.length();
+        int index = 0;
+        List<LatLng> decoded = new ArrayList<LatLng>();
+        int lat = 0;
+        int lng = 0;
+
+        while (index < len) {
+            int b;
+            int shift = 0;
+            int result = 0;
+            do {
+                b = poly.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = poly.charAt(index++
+
+                ) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            decoded.add(new LatLng(
+                    lat / 100000d, lng / 100000d
+            ));
+        }
+
+        return decoded;
     }
 }

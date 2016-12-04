@@ -27,5 +27,6 @@
     <string name="timeClose">Thời gian đóng cửa: %s</string>
     <string name="housetStatus">Tình trang: %s</string>
     <string name="updatingInformation">Đang cập nhật...</string>
+    <string name="title_activity_review">ReviewActivity</string>
 </resources>
 

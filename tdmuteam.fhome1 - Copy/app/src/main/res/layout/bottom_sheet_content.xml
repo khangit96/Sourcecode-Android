@@ -235,7 +235,7 @@
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/button_comment"
+                    android:id="@+id/button_review"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_centerHorizontal="true"

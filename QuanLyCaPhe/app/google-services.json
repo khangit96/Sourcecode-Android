@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "951540018970",
+    "firebase_url": "https://quanlycaphe.firebaseio.com",
+    "project_id": "quanlycaphe",
+    "storage_bucket": "quanlycaphe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951540018970:android:c9a9cafd253a74b1",
+        "android_client_info": {
+          "package_name": "khangit96.quanlycaphe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951540018970-ddi03vfegp7rjfv9qpmt0a6lv72gf7m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ0tBLN2rlrcM7TeK8JMNyioxOb2tc0P4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

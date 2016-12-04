@@ -92,7 +92,6 @@ import me.relex.circleindicator.CircleIndicator;
 
 import static khangit96.tdmuteamfhome.R.string.phone;
 
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
     private GoogleMap mMap;
     private DrawerLayout mDrawerLayout;
@@ -124,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean checkIfGetDataHouseFireBaseSuccess = false;
     String phoneNumber = null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +146,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         super.onStart();
         client.connect();
+        if (houseList != null) {
+            new ThreadInitMaker().start();
+        }
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -206,7 +216,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*
     *
      */
-    public void showBottonSheet(final House house) {
+    public void showBottonSheet(final int id) {
+        final House house = houseList.get(id);
         //Image
         int[] mDrawables = {
                 R.drawable.nhatro,
@@ -249,7 +260,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stub.setVisibility(View.VISIBLE);
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) fabLocation.getLayoutParams();
         mlp.setMargins(0, 0, 0, 150);
-
         //Textview bottom sheet
         final TextView textview_name, textview_address, textview_housePrice, textview_electricPrice, textview_waterPrice, textview_addressDetail, textview_nameOfOwnHouse,
                 textview_phone, textview_houseStatus, textview_sizeOfHouse, textview_timeOpen, textview_timeClose;
@@ -363,6 +373,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //button share click
+        ImageButton button_share = (ImageButton) findViewById(R.id.button_share);
+        button_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareHouse(house);
+            }
+        });
+
+        //button review click
+
+        ImageButton button_review = (ImageButton) findViewById(R.id.button_review);
+
+        button_review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent reviewIntent = new Intent(MainActivity.this, ReviewActivity.class);
+                reviewIntent.putExtra("NHATRO_POS", id);
+                startActivity(new Intent(reviewIntent));
+            }
+        });
+
+    }
+
+    /*
+    * share content house:name,direction,water price,house price.
+    * */
+
+    public void shareHouse(House house) {
+
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        String direction = "http://maps.google.com/maps?saddr=Current+Location&daddr="
+                + String.valueOf(house.viDo) + "," + String.valueOf(house.kinhDo);
+        intent.putExtra(Intent.EXTRA_SUBJECT, house.tenChuHo);
+        intent.putExtra(Intent.EXTRA_TEXT, "Nhà trọ: " + house.tenChuHo + "\n"
+                + "Chỉ đường: " + direction + "\n");
+        startActivity(Intent.createChooser(intent, "Chia sẻ"));
     }
 
     /**
@@ -421,6 +471,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 return true;
         }*/
+
         return true;
     }
 
@@ -487,7 +538,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 previousMaker = marker;
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected));
 
-                showBottonSheet(houseList.get(Integer.parseInt(marker.getTitle())));
+                showBottonSheet(Integer.parseInt(marker.getTitle()));
                 return true;
             }
         });
@@ -702,6 +753,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             requestQueue.add(jsonArrayRequest);
+
+
         } else {
             showSnackBar("Không có kết nối mạng.");
         }
@@ -898,7 +951,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (marker.getTitle() != null) {
-                    showBottonSheet(houseList.get(Integer.parseInt(marker.getTitle())));
+                    showBottonSheet(Integer.parseInt(marker.getTitle()));
                 }
                 if (previousMaker != null) {
                     //previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_default));

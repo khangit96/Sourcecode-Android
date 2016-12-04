@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_favorite"
-        android:icon="@drawable/ic_star_24dp"
-        android:title="Nhà trọ yêu thích" />
+    <!--  <item
+          android:id="@+id/menu_favorite"
+          android:icon="@drawable/ic_star_24dp"
+          android:title="Lịc" />-->
 
     <item
         android:id="@+id/navigation_item_2"
@@ -14,7 +14,7 @@
         android:title="Phản hồi" />
     <item
         android:id="@+id/navigation_ietem_2"
-        android:icon="@drawable/ic_info_24dp"
+        android:icon="@drawable/ic_infor_24dp"
         android:title="Giới thiệu ứng dụng" />
 
 </menu>

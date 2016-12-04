@@ -13,16 +13,26 @@ android {
         multiDexEnabled true
 
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+        //    minifyEnabled true
+            //shrinkResources true
+           // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
-    /*configurations {
-        all*.exclude group: 'com.android.support', module: 'support-v4'
-        all*.exclude group: 'com.android.support', module: 'support-annotations'
-    }*/
+    configurations {
+      //  all*.exclude group: 'com.android.support', module: 'support-v4'
+      //  all*.exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }
 
 dependencies {
@@ -44,4 +54,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+ //   compile 'com.eminayar.panterdialog:panter-dialog:0.0.2.1'
+    compile 'com.google.firebase:firebase-database:9.0.0'
+    compile 'com.greenhalolabs:facebooklogin:1.0'
+
+
 }
+apply plugin: 'com.google.gms.google-services'

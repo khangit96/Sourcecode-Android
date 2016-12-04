@@ -9,7 +9,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -32,14 +32,22 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:screenOrientation="portrait"
             android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ReviewActivity"
+            android:label="@string/title_activity_review"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+
         </activity>
     </application>
 

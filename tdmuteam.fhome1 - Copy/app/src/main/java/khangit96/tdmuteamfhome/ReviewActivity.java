@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,8 +27,8 @@ public class ReviewActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<Review> reviewArrayList;
     private ListViewReviewAdapter adapter;
-    int NHATRO_POS;
-    int countReview = 0;
+    private int NHATRO_POS;
+    private int countReview = 0;
     ProgressDialog progressDialog;
 
     @Override
@@ -55,6 +56,27 @@ public class ReviewActivity extends AppCompatActivity {
                 showDialogAddReview();
             }
         });
+
+        //listview scroll reached bottom
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                        && (listView.getLastVisiblePosition() - listView.getHeaderViewsCount() -
+                        listView.getFooterViewsCount()) >= (adapter.getCount() - 1)) {
+                    loadReviewFirebase();
+
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView lw, final int firstVisibleItem,
+                                 final int visibleItemCount, final int totalItemCount) {
+
+
+            }
+        });
     }
 
     /*
@@ -68,9 +90,23 @@ public class ReviewActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         Bundle bd = getIntent().getExtras();
-        if (bd != null)
+        if (bd != null) {
             NHATRO_POS = bd.getInt("NHATRO_POS");
+        }
 
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("NhaTro/" + NHATRO_POS + "/Review");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countReview = (int) dataSnapshot.getChildrenCount();
+                mDatabase.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /*
@@ -78,44 +114,33 @@ public class ReviewActivity extends AppCompatActivity {
     * */
     public void loadReviewFirebase() {
         progressDialog.setMessage("Đang tải nhận xét...");
-        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("NhaTro/" + NHATRO_POS + "/Review");
-       /* mDatabase.orderByKey().startAt("2", null).limitToFirst(2).addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByKey().startAt(String.valueOf(adapter.getCount() + 1), null).limitToFirst(10).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-            }
+                if (dataSnapshot.getChildrenCount() != 0) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countReview = (int) dataSnapshot.getChildrenCount();
-                if (countReview != 0) {
                     for (DataSnapshot dt : dataSnapshot.getChildren()) {
                         Review review = dt.getValue(Review.class);
                         reviewArrayList.add(review);
                         adapter.notifyDataSetChanged();
                     }
-                    progressDialog.dismiss();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Chưa có nhận xét!", Toast.LENGTH_LONG).show();
-                    progressDialog.dismiss();
                 }
+                progressDialog.dismiss();
 
                 mDatabase.removeEventListener(this);
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+
             }
         });
+
     }
 
     /*

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "951540018970-b679e9cajlov3gheon6v1qpdokqmu23t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "khangit96.quanlycaphe",
+            "certificate_hash": "2E7ED890C757B625B9091951BA7489A813725150"
+          }
+        },
+        {
           "client_id": "951540018970-ddi03vfegp7rjfv9qpmt0a6lv72gf7m5.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951540018970-ddi03vfegp7rjfv9qpmt0a6lv72gf7m5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

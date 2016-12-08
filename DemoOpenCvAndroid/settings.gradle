@@ -1,3 +1,0 @@
-include ':app'
-include ':openCVLibrary310'
-include ':openCVSample15puzzle'

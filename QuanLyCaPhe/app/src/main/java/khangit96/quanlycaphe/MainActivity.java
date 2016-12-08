@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,16 +21,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
+    Button button_order;
+    ArrayList<Food> foodList;
+    Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Order").push();
-        mDatabase.setValue(new Order("8", "Nước chanh"));
+        addControls();
+        addEvents();
 
+    }
+
+    public void addControls() {
+        button_order = (Button) findViewById(R.id.button_order);
+        foodList = new ArrayList<>();
+        foodList.add(new Food("Nước Chanh", 20000, 1));
+        foodList.add(new Food("Cà Phê Sữa", 25000, 1));
+        foodList.add(new Food("Nước Chanh Muối", 24000, 1));
+        order = new Order("8", foodList, 200000);
+    }
+
+    public void addEvents() {
+        button_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Order").push();
+                mDatabase.setValue(order);
+            }
+        });
     }
 
     public void checkLoginFirebase(final String username, final String password) {

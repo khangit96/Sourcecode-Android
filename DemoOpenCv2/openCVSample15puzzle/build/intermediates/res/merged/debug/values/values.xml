@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="CameraBridgeViewBase"><attr format="boolean" name="show_fps"/><attr format="integer" name="camera_id"><enum name="any" value="-1"/><enum name="back" value="99"/><enum name="front" value="98"/></attr></declare-styleable>
-    <!-- From: file:/C:/Users/Administrator/Desktop/Project%20Android/DemoOpenCv2/openCVSample15puzzle/src/main/res/values/strings.xml -->
-    <eat-comment/>
-    <string name="app_name">OCV 15 Puzzle</string>
-    <string name="menu_start_new_game">Start new game</string>
-    <string name="menu_toggle_tile_numbers">Show/hide tile numbers</string>
-</resources>

@@ -15,6 +15,7 @@
         app:layout_behavior="@string/BackDropBottomSheetBehavior">
 
     </android.support.v4.view.ViewPager>
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
@@ -59,10 +60,11 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
                 app:title="@string/key_binding_default_toolbar_name" />
+
             <me.relex.circleindicator.CircleIndicator
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"/>
+                android:layout_height="48dp" />
         </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -73,25 +75,27 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:clickable="true"
-        android:theme="@style/FabDirection"
         android:src="@drawable/ic_directions_black_24dp"
+        android:theme="@style/FabDirection"
         android:tint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|right|end"
         app:layout_behavior="@string/ScrollAwareFABBehavior" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabDirection1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:clickable="true"
-        app:borderWidth="0dp"
-        android:theme="@style/FabDirection1"
         android:src="@drawable/ic_directions_black_24dp"
+        android:theme="@style/FabDirection1"
         android:tint="@android:color/white"
+        app:borderWidth="0dp"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|right|end"
         app:layout_behavior="@string/ScrollAwareFABBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>
+

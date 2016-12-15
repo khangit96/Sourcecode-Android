@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "517185806877",
+    "firebase_url": "https://demoremoteconfig-35b8f.firebaseio.com",
+    "project_id": "demoremoteconfig-35b8f",
+    "storage_bucket": "demoremoteconfig-35b8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517185806877:android:f9fd7dee42746ec8",
+        "android_client_info": {
+          "package_name": "khangit96.demofirebaseconfig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517185806877-r8en39771ofsp2loodd1c3f12efbba2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQsdcIOKfs1sTqMDTL25TdOLK2RBKs9lM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

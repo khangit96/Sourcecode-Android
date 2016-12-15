@@ -5,16 +5,19 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "khangit96.tdmuteamfhome"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
+     //   multiDexEnabled true
 
     }
     dexOptions {
         javaMaxHeapSize "4g"
+    }
+    dataBinding {
+        enabled = true
     }
 
     buildTypes {
@@ -40,12 +43,16 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.google.android.gms:play-services:9.0.0'
+ //   compile 'com.google.android.gms:play-services:9.0.0'
+    compile 'com.google.android.gms:play-services-maps:9.0.0'
+    compile 'com.google.android.gms:play-services-location:9.0.0'
+  //  compile'com.google.android.gms:play-services-awareness:9.0.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.0.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:palette-v7:23.1.1'
     compile 'com.github.arimorty:floatingsearchview:2.0.3'
     compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:multidex:+'
+//    compile 'com.android.support:multidex:+'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.0.1'
     compile 'com.google.maps.android:android-maps-utils:0.4'

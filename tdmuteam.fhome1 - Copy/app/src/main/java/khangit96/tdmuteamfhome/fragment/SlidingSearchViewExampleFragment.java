@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
@@ -32,14 +31,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import   khangit96.tdmuteamfhome.R;
-import   khangit96.tdmuteamfhome.data.ColorSuggestion;
-import   khangit96.tdmuteamfhome.data.DataHelper;
+import khangit96.tdmuteamfhome.R;
+import khangit96.tdmuteamfhome.data.ColorSuggestion;
+import khangit96.tdmuteamfhome.data.DataHelper;
 
 
 public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
     private final String TAG = "BlankFragment";
-
     public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
 
     private static final long ANIM_DURATION = 350;

@@ -1,0 +1,32 @@
+<resources>
+    <!--App name-->
+    <string name="app_name">Tìm Nhà Trọ</string>
+
+    <!--String Behavior BottomSheet-->
+    <string name="BackDropBottomSheetBehavior">khangit96.tdmuteamfhome.lib.BackdropBottomSheetBehavior</string>
+    <string name="BottomSheetBehaviorGoogleMapsLike">khangit96.tdmuteamfhome.lib.BottomSheetBehaviorGoogleMapsLike</string>
+    <string name="ScrollAwareFABBehavior">khangit96.tdmuteamfhome.lib.ScrollAwareFABBehavior</string>
+    <string name="MergedAppBarLayoutBehavior">khangit96.tdmuteamfhome.lib.MergedAppBarLayoutBehavior</string>
+    <string name="ScrollingAppBarLayoutBehavior">khangit96.tdmuteamfhome.lib.ScrollingAppBarLayoutBehavior</string>
+    <string name="key_binding_default_toolbar_name">Modal-Toolbar-Title</string>
+
+    <!---->
+    <string name="detailInformation">Thông tin chi tiết</string>
+    <string name="contact">Liên hệ</string>
+    <string name="share">Chia sẻ</string>
+    <string name="review">Nhận xét</string>
+    <!---->
+    <string name="housePrice">Giá phòng: %s vnđ/tháng </string>
+    <string name="waterPrice">Giá nước: %s vnd/khối</string>
+    <string name="electricPrice">Giá điện: %s vnđ/kw</string>
+    <string name="phone">Số điện thoại: %s</string>
+    <string name="address">Địa chỉ: %s</string>
+    <string name="nameOfOwnHouse">Tên chủ hộ: %s</string>
+    <string name="sizeOfHouse">Diện tích: %s</string>
+    <string name="timeOpen">Thời gian mở cửa: %s</string>
+    <string name="timeClose">Thời gian đóng cửa: %s</string>
+    <string name="housetStatus">Tình trang: %s</string>
+    <string name="updatingInformation">Đang cập nhật...</string>
+    <string name="title_activity_review">ReviewActivity</string>
+</resources>
+

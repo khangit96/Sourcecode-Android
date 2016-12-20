@@ -48,6 +48,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<Polyline> polylinePaths = new ArrayList<>();
     boolean checkIfGetDataHouseFireBaseSuccess = false;
     String phoneNumber = null;
-    public static boolean activityState = false;
     ActivityMainBinding binding;
 
     @Override
@@ -142,6 +142,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         startService();
 
+        addEvents();
+
+        addControls();
+    }
+
+    private void addControls() {
+        binding.floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                if (item.getItemId() == R.id.filter) {
+                    startActivity(new Intent(MainActivity.this, FilterActivity.class));
+                }
+            }
+        });
+    }
+
+    private void addEvents() {
+        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AddHouseActivity.class));
+            }
+        });
     }
 
 
@@ -160,14 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (houseList != null) {
             new ThreadInitMaker().start();
         }
-        activityState = true;
 
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -175,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
         client.disconnect();
         clusterManager.clearItems();
-        activityState = false;
     }
 
     /*
@@ -405,7 +420,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(reviewIntent));
             }
         });
-
     }
 
     /*
@@ -1017,4 +1031,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return decoded;
     }
+
 }

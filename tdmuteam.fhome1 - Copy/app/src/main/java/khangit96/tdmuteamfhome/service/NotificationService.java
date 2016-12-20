@@ -37,9 +37,7 @@ public class NotificationService extends Service {
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!MainActivity.activityState) {
                     showNotification("Nhà trọ " + dataSnapshot.child("tenChuHo").getValue().toString());
-                }
 
             }
 

@@ -4,4 +4,9 @@
     <string name="closeDrawer">close</string>
     <string name="order">GỌI THỨC UỐNG ( TỔNG TIỀN : %s )</string>
     <string name="notOrder">CHƯA CHỌN THỨC UỐNG</string>
+
+    <!--activity-->
+    <string name="tableActivity">Bàn %s</string>
+    <string name="manageActivity">Quản Lý Đặt Hàng</string>
+    <string name="mainActivity">Order Food</string>
 </resources>

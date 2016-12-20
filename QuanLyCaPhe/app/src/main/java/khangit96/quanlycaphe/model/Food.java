@@ -11,6 +11,7 @@ public class Food {
     public String foodName;
     public double foodPrice;
     public int foodImage;
+    public String formatPrice;
 
     public Food(String foodName, double foodPrice, int foodImage) {
         this.foodName = foodName;
@@ -18,8 +19,9 @@ public class Food {
         this.foodImage = foodImage;
     }
 
-    public String getFoodPrice() {
-        return FortmatCurrency.formatVnCurrence(FortmatCurrency.formatDouble(foodPrice));
+    public String getFormatPrice() {
+        formatPrice = FortmatCurrency.formatVnCurrence(FortmatCurrency.formatDouble(foodPrice));
+        return formatPrice;
     }
 
     @BindingAdapter("setImage")

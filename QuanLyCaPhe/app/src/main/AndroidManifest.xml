@@ -12,11 +12,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:label="Order Food"
+            android:label="@string/mainActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +24,12 @@
         </activity>
         <activity
             android:name=".activity.ManageActivity"
-            android:parentActivityName=".activity.MainActivity"></activity>
+            android:label="@string/manageActivity"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.TableActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.ManageActivity"></activity>
     </application>
 
 </manifest>

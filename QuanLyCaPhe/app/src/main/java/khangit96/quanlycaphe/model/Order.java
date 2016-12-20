@@ -7,11 +7,12 @@ import java.util.List;
  */
 
 public class Order {
-    List<Food> foodList;
-    double totalPrice;
+    public List<Food> foodList;
+    public double totalPrice;
 
     public Order(List<Food> foodList, double totalPrice) {
         this.foodList = foodList;
         this.totalPrice = totalPrice;
     }
+
 }

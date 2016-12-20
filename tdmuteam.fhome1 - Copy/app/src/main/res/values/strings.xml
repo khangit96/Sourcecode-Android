@@ -27,6 +27,14 @@
     <string name="timeClose">Thời gian đóng cửa: %s</string>
     <string name="housetStatus">Tình trang: %s</string>
     <string name="updatingInformation">Đang cập nhật...</string>
-    <string name="title_activity_review">ReviewActivity</string>
+
+    <!--facebook-->
+    <string name="facebook_app_id">343572846013838</string>
+
+    <!--activity-->
+    <string name="addHouseActivity">Thêm Nhà Trọ</string>
+    <string name="reviewActivity">Nhận Xét</string>
+    <string name="filterActivity">Bộ Lọc</string>
+
 </resources>
 

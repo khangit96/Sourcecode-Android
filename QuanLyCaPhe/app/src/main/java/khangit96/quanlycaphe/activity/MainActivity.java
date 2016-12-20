@@ -35,6 +35,7 @@ import khangit96.quanlycaphe.adapter.CustomSpinnerAdapter;
 import khangit96.quanlycaphe.adapter.FoodAdapter;
 import khangit96.quanlycaphe.databinding.ActivityMainBinding;
 import khangit96.quanlycaphe.model.Admin;
+import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
 import khangit96.quanlycaphe.model.Order;
 
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     * */
     public static void pushOrderToFirebase(Order order, int table) {
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Order/Table " + table).push();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_NAME + "/Order/Table " + table).push();
         mDatabase.setValue(order);
 
     }
@@ -192,18 +193,19 @@ public class MainActivity extends AppCompatActivity {
     *
     * */
     public void checkLoginFirebase(final String username, final String password) {
+
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Đang kiểm tra đăng nhập!");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("Admin");
+        DatabaseReference myRef = database.getReference().child(Config.COMPANY_NAME + "/Admin");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dt : dataSnapshot.getChildren()) {
-                    Admin admin = (Admin) dt.getValue(Admin.class);
+                    Admin admin = dt.getValue(Admin.class);
                     if (admin.username.equals(username) && admin.password.equals(password)) {
                         progressDialog.dismiss();
                         startActivity(new Intent(MainActivity.this, ManageActivity.class));

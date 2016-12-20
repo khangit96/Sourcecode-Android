@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textview_foodName"
                     android:layout_marginTop="15px"
-                    android:text="@{Food.getFoodPrice()}" />
+                    android:text="@{Food.formatPrice}" />
 
                 <CheckBox
                     android:id="@+id/cbAgree"

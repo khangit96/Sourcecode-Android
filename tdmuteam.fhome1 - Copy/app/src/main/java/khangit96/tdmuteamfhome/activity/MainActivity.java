@@ -3,6 +3,7 @@ package khangit96.tdmuteamfhome.activity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -30,14 +31,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,9 +91,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import khangit96.tdmuteamfhome.R;
+import khangit96.tdmuteamfhome.adapter.CustomSpinerAdapter;
 import khangit96.tdmuteamfhome.databinding.ActivityMainBinding;
 import khangit96.tdmuteamfhome.lib.BottomSheetBehaviorGoogleMapsLike;
 import khangit96.tdmuteamfhome.lib.MergedAppBarLayoutBehavior;
+import khangit96.tdmuteamfhome.model.House;
+import khangit96.tdmuteamfhome.model.HouseCluster;
 import khangit96.tdmuteamfhome.service.NotificationService;
 import me.relex.circleindicator.CircleIndicator;
 
@@ -147,17 +154,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addControls();
     }
 
+    /*
+    *
+    * */
     private void addControls() {
         binding.floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
                 if (item.getItemId() == R.id.filter) {
-                    startActivity(new Intent(MainActivity.this, FilterActivity.class));
+                    showLoginDialogFilter();
                 }
             }
         });
     }
 
+    /*
+    *
+    * */
+    private void showLoginDialogFilter() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        final View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_filter, null, false);
+
+        Spinner spnHousePrice = (Spinner) view.findViewById(R.id.spnHousePrice);
+        ArrayList<String> housePriceList = new ArrayList<>();
+        housePriceList.add("Tất cả");
+        housePriceList.add("1500.000");
+        housePriceList.add("300.000");
+        housePriceList.add("950.000");
+        housePriceList.add("750.000");
+        CustomSpinerAdapter housePriceAdapter = new CustomSpinerAdapter(getApplicationContext(), R.layout.list_house_price, housePriceList);
+        spnHousePrice.setAdapter(housePriceAdapter);
+
+        Spinner spnPlace = (Spinner) view.findViewById(R.id.spnHousePlace);
+        ArrayList<String> housePlace = new ArrayList<>();
+        housePlace.add("Tất cả");
+        housePlace.add("Phú Lợi");
+        housePlace.add("Phú Hoà");
+        housePlace.add("Chánh Nghĩa");
+        housePlace.add("Thuận An");
+        CustomSpinerAdapter housePlaceAdapter = new CustomSpinerAdapter(getApplicationContext(), R.layout.list_house_price, housePlace);
+        spnPlace.setAdapter(housePlaceAdapter);
+
+        Spinner spnRadius = (Spinner) view.findViewById(R.id.spnHouseRadius);
+        ArrayList<String> houseRadius = new ArrayList<>();
+        houseRadius.add("5KM");
+        houseRadius.add("10KM");
+        houseRadius.add("20KM");
+        CustomSpinerAdapter houseRadiusAdapter = new CustomSpinerAdapter(getApplicationContext(), R.layout.list_house_price, houseRadius);
+        spnRadius.setAdapter(houseRadiusAdapter);
+
+        builder.setView(view);
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setPositiveButton("Huỷ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        builder.show();
+    }
+
+    /*
+    *
+    * */
     private void addEvents() {
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
 
     /*start service to listener event data change and noti to user*/
     public void startService() {
@@ -183,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (houseList != null) {
             new ThreadInitMaker().start();
         }
-
     }
 
     @Override
@@ -197,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         *
           * */
     public void initMainView() {
-
         binding.fabLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -488,14 +551,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     *
     * */
     @Override
-    public boolean onNavigationItemSelected(MenuItem mRenuItem) {
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
-      /*  switch (menuItem.getItemId()) {
-            case R.id.s:
+        switch (menuItem.getItemId()) {
+            case R.id.menu_houseArea:
+                startActivity(new Intent(MainActivity.this, HouseAreaActivity.class));
                 return true;
-            default:
-                return true;
-        }*/
+        }
 
         return true;
     }

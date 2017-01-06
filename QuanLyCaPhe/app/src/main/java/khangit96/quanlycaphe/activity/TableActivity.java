@@ -1,11 +1,15 @@
 package khangit96.quanlycaphe.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,14 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import khangit96.quanlycaphe.R;
+import khangit96.quanlycaphe.adapter.FoodInDialogAdapter;
+import khangit96.quanlycaphe.adapter.FoodInTableAdapter;
 import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
 import khangit96.quanlycaphe.model.Order;
+import khangit96.quanlycaphe.model.RecyclerItemClickListener;
 
 public class TableActivity extends AppCompatActivity {
-    ListView lvTable;
-    ArrayAdapter<String> adapter;
-    ArrayList<String> tableList;
+
+    ArrayList<Order> orderList;
+    FoodInTableAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,48 +45,63 @@ public class TableActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addControls();
+        addEvents();
+
         getOrderTableFromFirebase(tableNumber);
-
     }
 
+    /*
+    *
+    * */
     public void addControls() {
-        lvTable = (ListView) findViewById(R.id.lvTable);
-        tableList = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tableList);
-        lvTable.setAdapter(adapter);
+
+        orderList = new ArrayList<>();
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        adapter = new FoodInTableAdapter(getApplicationContext(), orderList);
     }
 
+    /*
+    *
+    * */
+    private void addEvents() {
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                adapter.setSelected(position);
+                showDialogOrderDetail((ArrayList<Food>) orderList.get(position).foodList);
+            }
+
+        }));
+    }
+
+    /*
+    *
+    * */
     public void getOrderTableFromFirebase(int tableNumber) {
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child(Config.COMPANY_NAME + "/Order/Table " + tableNumber).addChildEventListener(new ChildEventListener() {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_KEY + "/Order/Table " + tableNumber);
+        mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 List<Food> foodList = new ArrayList<Food>();
                 DataSnapshot dtFoodList = dataSnapshot.child("foodList");
 
                 for (DataSnapshot dt : dtFoodList.getChildren()) {
-                    String foodName = dt.child("foodName").getValue().toString();
-                    int foodImage = Integer.parseInt(dt.child("foodImage").getValue().toString());
-                    double foodPrice = Double.parseDouble(dt.child("foodPrice").getValue().toString());
-                    foodList.add(new Food(foodName, foodPrice, foodImage));
+                    Food food = dt.getValue(Food.class);
+                    foodList.add(food);
                 }
 
                 double totalPrice = Double.parseDouble(dataSnapshot.child("totalPrice").getValue().toString());
-
                 Order order = new Order(foodList, totalPrice);
+                orderList.add(order);
 
-                tableList.add("" + order.totalPrice);
-                adapter.notifyDataSetChanged();
-
-                lvTable.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Select the last row so it will scroll into view...
-                        lvTable.setSelection(lvTable.getCount() - 1);
-                    }
-                });
+                recyclerView.setAdapter(adapter);
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
 
             }
 
@@ -102,6 +125,42 @@ public class TableActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    /*
+    *
+    * */
+    private void showDialogOrderDetail(ArrayList<Food> foodList) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(TableActivity.this);
+
+        final View inflate = LayoutInflater.from
+                (getApplicationContext()).inflate(R.layout.show_listview_dialog, null, false);
+
+        RecyclerView re = (RecyclerView) inflate.findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager mLayout = new LinearLayoutManager(getApplicationContext());
+        re.setLayoutManager(mLayout);
+
+        FoodInDialogAdapter ad = new FoodInDialogAdapter(getApplicationContext(), foodList);
+        re.setAdapter(ad);
+
+        builder.setView(inflate);
+
+        builder.setNegativeButton("Thanh toán", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setPositiveButton("Huỷ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        builder.show();
     }
 
     @Override

@@ -48,8 +48,8 @@
             android:label="@string/addHouseActivity"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.FilterActivity"
-            android:label="@string/filterActivity"
+            android:name=".activity.HouseAreaActivity"
+            android:label="@string/HouseAreaActivity"
             android:parentActivityName=".activity.MainActivity"></activity>
     </application>
 

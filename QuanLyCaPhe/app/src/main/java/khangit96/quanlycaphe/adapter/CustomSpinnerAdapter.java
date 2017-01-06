@@ -12,16 +12,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import khangit96.quanlycaphe.R;
+import khangit96.quanlycaphe.model.Table;
 
 /**
  * Created by Administrator on 12/12/2016.
  */
 
-public class CustomSpinnerAdapter extends ArrayAdapter<String> {
-    List<String> tableList;
+public class CustomSpinnerAdapter extends ArrayAdapter<Table> {
+    List<Table> tableList;
     Activity activity;
 
-    public CustomSpinnerAdapter(Activity activity, int resource, List<String> tableList) {
+    public CustomSpinnerAdapter(Activity activity, int resource, List<Table> tableList) {
         super(activity, resource, tableList);
         this.activity = activity;
         this.tableList = tableList;
@@ -38,7 +39,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.list_table, parent, false);
         TextView tvTableName = (TextView) convertView.findViewById(R.id.tvTableName);
-        tvTableName.setText(tableList.get(position));
+        tvTableName.setText(tableList.get(position).tableName);
         return convertView;
     }
 
@@ -47,7 +48,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.list_table, parent, false);
         TextView tvTableName = (TextView) convertView.findViewById(R.id.tvTableName);
-        tvTableName.setText(tableList.get(position));
+        tvTableName.setText(tableList.get(position).tableName);
         return convertView;
     }
 }

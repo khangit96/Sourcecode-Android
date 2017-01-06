@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data >
+    <data>
 
         <variable
             name="house"
-            type="khangit96.tdmuteamfhome.activity.House" />
+            type="khangit96.tdmuteamfhome.model.House" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

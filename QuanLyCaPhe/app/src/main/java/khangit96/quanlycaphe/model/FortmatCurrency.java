@@ -33,7 +33,7 @@ public class FortmatCurrency {
                 price = price.substring(0, centsIndex);
             }
         }
-        price = String.format("%s vnđ", price);
+        price = String.format("%s VNĐ", price);
         return price;
     }
 

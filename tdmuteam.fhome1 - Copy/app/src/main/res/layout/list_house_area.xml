@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <!-- Thumbnail Image -->
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <!-- Movie Title -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Nhà trọ Ngọc Lan"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
+
+    <!-- Rating -->
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignStart="@+id/title"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Thủ Dầu Một,Bình Dương"
+        android:textSize="@dimen/rating" />
+
+    <!-- &lt;!&ndash; Genre &ndash;&gt;
+     <TextView
+         android:text="Thủ Dầu Một,Bình Dương"
+         android:id="@+id/genre"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/rating"
+         android:layout_toLeftOf="@+id/btnAddMovie"
+         android:layout_toRightOf="@+id/thumbnail"
+         android:layout_toStartOf="@+id/btnAddMovie"
+         android:textColor="@color/genre"
+         android:textSize="@dimen/genre" />-->
+
+    <!-- Release Year -->
+    <TextView
+        android:id="@+id/releaseYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="2.3 Km"
+        android:textColor="@color/year"
+        android:textSize="@dimen/year" />
+
+    <!--  <ImageView
+          android:id="@+id/btnAddMovie"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignEnd="@+id/rating"
+          android:layout_alignRight="@+id/rating"
+          android:layout_below="@+id/title"
+          android:focusable="false"
+          android:src="@mipmap/ic_launcher"
+          android:textColor="@color/white" />-->
+
+</RelativeLayout>

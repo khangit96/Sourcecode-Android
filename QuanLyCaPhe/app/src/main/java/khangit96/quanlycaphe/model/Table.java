@@ -8,8 +8,12 @@ public class Table {
     public String tableName;
     public int tableNumber;
 
-    public Table(int tableNumber,String tableName) {
+    public Table(int tableNumber, String tableName) {
         this.tableName = tableName;
         this.tableNumber = tableNumber;
+    }
+
+    public Table() {
+
     }
 }

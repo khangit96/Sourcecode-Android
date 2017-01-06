@@ -32,9 +32,10 @@
     <string name="facebook_app_id">343572846013838</string>
 
     <!--activity-->
-    <string name="addHouseActivity">Thêm Nhà Trọ</string>
+    <string name="addHouseActivity">Đăng Tin Nhà Trọ</string>
     <string name="reviewActivity">Nhận Xét</string>
     <string name="filterActivity">Bộ Lọc</string>
+    <string name="HouseAreaActivity">Nhà trọ quanh đây</string>
 
 </resources>
 

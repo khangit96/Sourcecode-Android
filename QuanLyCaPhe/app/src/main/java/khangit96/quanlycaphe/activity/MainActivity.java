@@ -2,15 +2,15 @@ package khangit96.quanlycaphe.activity;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,42 +30,48 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import khangit96.quanlycaphe.R;
 import khangit96.quanlycaphe.adapter.CustomSpinnerAdapter;
 import khangit96.quanlycaphe.adapter.FoodAdapter;
-import khangit96.quanlycaphe.databinding.ActivityMainBinding;
 import khangit96.quanlycaphe.model.Admin;
 import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
-import khangit96.quanlycaphe.model.Order;
+import khangit96.quanlycaphe.model.Table;
 
 
 public class MainActivity extends AppCompatActivity {
+
     ArrayList<Food> foodList;
-    ArrayList<String> tableList;
     private FoodAdapter mAdapter;
     Toolbar toolbar;
     Spinner spn;
-    public static ActivityMainBinding binding;
-    public static int selectedItemSpinnerPos = 0;
+    DrawerLayout mDrawerLayout;
+    RecyclerView recyclerView;
+
+    public static ArrayList<Table> tableList;
+    public static int tableNumberSelected = 0;
+    public static Context context;
+
+    public static Button buttonOrder;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         addControls();
         addEvents();
+        loadFoodFromFirebase();
     }
 
     private void addEvents() {
         spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                selectedItemSpinnerPos = pos;
+                tableNumberSelected = tableList.get(pos).tableNumber;
             }
 
             @Override
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Menu");
+        setTitle(Config.COMPANY_KEY);
     }
 
     /*
@@ -88,15 +95,63 @@ public class MainActivity extends AppCompatActivity {
     * */
     public void initSpinner() {
         spn = (Spinner) findViewById(R.id.spn);
-        tableList = new ArrayList<>();
-        tableList.add("Chọn bàn ");
-        tableList.add("Bàn 1");
-        tableList.add("Bàn 2");
-        tableList.add("Bàn 3");
-        tableList.add("Bàn 4");
-        tableList.add("Bàn 5");
-        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, R.layout.list_table, tableList);
-        spn.setAdapter(spinnerAdapter);
+        tableList = (ArrayList<Table>) loadTableFromFirebase();
+    }
+
+    /*
+    *
+    * */
+    public List<Table> loadTableFromFirebase() {
+
+        final ProgressDialog pd = new ProgressDialog(MainActivity.this);
+        pd.setMessage("Đang tải dữ liệu...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+
+        List<Table> list = new ArrayList<>();
+        list.add(new Table(0, "Chọn bàn"));
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_KEY + "/Table");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dt : dataSnapshot.getChildren()) {
+                    Table table = dt.getValue(Table.class);
+                    tableList.add(table);
+
+                }
+                CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, R.layout.list_table, tableList);
+                spn.setAdapter(spinnerAdapter);
+                pd.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return list;
+    }
+
+    /*
+    *
+    * */
+    public void loadFoodFromFirebase() {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child(Config.COMPANY_KEY + "/Food").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dt : dataSnapshot.getChildren()) {
+                    Food food = dt.getValue(Food.class);
+                    foodList.add(food);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /*
@@ -105,15 +160,14 @@ public class MainActivity extends AppCompatActivity {
     private void initDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.getHeaderView(0);
-       /* ImageView image = (ImageView) headerLayout.findViewById(R.id.imageView);
-        image.setImageResource(R.drawable.logo);*/
+
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
-                binding.drawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.menu_login:
                         showLoginDialog();
@@ -125,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -138,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        binding.drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
 
@@ -146,14 +200,11 @@ public class MainActivity extends AppCompatActivity {
     /*
     * */
     public void addControls() {
+        buttonOrder = (Button) findViewById(R.id.button_order);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         foodList = new ArrayList<>();
-        foodList.add(new Food("Trà Lipton", 30000, R.drawable.tralipton));
-        foodList.add(new Food("Cà Phê Sữa", 35000, R.drawable.caphesua));
-        foodList.add(new Food("Nước Cam ", 45000, R.drawable.nuoccam));
-        foodList.add(new Food("Trà Đào", 45000, R.drawable.tradaojpg));
-        foodList.add(new Food("Cà Phê Đá", 45000, R.drawable.capheden));
-        foodList.add(new Food("Trà Sữa", 45000, R.drawable.trasua));
-        foodList.add(new Food("Nước Chanh Dây", 45000, R.drawable.nuocchangday));
+        context = getApplicationContext();
 
         //Spinner table
         initSpinner();
@@ -172,23 +223,13 @@ public class MainActivity extends AppCompatActivity {
     * */
     public void initRecylerview() {
         mAdapter = new FoodAdapter(getApplicationContext(), foodList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        binding.recyclerView.setLayoutManager(mLayoutManager);
-        binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        binding.recyclerView.setAdapter(mAdapter);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(mAdapter);
     }
 
 
     /*
-    *
-    * */
-    public static void pushOrderToFirebase(Order order, int table) {
-
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_NAME + "/Order/Table " + table).push();
-        mDatabase.setValue(order);
-
-    }
-
     /*
     *
     * */
@@ -199,12 +240,14 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child(Config.COMPANY_NAME + "/Admin");
+        DatabaseReference myRef = database.getReference().child(Config.COMPANY_KEY + "/Admin");
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dt : dataSnapshot.getChildren()) {
+
                     Admin admin = dt.getValue(Admin.class);
                     if (admin.username.equals(username) && admin.password.equals(password)) {
                         progressDialog.dismiss();
@@ -213,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Đăng nhập thất bại", Toast.LENGTH_LONG).show();
             }

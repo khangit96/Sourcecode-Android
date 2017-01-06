@@ -1,19 +1,25 @@
 package khangit96.quanlycaphe.adapter;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import khangit96.quanlycaphe.R;
 import khangit96.quanlycaphe.activity.MainActivity;
-import khangit96.quanlycaphe.databinding.ListFoodBinding;
+import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
 import khangit96.quanlycaphe.model.FortmatCurrency;
 import khangit96.quanlycaphe.model.Order;
@@ -52,14 +58,18 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         * */
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        holder.tvFoodName.setText(foodList.get(position).foodName);
+        holder.tvFoodPrice.setText(foodList.get(position).getFormatPrice());
+        Picasso.with(context)
+                .load(foodList.get(position).foodUrl)
+                .placeholder(R.drawable.no_image)
+                .error(R.drawable.no_image)
+                .into(holder.foodImg);
 
-        holder.bind(foodList.get(position));
-        holder.binding.cbAgree.setOnClickListener(new View.OnClickListener() {
+        holder.cbAgree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (holder.binding.cbAgree.isChecked()) {
-
+                if (holder.cbAgree.isChecked()) {
                     foodListSelected.add(foodList.get(position));
                     totalOrderPrice += foodList.get(position).foodPrice;
 
@@ -88,22 +98,20 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
             }
         });
 
-        MainActivity.binding.buttonOrder.setOnClickListener(new View.OnClickListener() {
+        MainActivity.buttonOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (totalOrderPrice == 0) {
                     showToast("Vui lòng chọn thức uống!");
                     return;
                 }
-                if (MainActivity.selectedItemSpinnerPos == 0) {
+                if (MainActivity.tableNumberSelected == 0) {
                     showToast("Vui lòng chọn bàn!");
                     return;
                 }
-                MainActivity.pushOrderToFirebase(new Order(foodListSelected, totalOrderPrice),
-                        MainActivity.selectedItemSpinnerPos);
-
+                pushOrderToFirebase(new Order(foodListSelected, totalOrderPrice),
+                        MainActivity.tableNumberSelected);
                 showToast("Gọi thức uống thành công!");
-
             }
         });
     }
@@ -117,16 +125,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private ListFoodBinding binding;
+        CheckBox cbAgree;
+        TextView tvFoodName, tvFoodPrice;
+        ImageView foodImg;
 
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            binding = DataBindingUtil.bind(itemView);
-        }
-
-        public void bind(Food food) {
-            binding.setFood(food);
+        public MyViewHolder(View v) {
+            super(v);
+            cbAgree = (CheckBox) v.findViewById(R.id.cbAgree);
+            tvFoodName = (TextView) v.findViewById(R.id.tvFoodName);
+            tvFoodPrice = (TextView) v.findViewById(R.id.tvFoodPrice);
+            foodImg = (ImageView) v.findViewById(R.id.foodImg);
         }
     }
 
@@ -134,7 +142,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     * set text button order
     * */
     public void setTextButtoOrder() {
-        MainActivity.binding.buttonOrder.setText(String.format(context.getString(R.string.order),
+        MainActivity.buttonOrder.setText(String.format(context.getString(R.string.order),
                 FortmatCurrency.formatVnCurrence(FortmatCurrency.formatDouble(totalOrderPrice))));
     }
 
@@ -142,7 +150,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     *
     * */
     public void setDataDefault() {
-        MainActivity.binding.buttonOrder.setText(context.getString(R.string.notOrder));
+        MainActivity.buttonOrder.setText(context.getString(R.string.notOrder));
     }
 
     /*
@@ -150,6 +158,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     * */
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    /*
+    *
+    * */
+    public void pushOrderToFirebase(Order order, int table) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_KEY + "/Order/Table " + table).push();
+        mDatabase.setValue(order);
+
     }
 
 

@@ -14,7 +14,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import java.util.List;
 
 import khangit96.tdmuteamfhome.R;
-import khangit96.tdmuteamfhome.activity.Review;
+import khangit96.tdmuteamfhome.model.Review;
 
 /**
  * Created by Administrator on 11/23/2016.

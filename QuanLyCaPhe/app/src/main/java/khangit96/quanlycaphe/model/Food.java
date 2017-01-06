@@ -1,8 +1,5 @@
 package khangit96.quanlycaphe.model;
 
-import android.databinding.BindingAdapter;
-import android.widget.ImageView;
-
 /**
  * Created by Administrator on 12/6/2016.
  */
@@ -10,24 +7,22 @@ import android.widget.ImageView;
 public class Food {
     public String foodName;
     public double foodPrice;
-    public int foodImage;
+    public String foodUrl;
     public String formatPrice;
 
-    public Food(String foodName, double foodPrice, int foodImage) {
+    public Food(String foodName, double foodPrice, String foodUrl) {
         this.foodName = foodName;
         this.foodPrice = foodPrice;
-        this.foodImage = foodImage;
+        this.foodUrl = foodUrl;
+    }
+
+    public Food() {
+
     }
 
     public String getFormatPrice() {
         formatPrice = FortmatCurrency.formatVnCurrence(FortmatCurrency.formatDouble(foodPrice));
         return formatPrice;
     }
-
-    @BindingAdapter("setImage")
-    public static void setImage(ImageView img, int resource) {
-        img.setImageResource(resource);
-    }
-
 
 }

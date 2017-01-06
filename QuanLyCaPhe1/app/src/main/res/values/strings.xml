@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Quản Lý Cà Phê</string>
-    <string name="openDrawer">open</string>
-    <string name="closeDrawer">close</string>
-    <string name="order">GỌI THỨC UỐNG ( TỔNG TIỀN : %s )</string>
-    <string name="notOrder">CHƯA CHỌN THỨC UỐNG</string>
-</resources>

@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import khangit96.tdmuteamfhome.R;
 import khangit96.tdmuteamfhome.activity.MainActivity;
@@ -22,7 +23,7 @@ import khangit96.tdmuteamfhome.activity.MainActivity;
  */
 
 public class NotificationService extends Service {
-    private static int count = 0;
+    int count = 0;
 
     @Nullable
     @Override
@@ -34,11 +35,24 @@ public class NotificationService extends Service {
     public void onStart(Intent intent, int startId) {
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("NhaTro");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                count = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (Integer.parseInt(dataSnapshot.getKey()) + 1 > count && count != 0) {
                     showNotification("Nhà trọ " + dataSnapshot.child("tenChuHo").getValue().toString());
-
+                }
             }
 
             @Override
@@ -76,6 +90,7 @@ public class NotificationService extends Service {
                 .setContentText(houseName)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pIntent)
+                .setAutoCancel(true)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);

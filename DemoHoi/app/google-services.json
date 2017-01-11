@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "730397162896",
+    "firebase_url": "https://demohoi-4c40f.firebaseio.com",
+    "project_id": "demohoi-4c40f",
+    "storage_bucket": "demohoi-4c40f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730397162896:android:68a3494c1283a591",
+        "android_client_info": {
+          "package_name": "khangit96.demohoi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730397162896-gkma424ms12qb6vtphnqdg1da50ohgej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEsYjlJlng3K-GMZnyeMSk9BWR8a9S3_0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

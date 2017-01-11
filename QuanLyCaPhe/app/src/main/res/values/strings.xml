@@ -9,4 +9,9 @@
     <string name="tableActivity">Bàn %s</string>
     <string name="manageActivity">Quản Lý Đặt Hàng</string>
     <string name="mainActivity">Order Food</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="loginActivity">Đăng nhập</string>
+    <string name="cartActivity">Giỏ Hàng</string>
 </resources>

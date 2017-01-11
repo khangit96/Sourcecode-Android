@@ -3,25 +3,25 @@ package khangit96.quanlycaphe.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +35,6 @@ import java.util.List;
 import khangit96.quanlycaphe.R;
 import khangit96.quanlycaphe.adapter.CustomSpinnerAdapter;
 import khangit96.quanlycaphe.adapter.FoodAdapter;
-import khangit96.quanlycaphe.model.Admin;
 import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
 import khangit96.quanlycaphe.model.Table;
@@ -80,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+  /*  @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bubblesManager.recycle();
+    }*/
 
     /*
     *
@@ -159,25 +168,37 @@ public class MainActivity extends AppCompatActivity {
     * */
     private void initDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.getHeaderView(0);
-
+        navigationView.setItemIconTintList(null);
+        //  View headerLayout = navigationView.getHeaderView(0);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+
                 if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
+
+                Drawable drawable = menuItem.getIcon();
+                drawable.setColorFilter(getResources().getColor(R.color.bg_login), PorterDuff.Mode.SRC_ATOP);
                 switch (menuItem.getItemId()) {
                     case R.id.menu_login:
-                        showLoginDialog();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     default:
                         break;
                 }
-
                 return true;
             }
         });
+
+        TextView tvAbout, tvLogin, tvShare;
+        tvAbout = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menu_about));
+        tvLogin = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menu_login));
+        tvShare = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menu_share));
+
+        customMenuItemDrawer(tvAbout, "Giới thiệu", 150);
+        customMenuItemDrawer(tvLogin, "Đăng nhập", 150);
+        customMenuItemDrawer(tvShare, "Chia sẻ", 180);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
@@ -196,6 +217,17 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
+
+    /*
+    *
+     */
+    public void customMenuItemDrawer(TextView tv, String text, int paddingRight) {
+        tv.setText(text);
+        tv.setTextColor(getResources().getColor(R.color.bg_login));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setTextSize(17);
+        tv.setPadding(0, 20, paddingRight, 0);
+    }
 
     /*
     * */
@@ -227,74 +259,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
     }
-
-
-    /*
-    /*
-    *
-    * */
-    public void checkLoginFirebase(final String username, final String password) {
-
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Đang kiểm tra đăng nhập!");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child(Config.COMPANY_KEY + "/Admin");
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot dt : dataSnapshot.getChildren()) {
-
-                    Admin admin = dt.getValue(Admin.class);
-                    if (admin.username.equals(username) && admin.password.equals(password)) {
-                        progressDialog.dismiss();
-                        startActivity(new Intent(MainActivity.this, ManageActivity.class));
-                        return;
-                    }
-
-                }
-
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Đăng nhập thất bại", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    /*
-    *
-    * */
-    private void showLoginDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Đăng nhập");
-
-        final View viewInflated = LayoutInflater.from(getApplicationContext()).inflate(R.layout.input_login, null, false);
-
-        builder.setView(viewInflated);
-        builder.setNegativeButton("Huỷ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                EditText editText_username = (EditText) viewInflated.findViewById(R.id.editText_username);
-                EditText editText_password = (EditText) viewInflated.findViewById(R.id.editText_password);
-                checkLoginFirebase(editText_username.getText().toString(), editText_password.getText().toString());
-
-            }
-        });
-
-        builder.show();
-    }
-
 }

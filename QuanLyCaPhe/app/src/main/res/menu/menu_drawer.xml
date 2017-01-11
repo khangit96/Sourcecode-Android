@@ -1,19 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_login"
-        android:icon="@drawable/common_full_open_on_phone"
-        android:title="Đăng nhập" />
+        android:icon="@drawable/ic_login_menu"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
     <item
-        android:id="@+id/navigation_item_2"
-        android:icon="@drawable/common_full_open_on_phone"
-        android:title="Chia sẻ ứng dụng" />
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share_menu"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
     <item
-        android:id="@+id/navigasdtion_item_2"
-        android:icon="@drawable/common_full_open_on_phone"
-        android:title="Phản hồi" />
-    <item
-        android:id="@+id/navigation_ietem_2"
-        android:icon="@drawable/common_full_open_on_phone"
-        android:title="Giới thiệu ứng dụng" />
-
+        android:id="@+id/menu_about"
+        android:icon="@drawable/ic_about_menu"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
 </menu>

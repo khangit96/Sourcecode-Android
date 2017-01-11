@@ -1,6 +1,7 @@
 package khangit96.quanlycaphe.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,14 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.txusballesteros.bubbles.BubbleLayout;
+import com.txusballesteros.bubbles.BubblesManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import khangit96.quanlycaphe.R;
+import khangit96.quanlycaphe.activity.CartActivity;
 import khangit96.quanlycaphe.activity.MainActivity;
 import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
@@ -33,6 +37,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     List<Food> foodListSelected = new ArrayList<>();
     Context context;
     double totalOrderPrice = 0;
+    private BubblesManager bubblesManager;
+    TextView tvBubbleCounter;
 
     /*
     *
@@ -40,6 +46,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     public FoodAdapter(Context context, ArrayList<Food> foodList) {
         this.foodList = foodList;
         this.context = context;
+        initializeBubbleManager();
     }
 
     /*
@@ -109,9 +116,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                     showToast("Vui lòng chọn bàn!");
                     return;
                 }
-                pushOrderToFirebase(new Order(foodListSelected, totalOrderPrice),
-                        MainActivity.tableNumberSelected);
+
+                pushOrderToFirebase(new Order(foodListSelected, totalOrderPrice), MainActivity.tableNumberSelected);
                 showToast("Gọi thức uống thành công!");
+                addNewNotification();
             }
         });
     }
@@ -167,6 +175,43 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_KEY + "/Order/Table " + table).push();
         mDatabase.setValue(order);
 
+    }
+
+    /**
+     * Configure the trash layout with your BubblesManager builder.
+     */
+    private void initializeBubbleManager() {
+        bubblesManager = new BubblesManager.Builder(context)
+               // .setTrashLayout(R.layout.notification_trash_layout)
+                .build();
+        bubblesManager.initialize();
+    }
+
+    private void addNewNotification() {
+        BubbleLayout bubbleView = (BubbleLayout) LayoutInflater.from(context).inflate(R.layout.notification_layout, null);
+        tvBubbleCounter = (TextView) bubbleView.findViewById(R.id.tvBubbleCounter);
+        tvBubbleCounter.setText("1");
+
+        // this method call when user remove notification layout
+        bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
+            @Override
+            public void onBubbleRemoved(BubbleLayout bubble) {
+
+            }
+        });
+        // this methoid call when cuser click on the notification layout( bubble layout)
+        bubbleView.setOnBubbleClickListener(new BubbleLayout.OnBubbleClickListener() {
+
+            @Override
+            public void onBubbleClick(BubbleLayout bubble) {
+                Intent intentCart = new Intent(context, CartActivity.class);
+                intentCart.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intentCart);
+            }
+        });
+
+        // add bubble view into bubble manager
+        bubblesManager.addBubble(bubbleView, 300, 550);
     }
 
 

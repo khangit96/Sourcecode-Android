@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import id.arieridwan.lib.PageLoader;
 import khangit96.quanlycaphe.R;
 import khangit96.quanlycaphe.adapter.ChooseCompanyAdapter;
 import khangit96.quanlycaphe.model.Config;
@@ -25,6 +26,7 @@ public class ChooseCompanyActivity extends AppCompatActivity {
     ArrayList<Config> configList;
     ChooseCompanyAdapter adapter;
     RecyclerView recyclerView;
+    PageLoader pageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class ChooseCompanyActivity extends AppCompatActivity {
     }
 
     private void addControls() {
-
+        pageLoader = (PageLoader) findViewById(R.id.pageloader);
+        pageLoader.startProgress();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewChooseCompany);
         LinearLayoutManager mManager = new LinearLayoutManager(getApplicationContext());
         mManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -55,6 +58,7 @@ public class ChooseCompanyActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
                 Config.COMPANY_KEY = configList.get(position).key;
                 startActivity(new Intent(ChooseCompanyActivity.this, MainActivity.class));
+                finish();
             }
 
         }));
@@ -72,10 +76,17 @@ public class ChooseCompanyActivity extends AppCompatActivity {
                     config.key = dt.getKey();
                     configList.add(config);
                 }
+
                 configList.add(new Config("Mây Và Nước", "13", "dsksfl"));
                 configList.add(new Config("KCoffe", "13", "dsksfl"));
                 configList.add(new Config("Gió Và Nước", "13", "dsksfl"));
+
                 adapter.notifyDataSetChanged();
+                pageLoader.stopProgress();
+                pageLoader.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                findViewById(R.id.tvWhere).setVisibility(View.VISIBLE);
+                findViewById(R.id.activity_choose_company).setBackgroundColor(getResources().getColor(R.color.bg_login));
             }
 
             @Override

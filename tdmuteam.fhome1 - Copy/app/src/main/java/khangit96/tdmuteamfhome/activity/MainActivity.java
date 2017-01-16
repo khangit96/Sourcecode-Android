@@ -29,11 +29,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -298,9 +300,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView tvAbout, tvFeedback,tvShare,tvHouseArea;
+        tvAbout = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuAbout));
+        tvFeedback = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuFeedback));
+        tvShare = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuShare));
+        tvHouseArea = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuHouseArea));
+
+        customMenuItemDrawer(tvAbout,"Giới thiệu",145);
+        customMenuItemDrawer(tvFeedback,"Phản hồi",150);
+        customMenuItemDrawer(tvShare,"Chia sẻ",160);
+        customMenuItemDrawer(tvHouseArea,"Tìm quanh đây",90);
+
         binding.floatingSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 
     }
+    public void customMenuItemDrawer(TextView tv, String text, int paddingRight) {
+        tv.setText(text);
+        tv.setTextColor(getResources().getColor(R.color.genre));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setTextSize(17);
+        tv.setPadding(0, 20, paddingRight, 0);
+    }
+
 
     /*
     *
@@ -553,11 +575,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
-        switch (menuItem.getItemId()) {
+       /* switch (menuItem.getItemId()) {
             case R.id.menu_houseArea:
                 startActivity(new Intent(MainActivity.this, HouseAreaActivity.class));
                 return true;
-        }
+        }*/
 
         return true;
     }

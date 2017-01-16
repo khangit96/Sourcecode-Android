@@ -1,21 +1,26 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_houseArea"
-        android:icon="@drawable/nhatro"
-        android:title="Nhà trọ quanh đây" />
+        android:id="@+id/menuHouseArea"
+        android:icon="@drawable/ic_house_area"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
 
     <item
-        android:id="@+id/navigation_item_2"
-        android:icon="@drawable/ic_share_24dp"
-        android:title="Chia sẻ ứng dụng" />
+        android:id="@+id/menuShare"
+        android:icon="@drawable/ic_share_menu"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
     <item
-        android:id="@+id/navigasdtion_item_2"
-        android:icon="@drawable/ic_feedback_24dp"
-        android:title="Phản hồi" />
+        android:id="@+id/menuFeedback"
+        android:icon="@drawable/ic_feedback"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
     <item
-        android:id="@+id/navigation_ietem_2"
-        android:icon="@drawable/ic_infor_24dp"
-        android:title="Giới thiệu ứng dụng" />
+        android:id="@+id/menuAbout"
+        android:icon="@drawable/ic_about_menu"
+        android:title=""
+        app:actionViewClass="android.widget.TextView" />
 
 </menu>

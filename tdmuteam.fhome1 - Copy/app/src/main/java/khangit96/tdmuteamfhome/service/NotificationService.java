@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -82,6 +84,7 @@ public class NotificationService extends Service {
     * Show notification to user
     * */
     public void showNotification(String houseName) {
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 1, intent, 0);
@@ -91,6 +94,7 @@ public class NotificationService extends Service {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true)
+                .setSound(alarmSound)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);

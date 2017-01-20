@@ -18,11 +18,13 @@
         <activity
             android:name=".activity.ManageActivity"
             android:label="@string/manageActivity"
-            android:parentActivityName=".activity.MainActivity" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.TableActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activity.ManageActivity" />
+            android:parentActivityName=".activity.ManageActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.NotiService" />
 
@@ -38,11 +40,13 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/loginActivity"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.CartActivity"
             android:label="@string/cartActivity"
-            android:parentActivityName=".activity.MainActivity"></activity>
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@
         android:background="#EEEEEE"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar_main" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

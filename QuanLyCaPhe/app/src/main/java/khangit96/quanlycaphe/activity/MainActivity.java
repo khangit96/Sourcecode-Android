@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
 
     public static Button buttonOrder;
+    public Integer LOGIN_REQUEST_CODE = 1;
 
 
     @Override
@@ -80,23 +81,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
-  /*  @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        bubblesManager.recycle();
-    }*/
-
     /*
     *
     * */
-    public void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+    public void initToolbar(String title, int id) {
+        toolbar = (Toolbar) findViewById(id);
         setSupportActionBar(toolbar);
-        setTitle(Config.COMPANY_KEY);
+        setTitle(title);
     }
 
     /*
@@ -183,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
                 drawable.setColorFilter(getResources().getColor(R.color.bg_login), PorterDuff.Mode.SRC_ATOP);
                 switch (menuItem.getItemId()) {
                     case R.id.menu_login:
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityForResult(loginIntent, LOGIN_REQUEST_CODE);
+
                     default:
                         break;
                 }
@@ -197,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
         tvShare = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menu_share));
 
         customMenuItemDrawer(tvAbout, "Giới thiệu", 150);
-        customMenuItemDrawer(tvLogin, "Đăng nhập", 150);
-        customMenuItemDrawer(tvShare, "Chia sẻ", 180);
+        customMenuItemDrawer(tvLogin, "Đăng nhập", 145);
+        customMenuItemDrawer(tvShare, "Chia sẻ", 170);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
@@ -218,15 +211,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == LOGIN_REQUEST_CODE) {
+            setContentView(R.layout.activity_admin);
+            initAdminUI();
+        }
+    }
+
     /*
-    *
-     */
+        *
+         */
     public void customMenuItemDrawer(TextView tv, String text, int paddingRight) {
         tv.setText(text);
-        tv.setTextColor(getResources().getColor(R.color.bg_login));
+        tv.setTextColor(getResources().getColor(R.color.colorMenuItem));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setTextSize(17);
-        tv.setPadding(0, 20, paddingRight, 0);
+        tv.setPadding(15, 20, paddingRight, 0);
     }
 
     /*
@@ -245,9 +246,15 @@ public class MainActivity extends AppCompatActivity {
         initRecylerview();
 
         //Toolbar
-        initToolbar();
+        initToolbar(Config.COMPANY_KEY, R.id.toolbarMain);
 
         //Drawer
+        initDrawer();
+    }
+
+    public void initAdminUI() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        initToolbar("Admin", R.id.toolbarAdmin);
         initDrawer();
     }
 

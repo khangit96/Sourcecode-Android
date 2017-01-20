@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addControls();
     }
 
@@ -59,9 +58,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     Admin admin = dt.getValue(Admin.class);
                     if (admin.username.equals(username) && admin.password.equals(password)) {
-
                         progressDialog.dismiss();
-                        startActivity(new Intent(LoginActivity.this, ManageActivity.class));
+
+                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        setResult(RESULT_OK, mainIntent);
+
                         finish();
                         return;
                     }

@@ -46,4 +46,27 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+    <style name="TextViewAbout">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">#ff404040</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">8.0dip</item>
+        <item name="android:paddingBottom">9.0dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">27.0dip</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+    <style name="TextViewAboutContent">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">#ff404040</item>
+        <item name="android:gravity">right</item>
+        <item name="android:padding">9.0dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">30.0dip</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
 </resources>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.AboutActivity">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="16.0dip">
+
+         <!--   <ImageView
+                android:id="@+id/about_fhome_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8.0dip"
+                android:layout_marginLeft="100dp"
+                android:contentDescription="F home"
+                android:src="@drawable/ic_home"
+                android:tint="@color/colorPrimary" />-->
+
+            <TextView
+                android:id="@+id/about_version"
+                style="@style/TextViewAbout"
+                android:layout_below="@+id/about_fhome_logo"
+                android:drawableLeft="@drawable/ic_settings_gray_24dp"
+                android:drawableStart="@drawable/ic_settings_gray_24dp"
+                android:gravity="center"
+                android:text="@string/about_version_title" />
+
+            <TextView
+                android:id="@+id/about_version_content"
+                style="@style/TextViewAboutContent"
+                android:layout_alignTop="@+id/about_version"
+                android:layout_toEndOf="@+id/about_version"
+                android:layout_toRightOf="@+id/about_version"
+                android:text="@string/about_version_dummy"
+                android:textColor="@color/colorPrimary"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/about_email"
+                style="@style/TextViewAbout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/about_version_content"
+                android:drawableLeft="@drawable/ic_email_gray_24dp"
+                android:drawableStart="@drawable/ic_email_gray_24dp"
+                android:text="@string/about_email_title" />
+
+            <TextView
+                android:id="@+id/about_email_content"
+                style="@style/TextViewAboutContent"
+                android:layout_alignTop="@+id/about_email"
+                android:layout_toEndOf="@+id/about_version"
+                android:layout_toRightOf="@+id/about_version"
+                android:text="@string/about_email"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/about_phone"
+                style="@style/TextViewAbout"
+                android:layout_below="@+id/about_email"
+                android:drawableLeft="@drawable/ic_call_gray_24dp"
+                android:drawableStart="@drawable/ic_call_gray_24dp"
+                android:text="@string/about_phone_title" />
+
+            <TextView
+                android:id="@+id/about_phone_content"
+                style="@style/TextViewAboutContent"
+                android:layout_alignTop="@+id/about_phone"
+                android:layout_toEndOf="@+id/about_version"
+                android:layout_toRightOf="@+id/about_version"
+                android:text="@string/about_phone"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/about_address"
+                style="@style/TextViewAbout"
+                android:layout_below="@+id/about_phone"
+                android:drawableLeft="@drawable/ic_destination_gray_24dp"
+                android:drawableStart="@drawable/ic_destination_gray_24dp"
+                android:text="@string/about_address_title" />
+
+            <TextView
+                android:id="@+id/about_address_content"
+                style="@style/TextViewAboutContent"
+                android:layout_alignParentBottom="false"
+                android:layout_alignTop="@+id/about_address"
+                android:layout_toEndOf="@+id/about_version"
+                android:layout_toRightOf="@+id/about_version"
+                android:text="@string/about_address" />
+
+            <TextView
+                android:id="@+id/about_description"
+                style="@style/TextViewAbout"
+                android:layout_below="@+id/about_address_content"
+                android:gravity="start"
+                android:text="@string/about_description" />
+
+            <TextView
+                android:id="@+id/about_copyright"
+                style="@style/TextViewAbout"
+                android:layout_below="@+id/about_description"
+                android:layout_marginTop="50dp"
+                android:text="@string/about_copyright" />
+        </RelativeLayout>
+    </ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

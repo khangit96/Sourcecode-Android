@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -55,6 +56,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -301,20 +303,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        TextView tvAbout, tvFeedback,tvShare,tvHouseArea;
+        TextView tvAbout, tvFeedback, tvShare, tvHouseArea;
         tvAbout = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuAbout));
         tvFeedback = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuFeedback));
         tvShare = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuShare));
         tvHouseArea = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuHouseArea));
 
-        customMenuItemDrawer(tvAbout,"Giới thiệu",145);
-        customMenuItemDrawer(tvFeedback,"Phản hồi",150);
-        customMenuItemDrawer(tvShare,"Chia sẻ",160);
-        customMenuItemDrawer(tvHouseArea,"Tìm quanh đây",90);
+        customMenuItemDrawer(tvAbout, "Giới thiệu", 145);
+        customMenuItemDrawer(tvFeedback, "Phản hồi", 150);
+        customMenuItemDrawer(tvShare, "Chia sẻ", 160);
+        customMenuItemDrawer(tvHouseArea, "Tìm quanh đây", 90);
 
         binding.floatingSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
+        binding.floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                binding.floatingSearchView.clearSuggestions();
+                List<SearchSuggestion> listSuggestion = new ArrayList<SearchSuggestion>();
+
+                if (!newQuery.equals("")) {
+                    for (int i = 0; i < houseList.size(); i++) {
+                        final House h = houseList.get(i);
+                        final int pos = i;
+
+                        if (h.tenChuHo.contains(newQuery)) {
+                            SearchSuggestion searchSuggestion = new SearchSuggestion() {
+                                @Override
+                                public String getBody() {
+                                    return h.tenChuHo;
+                                }
+
+                                @Override
+                                public int describeContents() {
+                                    return pos;
+                                }
+
+                                @Override
+                                public void writeToParcel(Parcel parcel, int i) {
+
+                                }
+                            };
+                            listSuggestion.add(searchSuggestion);
+                        }
+                    }
+
+                    binding.floatingSearchView.swapSuggestions(listSuggestion);
+                }
+
+            }
+        });
+
+        binding.floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                int pos = searchSuggestion.describeContents();
+                LatLng lng = new LatLng(houseList.get(pos).viDo, houseList.get(pos).kinhDo);
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lng, 15f));
+                showBottonSheet(pos);
+            }
+
+            @Override
+            public void onSearchAction(String currentQuery) {
+
+            }
+        });
 
     }
+
     public void customMenuItemDrawer(TextView tv, String text, int paddingRight) {
         tv.setText(text);
         tv.setTextColor(getResources().getColor(R.color.genre));
@@ -575,11 +631,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
-       /* switch (menuItem.getItemId()) {
-            case R.id.menu_houseArea:
-                startActivity(new Intent(MainActivity.this, HouseAreaActivity.class));
-                return true;
-        }*/
+        switch (menuItem.getItemId()) {
+            case R.id.menuAbout:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                break;
+            case R.id.menuFeedback:
+                final Intent _Intent = new Intent(android.content.Intent.ACTION_SEND);
+                _Intent.setType("text/html");
+                _Intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.about_email)});
+                _Intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "[F Home] Phản hồi");
+                _Intent.putExtra(android.content.Intent.EXTRA_TEXT, "Xin chào,\n");
+                startActivity(Intent.createChooser(_Intent, getString(R.string.app_name)));
+                break;
+        }
 
         return true;
     }

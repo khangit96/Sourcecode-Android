@@ -1,58 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/bg_login"
+    android:id="@+id/activity_icon_chip"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00796B"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_launcher" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/edit_text_design">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/ic_username_24dp"
+            android:tint="#047A4D" />
 
         <EditText
             android:id="@+id/edUsername"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@android:color/white"
-            android:hint="@string/username"
+            android:layout_centerInParent="true"
+            android:background="@drawable/edit_text_design"
+            android:gravity="center_vertical"
+            android:hint="Tên đăng nhập"
             android:inputType="text"
-            android:padding="10dp"
+            android:padding="5dp"
             android:singleLine="true"
-            android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColor="#CBCBCB"
+            android:textColorHint="#CBCBCB" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_design">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/ic_password_24dp"
+            android:tint="#047A4D" />
 
         <EditText
             android:id="@+id/edPassword"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@android:color/white"
-            android:hint="@string/password"
+            android:layout_centerInParent="true"
+            android:background="@drawable/edit_text_design"
+            android:gravity="center_vertical"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:padding="5dp"
+            android:textColor="#CBCBCB"
+            android:textColorHint="#CBCBCB" />
+    </RelativeLayout>
 
-        <!-- Login Button -->
+    <RelativeLayout
+        android:id="@+id/rlPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp">
 
         <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_width="260dp"
+            android:layout_height="50dp"
             android:background="@drawable/button_login_selector"
             android:onClick="Login"
-            android:text="@string/login"
-            android:textColor="@color/btn_login" />
-
-    </LinearLayout>
-
+            android:text="Đăng nhập"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
 </LinearLayout>

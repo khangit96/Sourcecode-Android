@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="#48603B" />
+
+    <padding
+        android:bottom="@dimen/chip_padding"
+        android:left="@dimen/chip_padding"
+        android:right="@dimen/chip_padding"
+        android:top="@dimen/chip_padding" />
+
+    <corners android:radius="10dp" />
+</shape>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#fff" />
+            <corners android:radius="17dp" />
+        </shape>
+    </item>
+</selector>

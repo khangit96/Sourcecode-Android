@@ -36,6 +36,27 @@
     <string name="reviewActivity">Nhận Xét</string>
     <string name="filterActivity">Bộ Lọc</string>
     <string name="HouseAreaActivity">Nhà trọ quanh đây</string>
+    <!-- Màn hình giới thiệu -->
+    <string name="about">Giới thiệu</string>
+    <string name="feedback">Phản hồi</string>
+    <string name="about_address_title">Địa chỉ:</string>
+    <string name="about_address">"Khoa CNTT - ĐH Thủ Dầu Một
+06 Trần Văn Ơn, TP. Thủ Dầu Một, Bình Dương"</string>
+    <string name="about_copyright">© FHome Team - KCNTT - ĐH Thủ Dầu Một</string>
+    <string name="about_description">Ứng dụng hỗ trợ các bạn sinh viên tìm kiếm các địa điểm thuê phòng trọ, mua sắm, ăn uống…</string>
+    <string name="about_email_title">Email:</string>
+    <string name="about_email" translatable="false">khoacntt@tdmu.edu.vn</string>
+    <string name="about_phone_title">Điện thoại:</string>
+    <string name="about_phone" translatable="false">(0650) 383 4930</string>
+    <string name="about_version_title">Phiên bản:</string>
+    <string name="about_version_dummy">1.0</string>
+    <!-- Bootstrap Activity -->
+    <string name="splash_initializing">Đang chuẩn bị cho lần chạy đầu tiên…</string>
+    <string name="splash_initializing_error">Có lỗi khi khởi tạo dữ liệu :(</string>
+    <string name="splash_status_processing">Đang tải dữ liệu [0/0]…</string>
+    <string name="splash_status_processing_with_number" formatted="false">Đang tải dữ liệu [%d/%d]…</string>
+    <string name="splash_status_welcome">Chào mừng bạn đến với ứng dụng tìm nhà trọ FHome :D</string>
+    <string name="splash_status_welcome_back">Chào mừng bạn đã quay trở lại! :)</string>
 
 </resources>
 

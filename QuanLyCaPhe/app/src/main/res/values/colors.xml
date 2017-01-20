@@ -13,4 +13,5 @@
     <color name="brand_red">#d51826</color>
     <color name="iron">#CCCCCC</color>
     <color name="primary">#E43F3F</color>
+    <color name="colorMenuItem">#666666</color>
 </resources>

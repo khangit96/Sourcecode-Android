@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,8 @@ public class TableActivity extends AppCompatActivity {
 
         int tableNumber = getIntent().getExtras().getInt("TABLE_NUMBER");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle(String.format(getString(R.string.tableActivity), String.valueOf(tableNumber)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

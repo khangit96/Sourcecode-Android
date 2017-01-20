@@ -29,7 +29,6 @@ public class CustomGridViewAdapter extends ArrayAdapter<Table> {
     Context context;
     int layoutResourceId;
     ArrayList<Table> data = new ArrayList<Table>();
-    SharedPreferences preferences;
 
     public CustomGridViewAdapter(Context context, int layoutResourceId,
                                  ArrayList<Table> data) {
@@ -37,7 +36,6 @@ public class CustomGridViewAdapter extends ArrayAdapter<Table> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-        preferences = context.getSharedPreferences("Noti", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -66,16 +64,10 @@ public class CustomGridViewAdapter extends ArrayAdapter<Table> {
     *
     * */
     public void listenOrderFromFirebase(final int table, final TextView tv) {
-
-        //if (Dummy.checkForManageActivity == true) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Config.COMPANY_KEY + "/Order/Table " + table);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                  /*  int countOrder = preferences.getInt("table" + table, 0);
-                    countOrder++;
-                    PutDataSharepreferences("table" + table, countOrder);*/
 
                 tv.setText(String.valueOf(dataSnapshot.getChildrenCount()));
             }
@@ -85,17 +77,7 @@ public class CustomGridViewAdapter extends ArrayAdapter<Table> {
 
             }
         });
-        //  }
 
-    }
-
-    /*
-    *
-    * */
-    public void PutDataSharepreferences(String name, int data) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(name, data);
-        editor.commit();
     }
 
     /*

@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PendingResult<LocationSettingsResult> result;
     static final Integer GPS_SETTINGS = 0x7;
     static final Integer COLOR_TEXTVIEW_BOTTOMSHEET = 0x7f0e0105;
-    List<House> houseList = new ArrayList<>();
+    public static List<House> houseList = new ArrayList<>();
     HandlerInitMaker handlerInitMaker = new HandlerInitMaker();
     ClusterManager<HouseCluster> clusterManager;
     HomeRender homeRender;
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean checkIfGetDataHouseFireBaseSuccess = false;
     String phoneNumber = null;
     ActivityMainBinding binding;
+    static Integer HOUSE_AREA_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -326,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         final House h = houseList.get(i);
                         final int pos = i;
 
-                        if (h.tenChuHo.contains(newQuery)) {
+                        if (h.tenChuHo.contains(oldQuery + newQuery)) {
                             SearchSuggestion searchSuggestion = new SearchSuggestion() {
                                 @Override
                                 public String getBody() {
@@ -632,6 +633,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         switch (menuItem.getItemId()) {
+            case R.id.menuHouseArea:
+                Intent houseAreaIntent = new Intent(MainActivity.this, HouseAreaActivity.class);
+                startActivityForResult(houseAreaIntent, HOUSE_AREA_REQUEST_CODE);
+                break;
             case R.id.menuAbout:
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 break;
@@ -648,8 +653,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == HOUSE_AREA_REQUEST_CODE)
+                showBottonSheet(data.getIntExtra("HOUSE_SELECTED", -1));
+        }
+    }
+
     /*
-    * */
+        * */
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             showToast("Ứng dụng cần quyền truy câp vị trí của bạn!");
@@ -705,9 +719,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         clusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (previousMaker != null) {
-                    //  previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_share_24dp));
-                }
                 previousMaker = marker;
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected));
 
@@ -859,12 +870,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClusterIconGenerator.setTextAppearance(R.style.clusterTextStyle);
             mClusterIconGenerator.setBackground(clusterIcon);
 
-             /*  if (cluster.getSize() < 10) {
-                   mClusterIconGenerator.setContentPadding(40, 20, 0, 0);
-               }
-               else {
-                   mClusterIconGenerator.setContentPadding(30, 20, 0, 0);
-               }*/
             Bitmap icon = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
         }
@@ -966,7 +971,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
                             JSONArray jsonLegs = jsonRoute.getJSONArray("legs");
                             JSONObject jsonLeg = jsonLegs.getJSONObject(0);
-                            JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
+                            //     JSONObject jsonDistance = jsonLeg.getJSONObject("distance");
                             String points = overview_polylineJson.getString("points");
                             drawPolyline(destinationLocation, decodePolyLine(points));
                             progressDialog.dismiss();
@@ -1125,10 +1130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onMarkerClick(Marker marker) {
                 if (marker.getTitle() != null) {
                     showBottonSheet(Integer.parseInt(marker.getTitle()));
-                }
-                if (previousMaker != null) {
-                    //previousMaker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_default));
-
                 }
                 previousMaker = marker;
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_selected));

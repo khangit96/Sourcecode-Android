@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import khangit96.quanlycaphe.R;
-import khangit96.quanlycaphe.adapter.CustomSpinnerAdapter;
+import khangit96.quanlycaphe.adapter.SpinnerToolbarAdapter;
 import khangit96.quanlycaphe.adapter.FoodAdapter;
 import khangit96.quanlycaphe.model.Config;
 import khangit96.quanlycaphe.model.Food;
@@ -54,14 +54,11 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
 
     public static Button buttonOrder;
-    public Integer LOGIN_REQUEST_CODE = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         addControls();
         addEvents();
         loadFoodFromFirebase();
@@ -84,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
     /*
     *
     * */
-    public void initToolbar(String title, int id) {
-        toolbar = (Toolbar) findViewById(id);
+    public void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbar);
-        setTitle(title);
+        setTitle(Config.COMPANY_KEY);
     }
 
     /*
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     tableList.add(table);
 
                 }
-                CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, R.layout.list_table, tableList);
+                SpinnerToolbarAdapter spinnerAdapter = new SpinnerToolbarAdapter(MainActivity.this, R.layout.list_table, tableList);
                 spn.setAdapter(spinnerAdapter);
                 pd.dismiss();
             }
@@ -174,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 drawable.setColorFilter(getResources().getColor(R.color.bg_login), PorterDuff.Mode.SRC_ATOP);
                 switch (menuItem.getItemId()) {
                     case R.id.menu_login:
-                        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivityForResult(loginIntent, LOGIN_REQUEST_CODE);
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
                     default:
                         break;
@@ -210,15 +206,6 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == LOGIN_REQUEST_CODE) {
-            setContentView(R.layout.activity_admin);
-            initAdminUI();
-        }
-    }
-
     /*
         *
          */
@@ -246,17 +233,12 @@ public class MainActivity extends AppCompatActivity {
         initRecylerview();
 
         //Toolbar
-        initToolbar(Config.COMPANY_KEY, R.id.toolbarMain);
+        initToolbar();
 
         //Drawer
         initDrawer();
     }
 
-    public void initAdminUI() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        initToolbar("Admin", R.id.toolbarAdmin);
-        initDrawer();
-    }
 
     /*
     * */

@@ -25,13 +25,13 @@ import khangit96.quanlycaphe.model.Table;
  * Created by Administrator on 12/15/2016.
  */
 
-public class CustomGridViewAdapter extends ArrayAdapter<Table> {
+public class GridViewManageTableAdapter extends ArrayAdapter<Table> {
     Context context;
     int layoutResourceId;
     ArrayList<Table> data = new ArrayList<Table>();
 
-    public CustomGridViewAdapter(Context context, int layoutResourceId,
-                                 ArrayList<Table> data) {
+    public GridViewManageTableAdapter(Context context, int layoutResourceId,
+                                      ArrayList<Table> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;

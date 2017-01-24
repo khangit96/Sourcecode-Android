@@ -13,14 +13,14 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import khangit96.quanlycaphe.R;
-import khangit96.quanlycaphe.adapter.CustomGridViewAdapter;
+import khangit96.quanlycaphe.adapter.GridViewManageTableAdapter;
 import khangit96.quanlycaphe.model.Table;
 import khangit96.quanlycaphe.service.NotiService;
 
 public class ManageActivity extends AppCompatActivity {
 
     GridView gridView;
-    CustomGridViewAdapter customGridAdapter;
+    GridViewManageTableAdapter customGridAdapter;
     ArrayList<Table> tableList;
 
     @Override
@@ -45,7 +45,7 @@ public class ManageActivity extends AppCompatActivity {
         for (int i = 1; i < MainActivity.tableList.size(); i++) {
             tableList.add(MainActivity.tableList.get(i));
         }
-        customGridAdapter = new CustomGridViewAdapter(this, R.layout.row_grid, tableList);
+        customGridAdapter = new GridViewManageTableAdapter(this, R.layout.row_grid_manage_table, tableList);
         gridView.setAdapter(customGridAdapter);
 
     }

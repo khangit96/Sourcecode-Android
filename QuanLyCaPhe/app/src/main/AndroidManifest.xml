@@ -46,6 +46,9 @@
             android:name=".activity.CartActivity"
             android:label="@string/cartActivity"
             android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AdminActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

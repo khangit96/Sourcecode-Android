@@ -18,11 +18,11 @@ import khangit96.quanlycaphe.model.Table;
  * Created by Administrator on 12/12/2016.
  */
 
-public class CustomSpinnerAdapter extends ArrayAdapter<Table> {
+public class SpinnerToolbarAdapter extends ArrayAdapter<Table> {
     List<Table> tableList;
     Activity activity;
 
-    public CustomSpinnerAdapter(Activity activity, int resource, List<Table> tableList) {
+    public SpinnerToolbarAdapter(Activity activity, int resource, List<Table> tableList) {
         super(activity, resource, tableList);
         this.activity = activity;
         this.tableList = tableList;

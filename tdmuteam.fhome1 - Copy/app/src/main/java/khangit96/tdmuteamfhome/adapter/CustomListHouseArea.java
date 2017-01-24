@@ -1,54 +1,72 @@
 package khangit96.tdmuteamfhome.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
 import khangit96.tdmuteamfhome.R;
+import khangit96.tdmuteamfhome.model.House;
 
 /**
  * Created by Administrator on 1/1/2017.
  */
 
-public class CustomListHouseArea extends ArrayAdapter<String> {
+public class CustomListHouseArea extends RecyclerView.Adapter<CustomListHouseArea.MyViewHolder> {
+
+    List<House> houseList;
+    List<Integer> imgList;
+    List<String> distanceList;
     Context context;
-    List<String> houseAreaList;
 
-    public CustomListHouseArea(Context context, int resource, List<String> houseAreaList) {
-        super(context, resource, houseAreaList);
+    public CustomListHouseArea(Context context, List<House> houseList,
+                               List<Integer> imgList, List<String> distanceList) {
         this.context = context;
-        this.houseAreaList = houseAreaList;
-    }
-
-    @Nullable
-    @Override
-    public String getItem(int position) {
-        return houseAreaList.get(position);
+        this.houseList = houseList;
+        this.imgList = imgList;
+        this.distanceList = distanceList;
     }
 
     @Override
-    public int getCount() {
-        return houseAreaList.size();
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_house_area, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(view);
+        return myViewHolder;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        House house = houseList.get(position);
+
+        holder.tvHouseName.setText(house.tenChuHo);
+        holder.tvHouseAddress.setText(house.diaChi);
+        holder.tvHouePrice.setText(house.giaPhong +" vnđ/tháng");
+        holder.tvHouseDistance.setText(distanceList.get(position));
+        holder.img.setImageResource(imgList.get(position));
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.list_house_area, parent, false);
-
-        return convertView;
+    public int getItemCount() {
+        return houseList.size();
     }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView tvHouseName, tvHouePrice, tvHouseDistance, tvHouseAddress;
+        ImageView img;
+
+        public MyViewHolder(View view) {
+            super(view);
+            tvHouseName = (TextView) view.findViewById(R.id.tvHouseName);
+            tvHouePrice = (TextView) view.findViewById(R.id.tvHousePrice);
+            tvHouseDistance = (TextView) view.findViewById(R.id.tvHouseDistance);
+            tvHouseAddress = (TextView) view.findViewById(R.id.tvHouseAddress);
+            img = (ImageView) view.findViewById(R.id.img);
+        }
+    }
+
 }

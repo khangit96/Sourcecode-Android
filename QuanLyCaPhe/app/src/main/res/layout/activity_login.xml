@@ -41,11 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/edit_text_design"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:hint="Tên đăng nhập"
             android:inputType="text"
             android:padding="5dp"
-            android:singleLine="true"
             android:textColor="#CBCBCB"
             android:textColorHint="#CBCBCB" />
 
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/edit_text_design"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:padding="5dp"

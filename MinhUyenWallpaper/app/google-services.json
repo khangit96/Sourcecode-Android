@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "76261297090",
+    "firebase_url": "https://minhuyenwallpaper.firebaseio.com",
+    "project_id": "minhuyenwallpaper",
+    "storage_bucket": "minhuyenwallpaper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76261297090:android:67f0197a35b8a110",
+        "android_client_info": {
+          "package_name": "com.minhuyenwallpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "76261297090-emglapr3h1nvcoikn56b6c3rhnt1taca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh2u8KH8gGQyRveO985p7SNxHhsLVJ-po"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

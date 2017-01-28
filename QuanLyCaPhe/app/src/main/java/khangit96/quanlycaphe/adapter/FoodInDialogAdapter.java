@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -44,8 +45,10 @@ public class FoodInDialogAdapter extends RecyclerView.Adapter<FoodInDialogAdapte
         holder.tvFoodName.setText(food.foodName);
         String formatFoodPrice = FortmatCurrency.formatVnCurrence(FortmatCurrency.formatDouble(food.foodPrice));
         holder.tvFoodPrice.setText(formatFoodPrice);
-        Picasso.with(context)
-                .load(foodList.get(position).foodUrl)
+        Glide.with(context).load(foodList.get(position).foodUrl)
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_image)
                 .error(R.drawable.no_image)
                 .into(holder.imgFood);

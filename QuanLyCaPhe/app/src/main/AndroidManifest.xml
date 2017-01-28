@@ -48,8 +48,12 @@
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.AdminActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".activity.admin.AdminActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.admin.AdminTableActivity"
+            android:parentActivityName=".activity.admin.AdminActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

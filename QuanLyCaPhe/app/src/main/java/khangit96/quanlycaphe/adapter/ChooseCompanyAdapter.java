@@ -1,6 +1,7 @@
 package khangit96.quanlycaphe.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ public class ChooseCompanyAdapter extends RecyclerView.Adapter<ChooseCompanyAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.tvCompanyName.setText(configList.get(position).companyName);
+        Typeface pacificoFont = Typeface.createFromAsset(context.getAssets(), "fonts/Pacifico.ttf");
+        holder.tvCompanyName.setTypeface(pacificoFont);
     }
 
     @Override

@@ -16,6 +16,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <!-- Base application theme. -->
+    <style name="fabAdmin">
+        <item name="colorAccent">#009788</item>
+    </style>
 
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>

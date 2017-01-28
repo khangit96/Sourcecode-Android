@@ -11,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 import com.txusballesteros.bubbles.BubbleLayout;
 import com.txusballesteros.bubbles.BubblesManager;
 
@@ -67,8 +68,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.tvFoodName.setText(foodList.get(position).foodName);
         holder.tvFoodPrice.setText(foodList.get(position).getFormatPrice());
-        Picasso.with(context)
-                .load(foodList.get(position).foodUrl)
+
+        Glide.with(context).load(foodList.get(position).foodUrl)
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_image)
                 .error(R.drawable.no_image)
                 .into(holder.foodImg);
@@ -182,7 +186,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
      */
     private void initializeBubbleManager() {
         bubblesManager = new BubblesManager.Builder(context)
-               // .setTrashLayout(R.layout.notification_trash_layout)
+                // .setTrashLayout(R.layout.notification_trash_layout)
                 .build();
         bubblesManager.initialize();
     }

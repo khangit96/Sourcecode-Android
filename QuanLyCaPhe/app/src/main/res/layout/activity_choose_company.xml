@@ -18,10 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:text="Bạn đang ở đâu ?"
         android:textColor="@android:color/white"
         android:textSize="30sp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imgWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/map"
         android:visibility="gone" />
 
     <id.arieridwan.lib.PageLoader
@@ -35,7 +44,7 @@
         android:id="@+id/recyclerViewChooseCompany"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="130dp"
         android:scrollbars="none"
         android:visibility="gone" />
 </LinearLayout>

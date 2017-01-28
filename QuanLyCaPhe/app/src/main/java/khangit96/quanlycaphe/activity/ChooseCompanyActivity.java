@@ -1,11 +1,13 @@
 package khangit96.quanlycaphe.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +29,7 @@ public class ChooseCompanyActivity extends AppCompatActivity {
     ChooseCompanyAdapter adapter;
     RecyclerView recyclerView;
     PageLoader pageLoader;
+    TextView tvWhere;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class ChooseCompanyActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+        tvWhere = (TextView) findViewById(R.id.tvWhere);
+        Typeface pacificoFont = Typeface.createFromAsset(getAssets(), "fonts/Pacifico.ttf");
+        tvWhere.setTypeface(pacificoFont);
         pageLoader = (PageLoader) findViewById(R.id.pageloader);
         pageLoader.startProgress();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewChooseCompany);
@@ -85,7 +91,8 @@ public class ChooseCompanyActivity extends AppCompatActivity {
                 pageLoader.stopProgress();
                 pageLoader.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                findViewById(R.id.tvWhere).setVisibility(View.VISIBLE);
+                tvWhere.setVisibility(View.VISIBLE);
+                findViewById(R.id.imgWhere).setVisibility(View.VISIBLE);
                 findViewById(R.id.activity_choose_company).setBackgroundColor(getResources().getColor(R.color.bg_login));
             }
 

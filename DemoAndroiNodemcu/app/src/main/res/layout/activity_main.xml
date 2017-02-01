@@ -4,30 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/edt_ip"
+    <Button
+        android:id="@+id/btStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ip Address" />
+        android:text="Start" />
 
     <Button
-        android:id="@+id/btn_ledOn"
+        android:id="@+id/btStop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Led On" />
+        android:text="Stop" />
 
-    <Button
-        android:id="@+id/btn_ledOff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Led Off" />
-
-    <Button
-        android:id="@+id/btnScan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Scan Wifi" />
 
     <ListView
         android:id="@+id/lv"

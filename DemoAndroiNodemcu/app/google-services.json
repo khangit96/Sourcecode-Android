@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "653311739711",
+    "firebase_url": "https://demonodemcu.firebaseio.com",
+    "project_id": "demonodemcu",
+    "storage_bucket": "demonodemcu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653311739711:android:3167e75df23987bd",
+        "android_client_info": {
+          "package_name": "com.demoandroinodemcu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653311739711-rivgeprlsq258cacbd86hv7gmf8q0svp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChvO5COGx0Ghe87f39huC79hnzVah56jQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

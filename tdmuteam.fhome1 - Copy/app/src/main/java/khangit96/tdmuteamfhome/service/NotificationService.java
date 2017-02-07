@@ -52,14 +52,16 @@ public class NotificationService extends Service {
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (Integer.parseInt(dataSnapshot.getKey()) + 1 > count && count != 0) {
+                //    if (Integer.parseInt(dataSnapshot.getKey()) + 1 > count && count != 0) {
+                if ((Boolean)dataSnapshot.child("verified").getValue() == true)
                     showNotification("Nhà trọ " + dataSnapshot.child("tenChuHo").getValue().toString());
-                }
+                //   }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                if ((Boolean)dataSnapshot.child("verified").getValue() == true)
+                    showNotification("Nhà trọ " + dataSnapshot.child("tenChuHo").getValue().toString());
             }
 
             @Override

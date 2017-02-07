@@ -13,9 +13,12 @@ public class House {
     public String sdt;
     public String tenChuHo;
     public String tinhTrang;
+    public boolean verified;
     public double viDo;
+    public double distance;
 
-    public House(String diaChi, String giaDien, String giaNuoc, String giaPhong, double kinhDo, String sdt, String tenChuHo, String tinhTrang, double viDo) {
+    public House(String diaChi, String giaDien, String giaNuoc, String giaPhong,
+                 double kinhDo, String sdt, String tenChuHo, String tinhTrang, boolean verified, double viDo) {
         this.diaChi = diaChi;
         this.giaDien = giaDien;
         this.giaNuoc = giaNuoc;
@@ -24,6 +27,7 @@ public class House {
         this.sdt = sdt;
         this.tenChuHo = tenChuHo;
         this.tinhTrang = tinhTrang;
+        this.verified = verified;
         this.viDo = viDo;
     }
 }

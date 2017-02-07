@@ -57,6 +57,13 @@
     <string name="splash_status_processing_with_number" formatted="false">Đang tải dữ liệu [%d/%d]…</string>
     <string name="splash_status_welcome">Chào mừng bạn đến với ứng dụng tìm nhà trọ FHome :D</string>
     <string name="splash_status_welcome_back">Chào mừng bạn đã quay trở lại! :)</string>
+    <string name="hint_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="err_msg_name">Enter your full name</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
 
 </resources>
 

@@ -45,8 +45,8 @@ public class CustomListHouseArea extends RecyclerView.Adapter<CustomListHouseAre
 
         holder.tvHouseName.setText(house.tenChuHo);
         holder.tvHouseAddress.setText(house.diaChi);
-        holder.tvHouePrice.setText(house.giaPhong +" vnđ/tháng");
-        holder.tvHouseDistance.setText(distanceList.get(position));
+        holder.tvHouePrice.setText(house.giaPhong + " vnđ/tháng");
+        holder.tvHouseDistance.setText(String.format("%.2f", house.distance)+" m");
         holder.img.setImageResource(imgList.get(position));
     }
 

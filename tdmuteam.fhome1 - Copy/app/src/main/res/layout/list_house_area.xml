@@ -54,23 +54,23 @@
                 android:text="Giá:450k/tháng" />
 
             <ImageView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="150dp"
                 android:id="@+id/imgDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvHouseAddress"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@id/tvHousePrice"
+                android:layout_below="@+id/tvHousePrice"
                 android:src="@drawable/ic_distance_24dp"
                 android:tint="@color/colorPrimary" />
 
             <TextView
+                android:textStyle="italic"
+                android:layout_marginTop="15dp"
                 android:id="@+id/tvHouseDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvHouseAddress"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tvHousePrice"
+                android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/imgDistance"
                 android:text="2.3 Km" />
 

@@ -150,13 +150,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addApi(AppIndex.API)
                 .addApi(LocationServices.API)
                 .build();
-        getDataFromFireBase();
 
         startService();
 
         addEvents();
 
         addControls();
+        binding.swipeRefreshLayout.setRefreshing(true);
     }
 
     /*
@@ -385,6 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     *
      */
     public void showBottonSheet(final int id) {
+        Toast.makeText(getApplicationContext(), "distance: " + houseList.get(id).distance, Toast.LENGTH_LONG).show();
         final House house = houseList.get(id);
         //Image
         int[] mDrawables = {
@@ -766,6 +767,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onMyLocationChange(Location location) {
                 currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (checkFirstTimeLocationChange) {
+                    getDataFromFireBase();
                     getCurrentLocation(15f);
                     checkFirstTimeLocationChange = false;
                 }
@@ -909,7 +911,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void getDataFromFireBase() {
         String SERVER_FIREBASE = "https://test-8e5bd.firebaseio.com/NhaTro.json?pretty";
         if (isNetworkAvailable()) {
-            binding.swipeRefreshLayout.setRefreshing(true);
             final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(SERVER_FIREBASE, new Response.Listener<JSONArray>() {
                 @Override
@@ -999,11 +1000,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void run() {
             for (int i = 0; i < houseList.size(); i++) {
-                Message message = new Message();
-                Bundle bd = new Bundle();
-                bd.putInt("key", i);
-                message.setData(bd);
-                handlerInitMaker.sendMessage(message);
+                if (currentLatLng != null) {
+                    Location currLoc = new Location("Current Location");
+                    currLoc.setLatitude(currentLatLng.latitude);
+                    currLoc.setLongitude(currentLatLng.longitude);
+
+                    Location houseLoc = new Location("House Location");
+                    houseLoc.setLatitude(houseList.get(i).viDo);
+                    houseLoc.setLongitude(houseList.get(i).kinhDo);
+
+
+                    houseList.get(i).distance = currLoc.distanceTo(houseLoc);
+                }
+
+                if (houseList.get(i).verified) {
+                    Message message = new Message();
+                    Bundle bd = new Bundle();
+                    bd.putInt("key", i);
+                    message.setData(bd);
+                    handlerInitMaker.sendMessage(message);
+                }
+
             }
         }
     }

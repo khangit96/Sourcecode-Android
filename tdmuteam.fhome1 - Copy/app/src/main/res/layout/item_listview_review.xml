@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
     android:padding="10dp">
 
     <ImageView
@@ -11,30 +10,25 @@
         android:layout_height="50dp"
         android:contentDescription="@string/app_name" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textview_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/image_view"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:textSize="16sp"
-            android:id="@+id/textview_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text=""
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textview_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Nhà trọ tốt" />
-    </LinearLayout>
-
-</LinearLayout>
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:id="@+id/textview_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview_username"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/image_view"
+        android:gravity="center" />
+</RelativeLayout>

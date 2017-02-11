@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.demonoteapp.Model.Note;
+import com.demonoteapp.Model.Setting;
 import com.demonoteapp.R;
 
 import java.util.List;

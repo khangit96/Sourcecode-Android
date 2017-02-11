@@ -4,7 +4,7 @@ package khangit96.tdmuteamfhome.model;
  * Created by Administrator on 11/4/2016.
  */
 
-public class House {
+public class House implements Comparable<House> {
     public String diaChi;
     public String giaDien;
     public String giaNuoc;
@@ -29,5 +29,10 @@ public class House {
         this.tinhTrang = tinhTrang;
         this.verified = verified;
         this.viDo = viDo;
+    }
+
+    @Override
+    public int compareTo(House house) {
+        return (int) (this.distance - house.distance);
     }
 }

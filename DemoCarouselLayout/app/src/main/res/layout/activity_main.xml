@@ -26,7 +26,7 @@
     android:layout_width="140dp"
     android:layout_height="180dp">
 
-    <ImageView
+      <ImageView
         android:src="@drawable/order"
         android:id="@+id/image"
         android:layout_width="match_parent"

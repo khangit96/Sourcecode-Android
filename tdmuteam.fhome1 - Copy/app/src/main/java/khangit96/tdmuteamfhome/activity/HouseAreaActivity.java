@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import khangit96.tdmuteamfhome.R;
@@ -69,36 +70,12 @@ public class HouseAreaActivity extends AppCompatActivity {
         imgList.add(R.drawable.nhatro);
         imgList.add(R.drawable.nhatro);
 
-        distanceList = new ArrayList<>();
-        distanceList.add("1.5 Km");
-        distanceList.add("1.9 Km");
-        distanceList.add("2.0 Km");
-        distanceList.add("2.4 Km");
-        distanceList.add("2.5 Km");
-        distanceList.add("3.0 Km");
-        distanceList.add("3.7 Km");
-        distanceList.add("4.5 Km");
-        distanceList.add("4.8 Km");
-        distanceList.add("6.5 Km");
-        distanceList.add("6.7 Km");
-        distanceList.add("6.9 Km");
-        distanceList.add("7.0 Km");
-        distanceList.add("7.3 Km");
-        distanceList.add("7.5 Km");
-        distanceList.add("7.9 Km");
-        distanceList.add("8.5 Km");
-        distanceList.add("9.0 Km");
-        distanceList.add("9.4 Km");
-        distanceList.add("9.9 Km");
-        distanceList.add("10.5 Km");
-        distanceList.add("10.7 Km");
-        distanceList.add("11.5 Km");
-
+        Collections.sort(MainActivity.houseList);
         recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(HouseAreaActivity.this);
         recyclerview.setLayoutManager(layoutManager);
 
-        adapter = new CustomListHouseArea(getApplicationContext(), MainActivity.houseList, imgList, distanceList);
+        adapter = new CustomListHouseArea(getApplicationContext(), MainActivity.houseList, imgList);
         recyclerview.setAdapter(adapter);
 
         //init Toolbar

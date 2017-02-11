@@ -22,20 +22,10 @@
             android:background="@android:color/white"
             android:padding="16.0dip">
 
-         <!--   <ImageView
-                android:id="@+id/about_fhome_logo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="8.0dip"
-                android:layout_marginLeft="100dp"
-                android:contentDescription="F home"
-                android:src="@drawable/ic_home"
-                android:tint="@color/colorPrimary" />-->
 
             <TextView
                 android:id="@+id/about_version"
                 style="@style/TextViewAbout"
-                android:layout_below="@+id/about_fhome_logo"
                 android:drawableLeft="@drawable/ic_settings_gray_24dp"
                 android:drawableStart="@drawable/ic_settings_gray_24dp"
                 android:gravity="center"

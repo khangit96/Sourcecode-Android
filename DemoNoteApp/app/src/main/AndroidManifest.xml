@@ -21,6 +21,15 @@
             android:name=".Activity.AddNoteActivity"
             android:label="Add Note"
             android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.EditNoteActivity"
+            android:label="Edit Note"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.SettingActivity"
+            android:label="Setting"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

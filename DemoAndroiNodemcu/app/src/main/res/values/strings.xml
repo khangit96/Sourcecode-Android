@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DemoAndroiNodemcu</string>
+    <string name="labelMainActivity">KBottle</string>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.demonoteapp.Adapter.NoteAdapter;
 import com.demonoteapp.Database.DatabaseAdapter;
 import com.demonoteapp.Model.Note;
+import com.demonoteapp.Model.Setting;
 import com.demonoteapp.R;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_ADD_NOTE = 1;
+    private static final int REQUEST_CODE_EDIT_NOTE = 1;
     DatabaseAdapter db;
     NoteAdapter adapter;
     List<Note> noteList;
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         db = new DatabaseAdapter(this);
+        Toast.makeText(getApplicationContext(),""+db.getNotesCount(),Toast.LENGTH_LONG).show();
+        db.addNote(new Note("test","Demo"));
+
         checkIfNoteEmpty();
         initListViewNote();
         initEvents();
@@ -111,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menuSetting) {
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Option");
@@ -121,7 +134,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Edit") {
-            Toast.makeText(getApplicationContext(), "calling code", Toast.LENGTH_LONG).show();
+            Intent editNoteIntent = new Intent(MainActivity.this, EditNoteActivity.class);
+            Note note = noteList.get(selectedPos);
+            editNoteIntent.putExtra("NOTE", note);
+            startActivityForResult(editNoteIntent, REQUEST_CODE_EDIT_NOTE);
+
         } else if (item.getTitle() == "Delete") {
             showDialogDeleteNote();
         }
@@ -134,6 +151,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ADD_NOTE) {
             checkIfNoteEmpty();
+            noteList.clear();
+            noteList.addAll(db.getAllNotes());
+            adapter.notifyDataSetChanged();
+        }
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_EDIT_NOTE) {
             noteList.clear();
             noteList.addAll(db.getAllNotes());
             adapter.notifyDataSetChanged();

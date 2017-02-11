@@ -21,15 +21,13 @@ public class CustomListHouseArea extends RecyclerView.Adapter<CustomListHouseAre
 
     List<House> houseList;
     List<Integer> imgList;
-    List<String> distanceList;
     Context context;
 
     public CustomListHouseArea(Context context, List<House> houseList,
-                               List<Integer> imgList, List<String> distanceList) {
+                               List<Integer> imgList) {
         this.context = context;
         this.houseList = houseList;
         this.imgList = imgList;
-        this.distanceList = distanceList;
     }
 
     @Override

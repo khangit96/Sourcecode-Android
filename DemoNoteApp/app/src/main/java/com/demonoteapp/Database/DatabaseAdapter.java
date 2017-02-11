@@ -37,7 +37,7 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("test", "create database");
+        Log.d("Create", "create database");
         String script = "CREATE TABLE " + TABLE_NOTE + "("
                 + COLUMN_NOTE_ID + " INTEGER PRIMARY KEY," + COLUMN_NOTE_TITLE + " TEXT,"
                 + COLUMN_NOTE_CONTENT + " TEXT" + ")";
@@ -120,5 +120,18 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
                 new String[]{String.valueOf(note.noteId)});
         db.close();
     }
+    public int updateNote(Note note) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NOTE_TITLE, note.noteTitle);
+        values.put(COLUMN_NOTE_CONTENT, note.noteContent);
+
+        // updating row
+        return db.update(TABLE_NOTE, values, COLUMN_NOTE_ID + " = ?",
+                new String[]{String.valueOf(note.noteId)});
+    }
+
 
 }

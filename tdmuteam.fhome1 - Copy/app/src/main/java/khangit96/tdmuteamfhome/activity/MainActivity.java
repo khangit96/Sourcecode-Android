@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -156,12 +157,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addEvents();
 
         addControls();
-        binding.swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    protected void onResume() {
+        if (checkStateGPS())
+            binding.swipeRefreshLayout.setRefreshing(true);
+        else
+            showDialogEnableGPS();
+        super.onResume();
     }
 
     /*
-    *
-    * */
+        *
+        * */
     private void addControls() {
         binding.floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
@@ -241,6 +250,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*start service to listener event data change and noti to user*/
     public void startService() {
         startService(new Intent(MainActivity.this, NotificationService.class));
+    }
+
+    public void showDialogEnableGPS() {
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Vui lòng bật GPS");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity( new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                System.exit(1);
+            }
+        });
+        builder.show();
     }
 
     /*
@@ -385,7 +415,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     *
      */
     public void showBottonSheet(final int id) {
-        Toast.makeText(getApplicationContext(), "distance: " + houseList.get(id).distance, Toast.LENGTH_LONG).show();
         final House house = houseList.get(id);
         //Image
         int[] mDrawables = {
@@ -830,6 +859,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
                             break;
                     }
                 }

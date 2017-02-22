@@ -1,0 +1,23 @@
+<tabs>
+    <tab
+        id="@+id/tabHome"
+        title="Mon" />
+    <tab
+        id="@+id/tabAccount"
+        title="Tus" />
+    <tab
+        id="@+id/tabSetting"
+        title="Wed" />
+    <tab
+        id="@+id/tabSetting"
+        title="Thur" />
+    <tab
+        id="@+id/tabSetting"
+        title="Fri" />
+    <tab
+        id="@+id/tabSetting"
+        title="Sa" />
+    <tab
+        id="@+id/tabSetting"
+        title="Sun" />
+</tabs>

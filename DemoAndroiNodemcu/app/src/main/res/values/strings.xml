@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">DemoAndroiNodemcu</string>
-    <string name="labelMainActivity">KBottle</string>
+    <string name="app_name">KBottle</string>
+    <string name="openDrawer">Open</string>
+    <string name="closeDrawer">Close</string>
 </resources>

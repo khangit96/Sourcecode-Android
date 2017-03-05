@@ -1,6 +1,6 @@
 <resources>
     <!--App name-->
-    <string name="app_name">Tìm Nhà Trọ</string>
+    <string name="app_name">Nhà Trọ TDMU</string>
 
     <!--String Behavior BottomSheet-->
     <string name="BackDropBottomSheetBehavior">khangit96.tdmuteamfhome.lib.BackdropBottomSheetBehavior</string>

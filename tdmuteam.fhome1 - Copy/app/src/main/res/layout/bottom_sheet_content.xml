@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{house.tenChuHo}"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/primary_text_light"
                     android:textSize="19sp" />
 
                 <TextView
@@ -50,6 +50,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                     android:id="@+id/tvHouseDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

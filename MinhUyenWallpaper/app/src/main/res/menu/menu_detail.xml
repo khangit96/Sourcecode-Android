@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.minhuyenwallpaper.Activity.DetailActivity">
+    <item
+        android:id="@+id/menuFavorite"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:orderInCategory="100"
+        android:title="Favorite"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menuShare"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:orderInCategory="100"
+        android:title="Share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menuSetWallpaper"
+        android:orderInCategory="100"
+        android:title="Set Wallpaper"
+        app:showAsAction="never" />
+</menu>

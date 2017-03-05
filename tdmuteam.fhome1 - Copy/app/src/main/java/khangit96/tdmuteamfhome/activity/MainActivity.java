@@ -37,12 +37,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -91,9 +93,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import khangit96.tdmuteamfhome.R;
 import khangit96.tdmuteamfhome.adapter.CustomSpinerAdapter;
@@ -136,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String phoneNumber = null;
     ActivityMainBinding binding;
     static Integer HOUSE_AREA_REQUEST_CODE = 1;
+    String distanceSelected = "";
+    String priceSelected = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
         startService();
-
         addEvents();
 
         addControls();
@@ -192,13 +199,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Spinner spnHousePrice = (Spinner) view.findViewById(R.id.spnHousePrice);
         ArrayList<String> housePriceList = new ArrayList<>();
-        housePriceList.add("Tất cả");
-        housePriceList.add("1500.000");
         housePriceList.add("300.000");
-        housePriceList.add("950.000");
-        housePriceList.add("750.000");
+        housePriceList.add("700.000");
+        housePriceList.add("1000.000");
         CustomSpinerAdapter housePriceAdapter = new CustomSpinerAdapter(getApplicationContext(), R.layout.list_house_price, housePriceList);
         spnHousePrice.setAdapter(housePriceAdapter);
+        spnHousePrice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        priceSelected = "300000";
+                        break;
+                    case 1:
+                        priceSelected = "700000";
+                        break;
+                    case 2:
+                        priceSelected = "1000000";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         Spinner spnPlace = (Spinner) view.findViewById(R.id.spnHousePlace);
         ArrayList<String> housePlace = new ArrayList<>();
@@ -211,10 +237,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         spnPlace.setAdapter(housePlaceAdapter);
 
         Spinner spnRadius = (Spinner) view.findViewById(R.id.spnHouseRadius);
-        ArrayList<String> houseRadius = new ArrayList<>();
+        final ArrayList<String> houseRadius = new ArrayList<>();
+        houseRadius.add("1KM");
+        houseRadius.add("2KM");
         houseRadius.add("5KM");
-        houseRadius.add("10KM");
-        houseRadius.add("20KM");
+
+        spnRadius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        distanceSelected = "1000";
+                        break;
+                    case 1:
+                        distanceSelected = "2000";
+                        break;
+                    case 2:
+                        distanceSelected = "5000";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         CustomSpinerAdapter houseRadiusAdapter = new CustomSpinerAdapter(getApplicationContext(), R.layout.list_house_price, houseRadius);
         spnRadius.setAdapter(houseRadiusAdapter);
 
@@ -222,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                filterDistance();
             }
         });
         builder.setPositiveButton("Huỷ", new DialogInterface.OnClickListener() {
@@ -233,6 +282,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         builder.show();
+    }
+
+    public void filterDistance() {
+        binding.swipeRefreshLayout.setRefreshing(true);
+        mMap.clear();
+        clusterManager.clearItems();
+        double distanceFilter = Double.parseDouble(distanceSelected);
+        double priceFilter = Double.parseDouble(priceSelected);
+
+        for (int i = 0; i < houseList.size(); i++) {
+            double priceHouse = Double.parseDouble(houseList.get(i).giaPhong);
+            double distanceHouse = houseList.get(i).distance;
+
+            if (distanceHouse < distanceFilter && priceHouse < priceFilter) {
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .title(String.valueOf(i))
+                        .position(new LatLng(houseList.get(i).viDo, houseList.get(i).kinhDo))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_house_default));
+                HouseCluster houseCluster = new HouseCluster(markerOptions);
+                clusterManager.addItem(houseCluster);
+                clusterManager.cluster();
+            }
+
+        }
+        binding.swipeRefreshLayout.setRefreshing(false);
+
     }
 
     /*
@@ -261,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity( new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -461,7 +536,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Textview bottom sheet
         //Textview bottom sheet
         final TextView textview_name, textview_address, textview_housePrice, textview_electricPrice, textview_waterPrice, textview_addressDetail, textview_nameOfOwnHouse,
-                textview_phone, textview_houseStatus, textview_sizeOfHouse, textview_timeOpen, textview_timeClose;
+                textview_phone, textview_houseStatus, textview_sizeOfHouse, textview_timeOpen, textview_timeClose, tvHouseDistance;
         textview_name = (TextView) bottomSheet.findViewById(R.id.textview_name);
         textview_address = (TextView) bottomSheet.findViewById(R.id.textview_address);
 
@@ -482,14 +557,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textview_timeClose = (TextView) bottomSheet.findViewById(R.id.textview_timeClose);
         textview_phone = (TextView) bottomSheet.findViewById(R.id.textview_phone);
         textview_houseStatus = (TextView) bottomSheet.findViewById(R.id.textview_houseStatus);
+        tvHouseDistance = (TextView) bottomSheet.findViewById(R.id.tvHouseDistance);
 
-        checkIsNullBeforeSetText(textview_housePrice, String.format(getString(R.string.housePrice), house.giaPhong));
+        checkIsNullBeforeSetText(textview_housePrice, String.format(getString(R.string.housePrice), formatVnCurrence(house.giaPhong)));
         checkIsNullBeforeSetText(textview_electricPrice, String.format(getString(R.string.electricPrice), house.giaDien));
         checkIsNullBeforeSetText(textview_waterPrice, String.format(getString(R.string.waterPrice), house.giaNuoc));
         checkIsNullBeforeSetText(textview_addressDetail, String.format(getString(R.string.address), house.diaChi));
         checkIsNullBeforeSetText(textview_nameOfOwnHouse, String.format(getString(R.string.nameOfOwnHouse), house.tenChuHo));
         checkIsNullBeforeSetText(textview_phone, String.format(getString(phone), house.sdt));
         checkIsNullBeforeSetText(textview_houseStatus, String.format(getString(R.string.housetStatus), house.tinhTrang));
+        checkIsNullBeforeSetText(tvHouseDistance, String.format("%.2f", house.distance) + " m");
 
         //not update in database
         checkIsNullBeforeSetText(textview_sizeOfHouse, String.format(getString(R.string.sizeOfHouse), getString(R.string.updatingInformation)));
@@ -592,6 +669,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(reviewIntent));
             }
         });
+    }
+
+    /*
+    *
+    * */
+    public static String formatVnCurrence(String price) {
+
+        NumberFormat format =
+                new DecimalFormat("#,##0.00");// #,##0.00 ¤ (¤:// Currency symbol)
+        format.setCurrency(Currency.getInstance(Locale.US));//Or default locale
+
+        price = (!TextUtils.isEmpty(price)) ? price : "0";
+        price = price.trim();
+        price = format.format(Double.parseDouble(price));
+        price = price.replaceAll(",", "\\.");
+
+        if (price.endsWith(".00")) {
+            int centsIndex = price.lastIndexOf(".00");
+            if (centsIndex != -1) {
+                price = price.substring(0, centsIndex);
+            }
+        }
+        price = String.format("%s", price);
+        return price;
     }
 
     /*

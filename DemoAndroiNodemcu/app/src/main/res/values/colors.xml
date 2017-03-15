@@ -13,4 +13,5 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="nav_normal">#E0E0E0</color>
+    <color name="white">#FFF</color>
 </resources>

@@ -19,11 +19,33 @@
         app:pv_progressMode="indeterminate"
         app:pv_progressStyle="@style/Material.Drawable.CircularProgress" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:stackFromBottom="true" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:stackFromBottom="true" />
+
+        <com.jetradarmobile.snowfall.SnowfallView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:snowflakeAlphaMax="255"
+            app:snowflakeAlphaMin="150"
+            app:snowflakeAngleMax="5"
+            app:snowflakeImage="@drawable/snowflake"
+            app:snowflakeSizeMax="32dp"
+            app:snowflakeSizeMin="8dp"
+            app:snowflakeSpeedMax="12"
+            app:snowflakeSpeedMin="4"
+            app:snowflakesAlreadyFalling="false"
+            app:snowflakesFadingEnabled="true"
+            app:snowflakesNum="250" />
+    </FrameLayout>
+
+
 </LinearLayout>
 

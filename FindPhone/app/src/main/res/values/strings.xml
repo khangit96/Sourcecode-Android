@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">FindPhone</string>
-    <string name="service_not_available">Service not available</string>
-    <string name="invalid_lat_long_used">invalid latitude,longitude</string>
-    <string name="no_address_found">no address found</string>
-    <string name="address_found">Address found</string>
-    <string name="no_geocoder_available">no geocoder available</string>
-</resources>

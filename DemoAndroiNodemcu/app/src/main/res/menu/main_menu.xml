@@ -7,7 +7,7 @@
         android:title="Calendar"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menuAlarm"
+        android:id="@+id/menuHenGio"
         android:icon="@drawable/ic_alarm_white_24dp"
         android:title="Alarm"
         app:showAsAction="always" />

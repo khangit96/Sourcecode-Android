@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Today"
+            android:text="Hôm nay"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
         android:layout_width="210dp"
         android:layout_height="210dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
         CircleProgressView:cpv_autoTextSize="false"
         CircleProgressView:cpv_barColor="@color/primary"
         CircleProgressView:cpv_barWidth="35dp"
@@ -78,9 +78,9 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvConLai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="300 ML"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Remaining"
+                android:text="Còn lại"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -101,9 +101,9 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvSoLit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2.0 L"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -111,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Target"
+                android:text="Tổng"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -124,9 +124,9 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvDaUong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="300 ML"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -134,20 +134,56 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consumed"
+                android:text="Đã uống"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btViewActivity"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="30dp"
-        android:background="@android:color/transparent"
-        android:text="@string/viewActivity"
-        android:textAllCaps="false"
-        android:textSize="17sp" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_history_black_24dp" />
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/btViewActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/viewActivity"
+            android:textAllCaps="false"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_info_outline_black_24dp" />
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/btRecommended"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/recommended"
+            android:textAllCaps="false"
+            android:textSize="17sp" />
+    </LinearLayout>
 
 </LinearLayout>

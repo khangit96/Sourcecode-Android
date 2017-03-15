@@ -1,7 +1,31 @@
-<ImageView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detail_image"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:scaleType="fitXY" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context="com.minhuyenwallpaper.Fragment.MoviesFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/detail_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="fitXY" />
+
+    <!-- <com.jetradarmobile.snowfall.SnowfallView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         app:snowflakeAlphaMax="255"
+         app:snowflakeAlphaMin="150"
+         app:snowflakeAngleMax="5"
+         app:snowflakeImage="@drawable/snowflake"
+         app:snowflakeSizeMax="32dp"
+         app:snowflakeSizeMin="8dp"
+         app:snowflakeSpeedMax="12"
+         app:snowflakeSpeedMin="4"
+         app:snowflakesAlreadyFalling="false"
+         app:snowflakesFadingEnabled="true"
+         app:snowflakesNum="250" />-->
+
+</FrameLayout>

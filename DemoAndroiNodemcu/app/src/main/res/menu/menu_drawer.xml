@@ -2,40 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_wallpaper"
-            android:icon="@drawable/ic_photo_library_black_24dp"
-            android:title="Wallpaper" />
-        <item
-            android:id="@+id/nav_favorite"
-            android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="Favorite" />
-        <item
-            android:id="@+id/nav_movies"
-            android:icon="@drawable/ic_local_movies_black_24dp"
-            android:title="Movies" />
 
         <item
-            android:id="@+id/nav_notifications"
+            android:id="@+id/menuLichTrinh"
+            android:icon="@drawable/ic_calendar_white24dp"
+            android:title="Lịch Trình" />
+        <item
             android:icon="@drawable/ic_notifications_black_24dp"
-            android:title="Notifications" />
+            android:title="Thông Báo" />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="Cài Đặt" />
     </group>
 
     <item android:title="Other">
         <menu>
             <item
                 android:icon="@drawable/ic_person_black_24dp"
-                android:id="@+id/nav_about_us"
-                android:title="Account" />
+                android:id="@+id/menuTaiKhoan"
+                android:title="Tài Khoản" />
             <item
                 android:icon="@drawable/ic_sms_black_24dp"
                 android:id="@+id/nav_privacy_policy"
-                android:title="About" />
+                android:title="Giới Thiệu" />
         </menu>
     </item>
 

@@ -16,6 +16,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <!-- Base application theme. -->
+    <style name="fab"  parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">#1976D2</item>
+    </style>
     <style name="AppTheme.TransNav" parent="AppTheme" />
 </resources>

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,20 +47,14 @@ public class PreviousDayFragment extends Fragment {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 TinhTrang tinhTrang = dataSnapshot.getValue(TinhTrang.class);
 
+                TextView tvCheck = (TextView) view.findViewById(R.id.tvCheck);
+                ImageView imgCheck = (ImageView) view.findViewById(R.id.imgCheck);
+
+
                 if (tinhTrang == null) {
-
-                   /* float daUong = new Random().nextInt(500);
-                    float soLit = userSharePreferences.getFloat("DA_UONG", 0);
-
-                    int phanTram = (int) ((daUong * 100) / soLit);
-
-                    circleProgressView.setText(String.valueOf(phanTram));
-                    circleProgressView.setValueAnimated(phanTram);
-                    tvDaUong.setText(String.format("%.2f", daUong) + "ML");
-                    tvSoLit.setText(String.format("%.2f", soLit) + "ML");
-                    tvConLai.setText(String.format("%.2f", soLit - daUong) + "ML");*/
                     view.findViewById(R.id.ln).setVisibility(View.GONE);
                     Toast.makeText(getActivity(), "Chưa có dữ liệu", Toast.LENGTH_LONG).show();
 
@@ -68,23 +63,61 @@ public class PreviousDayFragment extends Fragment {
                     tvDay.setText(args.getString("DAY", ""));
 
                     int phanTram = (int) ((tinhTrang.daUong * 100) / tinhTrang.soLit);
+                    if (phanTram < 10) {
+                        setColorCircleProgressView(R.color.level1);
+                    } else if (phanTram >= 10 && phanTram <= 20) {
+                        setColorCircleProgressView(R.color.level2);
 
+                    } else if (phanTram > 20 && phanTram <= 30) {
+                        setColorCircleProgressView(R.color.level3);
+
+                    } else if (phanTram > 30 && phanTram <= 50) {
+                        setColorCircleProgressView(R.color.level4);
+
+                    } else if (phanTram > 50 && phanTram <= 60) {
+                        setColorCircleProgressView(R.color.level5);
+
+                    } else if (phanTram > 60 && phanTram <= 70) {
+                        setColorCircleProgressView(R.color.level6);
+
+                    } else if (phanTram > 70 && phanTram <= 80) {
+                        setColorCircleProgressView(R.color.level7);
+
+                    } else if (phanTram > 80 && phanTram <= 90) {
+                        setColorCircleProgressView(R.color.level8);
+
+                    } else if (phanTram > 90 && phanTram <= 100) {
+                        setColorCircleProgressView(R.color.level9);
+                    }
                     circleProgressView.setText(String.valueOf(phanTram));
                     circleProgressView.setValueAnimated(phanTram);
 
                     tvDaUong.setText(String.format("%.2f", tinhTrang.daUong) + "ML");
                     tvSoLit.setText(String.format("%.2f", tinhTrang.soLit) + "L");
                     tvConLai.setText(String.format("%.2f", tinhTrang.conLai) + "ML");
+
+                    if (tinhTrang.conLai > 0) {
+
+                        tvCheck.setText("Chưa hoàn thành");
+                        imgCheck.setImageResource(R.drawable.ic_not_check_24dp);
+                    } else {
+
+                        tvCheck.setText("Đã hoàn thành");
+                        imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                    }
                 }
                 pg.dismiss();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "lỗi", Toast.LENGTH_LONG).show();
             }
         });
         return view;
+    }
+
+    public void setColorCircleProgressView(int color) {
+        circleProgressView.setBarColor(getResources().getColor(color));
     }
 
     public void initControls() {

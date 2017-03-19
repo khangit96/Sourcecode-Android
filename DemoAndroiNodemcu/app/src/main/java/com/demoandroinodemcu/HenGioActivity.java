@@ -1,5 +1,8 @@
 package com.demoandroinodemcu;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +58,7 @@ public class HenGioActivity extends AppCompatActivity implements TimePickerDialo
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+
 
     }
 }

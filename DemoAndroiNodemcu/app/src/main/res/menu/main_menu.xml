@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menConnect"
+        android:icon="@drawable/ic_wifi_on"
+        android:title="Connect"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menuCalendar"
         android:icon="@drawable/ic_calendar_white24dp"
         android:title="Calendar"
         app:showAsAction="always" />
-    <item
+   <!-- <item
         android:id="@+id/menuHenGio"
         android:icon="@drawable/ic_alarm_white_24dp"
         android:title="Alarm"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 </menu>

@@ -3,7 +3,7 @@
     <string name="openDrawer">Open</string>
     <string name="closeDrawer">Close</string>
     <string name="viewActivity"><u>Lịch sử uống (50)</u></string>
-    <string name="recommended"><u>Lời khuyên (30)</u></string>
+    <string name="recommended"><u>Phân tích</u></string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

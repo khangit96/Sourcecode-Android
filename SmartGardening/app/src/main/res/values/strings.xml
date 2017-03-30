@@ -2,8 +2,20 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Cấu hình wifi</string>
     <string name="smart_gardening">Smart Gardening</string>
     <string name="image_home">Image Home</string>
     <string name="image_item">Image item</string>
+    <string name="img">img</string>
+    <string name="nhi_t_30_c">Nhiệt độ: 30°C</string>
+    <string name="doam">Độ ẩm: 50%</string>
+    <string name="anhsang">Độ ẩm không khí: 50</string>
+    <string name="time">Thời gian cập nhật: 8:30:50</string>
+    <string name="tuoi_nuoc">Tưới nước cho hệ thống.</string>
+    <string name="off">TẮT</string>
+    <string name="on">BẬT</string>
+    <string name="led">Bật đèn cho hệ thống.</string>
+    <string name="change">Thay đổi độ ẩm cho hệ thống.</string>
+    <string name="Manche">Kéo màn che cho hệ thống.</string>
+    <string name="change_btn">THAY ĐỔI</string>
 </resources>

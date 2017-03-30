@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.minhuyenwallpaper.Fragment.HomeFragment;
+import com.minhuyenwallpaper.Fragment.WallpaperFragment;
 import com.minhuyenwallpaper.Model.Wallpaper;
 import com.minhuyenwallpaper.Others.DepthPageTransformer;
 import com.minhuyenwallpaper.R;
@@ -54,7 +54,7 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        wallpapers = HomeFragment.wallpapers;
+        wallpapers = WallpaperFragment.wallpapers;
 
         pos = getIntent().getIntExtra("pos", 0);
 
@@ -77,7 +77,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 pos = position;
-                setTitle(wallpapers.get(position).wallpaperTitle);
+                //setTitle(wallpapers.get(position).wallpaperTitle);
             }
 
             @Override

@@ -1,7 +1,7 @@
 package com.demoandroinodemcu;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,12 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
@@ -33,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private static int FRAGMENT_INDEX = 0;
     private static boolean check = false;
-    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menuSetting:
                         startActivity(new Intent(MainActivity.this, CaiDatActivity.class));
                         break;
+                    case R.id.menuGioiThieu:
+                        AlertDialog.Builder dialogGioiThieu = new AlertDialog.Builder(MainActivity.this);
+                        dialogGioiThieu.setTitle("Giới thiệu");
+                        dialogGioiThieu.setIcon(R.mipmap.ic_launcher);
+                        dialogGioiThieu.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                // ToDo get user input here
+                            }
+                        });
+                        dialogGioiThieu.setMessage("Đây là bình nước thông minh-sản phẩm IoT của trường Đại Học Thủ Dầu Một.");
+                        dialogGioiThieu.show();
+                        break;
                     default:
                         break;
                 }
@@ -131,17 +139,32 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        if (!userSharePreferences.getBoolean("STATUS", false)) {
-            menu.getItem(0).setIcon(R.drawable.ic_wifi_off);
-            check = false;
-        } else {
-            check = true;
-        }
+        /*DatabaseReference mData = FirebaseDatabase.getInstance().getReference().child("status");
+        mData.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              *//*  if ((Boolean) dataSnapshot.getValue() == true) {
+                    check = true;
+                    menu.getItem(0).setIcon(R.drawable.ic_wifi_on);
+                } else {
+                    check = false;
+                    menu.getItem(0).setIcon(R.drawable.ic_wifi_off);
+                }*//*
+                Toast.makeText(getApplicationContext(), dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
+
+
         return true;
     }
 
@@ -193,50 +216,6 @@ public class MainActivity extends AppCompatActivity {
                     .setDoneText("Đồng ý")
                     .setCancelText("Huỷ bỏ");
             cdp.show(getSupportFragmentManager(), "lđ");
-
-        } else if (item.getItemId() == R.id.menConnect) {
-
-            final ProgressDialog pg = new ProgressDialog(MainActivity.this);
-
-            if (!check) {
-
-                check = true;
-                pg.setMessage("Đang kết nối thiết bị...");
-                pg.setCanceledOnTouchOutside(false);
-                pg.show();
-
-                DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        pg.dismiss();
-                        putBooleanValueSharePreferences("STATUS", true);
-                        Toast.makeText(getApplicationContext(),"Kết nối thành công",Toast.LENGTH_LONG).show();
-                    }
-                };
-                DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("status");
-                mDatabase1.setValue(true, listener);
-                item.setIcon(R.drawable.ic_wifi_on);
-
-            } else {
-
-                pg.setMessage("Đang huỷ kết nối thiết bị...");
-                pg.setCanceledOnTouchOutside(false);
-                pg.show();
-
-                DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        pg.dismiss();
-                        putBooleanValueSharePreferences("STATUS", false);
-                        Toast.makeText(getApplicationContext(),"Huỷ kết nối thành công",Toast.LENGTH_LONG).show();
-
-                    }
-                };
-                DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("status");
-                mDatabase1.setValue(false, listener);
-                item.setIcon(R.drawable.ic_wifi_off);
-                check = false;
-            }
 
         }
         return super.onOptionsItemSelected(item);

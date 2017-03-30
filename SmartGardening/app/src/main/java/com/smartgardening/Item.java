@@ -7,28 +7,20 @@ import java.io.Serializable;
  */
 
 public class Item implements Serializable {
-    private String name;
-    private String key;
+    public float ground_humidity;
+    public float humidity;
+    public String key;
+    public String name;
+    public float temp;
 
     public Item() {
     }
 
-    public Item(String name) { this.name = name; }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Item(float ground_humidity, float humidity, String key, String name, float temp) {
+        this.ground_humidity = ground_humidity;
+        this.humidity = humidity;
+        this.key = key;
         this.name = name;
-    }
-
-    public String getKey() { return key; }
-
-    public void setKey(String key) { this.key = key; }
-
-    @Override
-    public String toString() {
-        return this.name;
+        this.temp = temp;
     }
 }

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -34,19 +34,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cloud" />
+                android:src="@drawable/cloud"
+                android:contentDescription="@string/img" />
 
             <TextView
                 android:id="@+id/tvTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Nhiệt độ: 30°C"
+                android:text="@string/nhi_t_30_c"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -56,19 +58,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/huminity" />
+                android:src="@drawable/huminity"
+                android:contentDescription="@string/img" />
 
             <TextView
                 android:id="@+id/tvDoAm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Độ ẩm: 50%"
+                android:text="@string/doam"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -78,18 +82,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sunny" />
+                android:src="@drawable/sunny"
+                android:contentDescription="@string/img" />
 
             <TextView
+                android:id="@+id/tvNang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Cường độ nắng: 1500"
+                android:text="@string/anhsang"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -99,19 +106,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/time" />
+                android:src="@drawable/time"
+                android:contentDescription="@string/img" />
 
             <TextView
                 android:id="@+id/tvTimeUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Thời gian cập nhật: 8:30:50"
+                android:text="@string/time"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -134,7 +143,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Tưới nước cho hệ thống."
+                android:text="@string/tuoi_nuoc"
                 android:textColor="@color/colorPrimary"
                 android:textSize="17sp" />
 
@@ -145,10 +154,9 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:checked="true"
-                android:onClick="Watering"
                 android:textColor="@color/white"
-                android:textOff="TẮT"
-                android:textOn="BẬT" />
+                android:textOff="@string/off"
+                android:textOn="@string/on" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
@@ -168,7 +176,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Kéo màn che cho hệ thống."
+                android:text="@string/Manche"
                 android:textColor="@color/colorPrimary"
                 android:textSize="17sp" />
 
@@ -179,10 +187,9 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:checked="true"
-                android:onClick="Push"
                 android:textColor="@color/white"
-                android:textOff="TẮT"
-                android:textOn="BẬT" />
+                android:textOff="@string/off"
+                android:textOn="@string/on" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -203,7 +210,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Thay đổi độ ẩm cho hệ thống."
+                android:text="@string/change"
                 android:textColor="@color/colorPrimary"
                 android:textSize="17sp" />
 
@@ -212,8 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:onClick="ChangeHumidity"
-                android:text="THAY ĐỔI"
+                android:text="@string/change_btn"
                 android:textColor="@color/white" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -234,7 +240,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Bật đèn cho hệ thống."
+                android:text="@string/led"
                 android:textColor="@color/colorPrimary"
                 android:textSize="17sp" />
 
@@ -245,10 +251,9 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:checked="true"
-                android:onClick="Led"
                 android:textColor="@color/white"
-                android:textOff="TẮT"
-                android:textOn="BẬT" />
+                android:textOff="@string/off"
+                android:textOn="@string/on" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

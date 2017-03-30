@@ -66,6 +66,7 @@
             android:textColor="#797979"
             android:textSize="20sp"
             android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,11 +75,11 @@
 
         <EditText
             android:id="@+id/edTenWifi"
-            android:textColor="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="khangtdmu" />
+            android:text="khangtdmu"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -88,10 +89,11 @@
 
         <EditText
             android:id="@+id/edMatKhau"
-            android:textColor="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="123456789" />
+            android:inputType="textPassword"
+            android:text="123456789"
+            android:textColor="@color/colorAccent" />
     </LinearLayout>
 </LinearLayout>

@@ -51,7 +51,7 @@ public class ItemAdapter extends BaseAdapter {
             gridViewAndroid = inflater.inflate(R.layout.item_layout, null);
             ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.txt_item);
-            textViewAndroid.setText(itemList.get(position).getName());
+            textViewAndroid.setText(itemList.get(position).name);
         } else {
             gridViewAndroid = (View) convertView;
         }

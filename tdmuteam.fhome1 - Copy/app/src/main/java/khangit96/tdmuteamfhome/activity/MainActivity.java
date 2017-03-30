@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void filterDistance() {
+        int count = 0;
         binding.swipeRefreshLayout.setRefreshing(true);
         mMap.clear();
         clusterManager.clearItems();
@@ -296,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             double distanceHouse = houseList.get(i).distance;
 
             if (distanceHouse < distanceFilter && priceHouse < priceFilter) {
+                count++;
                 MarkerOptions markerOptions = new MarkerOptions()
                         .title(String.valueOf(i))
                         .position(new LatLng(houseList.get(i).viDo, houseList.get(i).kinhDo))
@@ -306,6 +308,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
+        if(count==0){
+            Toast.makeText(getApplicationContext(), "Không có kết quả nào!",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Lọc được "+count+" kết quả",
+                    Toast.LENGTH_LONG).show();
+        }
+
+
         binding.swipeRefreshLayout.setRefreshing(false);
 
     }

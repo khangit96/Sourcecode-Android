@@ -6,4 +6,6 @@
     <color name="red">#F26149</color>
     <color name="green">#3C7ADF</color>
     <color name="white">#ffffff</color>
+    <color name="secondary_text">#727272</color>
+    <color name="PrimaryColor">#46CBC6</color>
 </resources>

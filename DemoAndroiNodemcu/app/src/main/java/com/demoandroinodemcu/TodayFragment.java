@@ -103,7 +103,8 @@ public class TodayFragment extends Fragment {
 
                     final float soLit = userSharePreferences.getFloat("SO_LIT", 0);
                     float valueFirebase = Float.parseFloat(dataSnapshot.child("value").getValue().toString());
-                    float daUong = userSharePreferences.getFloat("DA_UONG", 0) + valueFirebase;
+                    // float daUong = userSharePreferences.getFloat("DA_UONG", 0) + valueFirebase;
+                    float daUong = valueFirebase;
                     float conLai = soLit - daUong;
                     if (conLai > 0) {
 
@@ -113,7 +114,7 @@ public class TodayFragment extends Fragment {
                     } else {
                         countWater++;
                         if (userSharePreferences.getBoolean("THONG_BAO", false)) {
-                            showNotification("Bạn đã uống dư " + valueFirebase + " ML.");
+                            showNotification("Bạn đã uống dư " + String.valueOf(valueFirebase-soLit) + " ML.");
                         }
                         DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("NguoiDung/" + userSharePreferences.getString("KEY", "") + "/" + DAY + "/TinhTrang");
                         mDatabase1.setValue(new Today(soLit, soLit, (float) 0.00));
@@ -121,6 +122,7 @@ public class TodayFragment extends Fragment {
 
 
                 } else {
+
 
                     final DatabaseReference mDatabaseTinhTrang = FirebaseDatabase.getInstance().getReference().child("NguoiDung/" + userSharePreferences.getString("KEY", "") + "/" + DAY + "/TinhTrang");
                     mDatabaseTinhTrang.addValueEventListener(new ValueEventListener() {
@@ -186,6 +188,8 @@ public class TodayFragment extends Fragment {
                                 tvDaUong.setText(String.format("%.2f", 0.00) + "ML");
                                 tvSoLit.setText(String.format("%.2f", userSharePreferences.getFloat("SO_LIT", 0)) + "ML");
                                 tvConLai.setText(String.format("%.2f", 0.00) + "ML");
+                                DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Config/value");
+                                mDatabase1.setValue(0);
 
                                 putFloatValueSharePreferences("DA_UONG", 0);
 

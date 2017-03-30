@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
 
     public static SharedPreferences userSharePreferences;
+    EditText edUsername, edPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,25 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
-
         setContentView(R.layout.activity_login);
+        edUsername = (EditText) findViewById(R.id.edUsername);
+        edPassword = (EditText) findViewById(R.id.edPassword);
+        findViewById(R.id.tvDangKy).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, DangKyActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            edUsername.setText(data.getStringExtra("username"));
+            edPassword.setText(data.getStringExtra("password"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void Login(View v) {

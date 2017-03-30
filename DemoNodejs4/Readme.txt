@@ -1,1 +1,0 @@
-Demo chức năng send and receiver image with server nodejs

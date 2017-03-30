@@ -1,6 +1,7 @@
 package com.demoandroinodemcu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.view.View;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import me.drozdzynski.library.steppers.OnCancelAction;
@@ -17,8 +17,8 @@ import me.drozdzynski.library.steppers.OnChangeStepAction;
 import me.drozdzynski.library.steppers.OnFinishAction;
 import me.drozdzynski.library.steppers.SteppersItem;
 import me.drozdzynski.library.steppers.SteppersView;
-
-import static com.demoandroinodemcu.ThongTinChung.TEN_DANG_NHAP;
+import me.sudar.zxingorient.ZxingOrient;
+import me.sudar.zxingorient.ZxingOrientResult;
 
 
 public class ThongTinActivity extends AppCompatActivity {
@@ -69,19 +69,38 @@ public class ThongTinActivity extends AppCompatActivity {
         stepCanNang.setFragment(new CanNangFragment());
         steps.add(stepCanNang);
 
+        SteppersItem stepQRCODE = new SteppersItem();
+
+        stepQRCODE.setLabel("QR CODE");
+        stepQRCODE.setSubLabel("Vui lòng nhập mã bình nưỡc");
+        stepQRCODE.setFragment(new QRCODEFragment());
+        steps.add(stepQRCODE);
+
 
         SteppersView steppersView = (SteppersView) findViewById(R.id.steppersView);
         steppersView.setConfig(steppersViewConfig);
         steppersView.setItems(steps);
+
         steppersView.build();
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        ZxingOrientResult scanResult =
+                ZxingOrient.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanResult != null) {
+            QRCODEFragment.edQRCode.setText("3476");
+        }
     }
 
     public void HoanTat(View v) {
         float chieuCao = Integer.parseInt(ChieuCaoFragment.edChieuCao.getText().toString());
         float canNang = Integer.parseInt(CanNangFragment.edCangNang.getText().toString());
 
-        ThongTinChung thongTinChung = new ThongTinChung(canNang, chieuCao, ThongTinChung.MAT_KHAU,(float) ((float) canNang / 0.03), ThongTinChung.TEN_DANG_NHAP);
+        ThongTinChung thongTinChung = new ThongTinChung(canNang, chieuCao, ThongTinChung.MAT_KHAU, (float) ((float) canNang / 0.03), ThongTinChung.TEN_DANG_NHAP);
         ThongTinChung.CHIEU_CAO = thongTinChung.chieuCao;
         ThongTinChung.CAN_NANG = thongTinChung.canNang;
         ThongTinChung.SO_LIT = thongTinChung.soLit;
@@ -96,7 +115,6 @@ public class ThongTinActivity extends AppCompatActivity {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("NguoiDung/" + ThongTinChung.KEY + "/ThongTinChung");
         mDatabase.setValue(thongTinChung);
     }
-
 
 
 }

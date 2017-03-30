@@ -18,6 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -40,8 +41,48 @@ public class MainActivity extends AppCompatActivity {
         initRecylerView();
 
         queue = Volley.newRequestQueue(this);
-        loadMoreWallpaper();
+        getDataFromTKaraoke();
+        //   loadMoreWallpaper();
 
+    }
+
+    public void getDataFromTKaraoke() {
+        String url = "http://lyric.tkaraoke.com/New.Songs";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document document = null;
+                        document = (Document) Jsoup.parse(response);
+                        if (document != null) {
+                            Elements subjectElements = document.select("td.td-title-song");
+
+
+                            if (subjectElements != null && subjectElements.size() > 0) {
+                                for (Element element : subjectElements) {
+                                    Element imgSubject = element.getElementsByTag("a").first();
+
+
+                                    if (imgSubject != null) {
+                                        String imgUrl =imgSubject.attr("href");
+                                        Log.d("test",imgUrl);
+                                      /*  imageUrls.add(imgUrl);
+                                        mAdapter.notifyDataSetChanged();*/
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"null", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        queue.add(stringRequest);
     }
 
     public void loadMoreWallpaper() {

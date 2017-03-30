@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.minhuyenwallpaper.Activity.DetailActivity">
     <item
-        android:id="@+id/menuFavorite"
-        android:icon="@drawable/ic_favorite_black_24dp"
+        android:id="@+id/menuDownload"
+        android:icon="@drawable/ic_file_download_black_24dp"
         android:orderInCategory="100"
         android:title="Favorite"
         app:showAsAction="always" />

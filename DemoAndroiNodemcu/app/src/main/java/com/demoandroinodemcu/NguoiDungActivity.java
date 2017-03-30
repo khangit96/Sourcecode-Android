@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class NguoiDungActivity extends AppCompatActivity {
@@ -52,6 +53,10 @@ public class NguoiDungActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_nguoi_dung, menu);
         return true;
+    }
+
+    public void CapNhat(View v) {
+        startActivity(new Intent(NguoiDungActivity.this, UpdateActivity.class));
     }
 
     @Override

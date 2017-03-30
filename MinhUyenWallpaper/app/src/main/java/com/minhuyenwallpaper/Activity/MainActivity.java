@@ -17,8 +17,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.minhuyenwallpaper.Fragment.FavoriteFragment;
-import com.minhuyenwallpaper.Fragment.HomeFragment;
+import com.minhuyenwallpaper.Fragment.WallpaperFragment;
 import com.minhuyenwallpaper.Fragment.MoviesFragment;
 import com.minhuyenwallpaper.Others.CircleTransform;
 import com.minhuyenwallpaper.R;
@@ -134,19 +133,15 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getFragment() {
         switch (navItemIndex) {
             case 0:
-                HomeFragment homeFragment = new HomeFragment();
+                WallpaperFragment wallpaperFragment = new WallpaperFragment();
                 setToolbarTitle("Wallpaper");
-                return homeFragment;
+                return wallpaperFragment;
             case 1:
-                FavoriteFragment favoriteFragment = new FavoriteFragment();
-                setToolbarTitle("Favorite");
-                return favoriteFragment;
-            case 2:
                 MoviesFragment moviesFragment=new MoviesFragment();
                 setToolbarTitle("Movie");
                 return moviesFragment;
             default:
-                return new HomeFragment();
+                return new WallpaperFragment();
         }
     }
 
@@ -176,12 +171,8 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case R.id.nav_favorite:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
                     case R.id.nav_movies:
-                        navItemIndex = 2;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_MOVIES;
                         break;
                     case R.id.nav_notifications:
@@ -241,20 +232,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-        // show menu only when home fragment is selected
         if (navItemIndex == 0) {
             getMenuInflater().inflate(R.menu.menu_nav_wallpaper, menu);
-           /* MenuItem itemNoti = menu.findItem(R.id.menuNoti);
-            MenuItemCompat.setActionView(itemNoti, R.layout.notification_count);
-
-            MenuItem itemFavorite = menu.findItem(R.id.menuNavFavorite);
-            MenuItemCompat.setActionView(itemFavorite, R.layout.notification_count);*/
         }
 
-        // when fragment is notifications, load the menu created for notifications
-        if (navItemIndex == 3) {
+        if (navItemIndex ==2) {
             // getMenuInflater().inflate(R.menu.notifications, menu);
         }
         return true;

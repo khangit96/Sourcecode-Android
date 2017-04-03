@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "89920388710",
-    "firebase_url": "https://smartgardening-1d4e7.firebaseio.com",
-    "project_id": "smartgardening-1d4e7",
-    "storage_bucket": "smartgardening-1d4e7.appspot.com"
+    "project_number": "1032151956094",
+    "firebase_url": "https://smartgardening-3d2d2.firebaseio.com",
+    "project_id": "smartgardening-3d2d2",
+    "storage_bucket": "smartgardening-3d2d2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:89920388710:android:8f9d779ae71703b3",
+        "mobilesdk_app_id": "1:1032151956094:android:8f9d779ae71703b3",
         "android_client_info": {
           "package_name": "com.smartgardening"
         }
       },
       "oauth_client": [
         {
-          "client_id": "89920388710-97t3teu1qe88m4lo46vmlng4jgl8sdn5.apps.googleusercontent.com",
+          "client_id": "1032151956094-2rhsqb8kqiiqt4sgl9j1lmsani2hqg4u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCGwrGHGrlmSyJaRaquu4RpqUm25YQZpIQ"
+          "current_key": "AIzaSyBokZmHw3MUigFKRddU_my5w63tczTLz0I"
         }
       ],
       "services": {

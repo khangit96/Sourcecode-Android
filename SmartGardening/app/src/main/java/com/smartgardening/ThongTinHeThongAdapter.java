@@ -15,18 +15,18 @@ import java.util.List;
  * Created by ShimizuRou on 3/2/2017.
  */
 
-public class ItemAdapter extends BaseAdapter {
+public class ThongTinHeThongAdapter extends BaseAdapter {
     private Context context;
-    private List<Item> itemList;
+    private List<ThongTinHeThong> thongTinHeThongList;
 
-    public ItemAdapter(Context context, ArrayList<Item> itemList) {
+    public ThongTinHeThongAdapter(Context context, ArrayList<ThongTinHeThong> thongTinHeThongList) {
         this.context = context;
-        this.itemList = itemList;
+        this.thongTinHeThongList = thongTinHeThongList;
     }
 
     @Override
     public int getCount() {
-        return itemList.size();
+        return thongTinHeThongList.size();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ItemAdapter extends BaseAdapter {
             gridViewAndroid = inflater.inflate(R.layout.item_layout, null);
             ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.txt_item);
-            textViewAndroid.setText(itemList.get(position).name);
+            textViewAndroid.setText(thongTinHeThongList.get(position).tenHeThong);
         } else {
             gridViewAndroid = (View) convertView;
         }

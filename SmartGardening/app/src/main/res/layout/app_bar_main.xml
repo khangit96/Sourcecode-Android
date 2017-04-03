@@ -23,12 +23,44 @@
 
     <include layout="@layout/content_main" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_led" />
+        android:layout_gravity="bottom"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabLed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:tint="@android:color/darker_gray"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/ic_led" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabWatering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="20dp"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_watering" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabPush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="20dp"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_push_button" />
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

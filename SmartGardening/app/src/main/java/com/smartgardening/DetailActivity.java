@@ -1,20 +1,15 @@
 package com.smartgardening;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,14 +17,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.smartgardening.R.id.edMatKhau;
-import static com.smartgardening.R.id.edTenWifi;
-
 
 public class DetailActivity extends AppCompatActivity {
     Toolbar toolbar;
-    TextView temp, humidity, ground_humidity;
-    Item item;
+    TextView temp, loaiCay, ground_humidity;
+    ThongTinHeThong item;
     String key;
     public int count = 0;
 
@@ -37,58 +29,56 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
         init();
         initEvents();
         initToolbar();
-        getDataFireBase();
-        SetData();
     }
 
-    public void initEvents() {
-        final ToggleButton toggleLed = (ToggleButton) findViewById(R.id.toggleLed);
-        toggleLed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final ProgressDialog pg = new ProgressDialog(DetailActivity.this);
-                pg.setCanceledOnTouchOutside(false);
-
-                if (isChecked) {
-                    pg.setMessage("Đang tắt đèn...");
-                    pg.show();
-
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            pg.dismiss();
-                        }
-                    };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("System/" + item.key + "/ledEnable");
-                    mDatabase.setValue(false, listener);
-
-                } else {
-                    pg.setMessage("Đang bật đèn...");
-                    pg.show();
-
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            pg.dismiss();
-                        }
-                    };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("System/" + item.key + "/ledEnable");
-                    mDatabase.setValue(true, listener);
-
-                }
-            }
-        });
+    /*
+    * Init toolbar
+    * */
+    public void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.drawable.leaf);
+        setTitle(item.tenHeThong);
     }
 
-    private void getDataFireBase() {
+
+    private void init() {
+        item = (ThongTinHeThong) getIntent().getSerializableExtra("SYSTEM");
+        key = item.key;
+        temp = (TextView) findViewById(R.id.tvTemperature);
+        loaiCay = (TextView) findViewById(R.id.tvLoaiCay);
+        loaiCay.setText("Loại cây: " + item.loaiCay);
+        ground_humidity = (TextView) findViewById(R.id.tvDoAm);
+        if (key.equals("2")) {
+            findViewById(R.id.lnKeoMang).setVisibility(View.GONE);
+        }
+
+
         DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("System").child(key).addValueEventListener(new ValueEventListener() {
+        mData.child(key + "/DuLieu").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                item = dataSnapshot.getValue(Item.class);
-                SetData();
+
+                String nhietDo = dataSnapshot.child("NhietDo").getValue().toString();
+                String doAm1 = dataSnapshot.child("DoAm1").getValue().toString();
+                //String doAm2 = dataSnapshot.child("DoAm2").getValue().toString();
+                // String doAm3 = dataSnapshot.child("DoAm3").getValue().toString();
+
+                String nhietDoNumber1 = nhietDo.substring(1, 2);
+                String nhietDoNumber2 = nhietDo.substring(2, 3);
+                String nhietDoNumber3 = nhietDo.substring(3, 4);
+
+                String doAm1Number1 = doAm1.substring(1, 2);
+                String doAm1Number2 = doAm1.substring(2, 3);
+                String doAm1Number3 = doAm1.substring(3, 4);
+
+                temp.setText("Nhiệt độ: " + nhietDoNumber1 + nhietDoNumber2 + "." + nhietDoNumber3 + "°C");
+                ground_humidity.setText("Độ ẩm đất trung bình: " + doAm1Number1 + doAm1Number2 + doAm1Number3 + "%");
+
             }
 
             @Override
@@ -98,34 +88,141 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    public void initToolbar() {
-        //Toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(item.name);
-        Config.NAME = item.name;
-    }
+    /*
+    * Init Event
+    * */
+    public void initEvents() {
 
-    private void init() {
-        item = (Item) getIntent().getSerializableExtra("SYSTEM");
-        key = item.key;
-        temp = (TextView) findViewById(R.id.tvTemperature);
-        humidity = (TextView) findViewById(R.id.tvNang);
-        ground_humidity = (TextView) findViewById(R.id.tvDoAm);
-    }
+        //Event Watering
+        final SwitchCompat switchWatering = (SwitchCompat) findViewById(R.id.switchWatering);
+        switchWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(DetailActivity.this);
+                pg.setCanceledOnTouchOutside(false);
 
-    private void SetData() {
-        temp.setText("Nhiệt độ: " + item.temp + "°C");
-        humidity.setText("Độ ẩm không khí: " + item.humidity + "%");
-        ground_humidity.setText("Độ ẩm đất: " + item.ground_humidity + "%");
+                if (switchWatering.isChecked()) {
+                    pg.setMessage("Đang bật máy bơm...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/batMayBom");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt máy bơm" +
+                            "...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/batMayBom");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
+
+        //Event push
+        final SwitchCompat switchPush = (SwitchCompat) findViewById(R.id.switchPush);
+        switchPush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(DetailActivity.this);
+                pg.setCanceledOnTouchOutside(false);
+
+                if (switchPush.isChecked()) {
+                    pg.setMessage("Đang bật kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/keoMang");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/keoMang");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
+
+        //Event enable led
+        final SwitchCompat switchEnableLed = (SwitchCompat) findViewById(R.id.switchEnableLed);
+        switchEnableLed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(DetailActivity.this);
+                pg.setCanceledOnTouchOutside(false);
+
+                if (switchEnableLed.isChecked()) {
+                    pg.setMessage("Đang bật đèn ...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/batDen");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt đèn...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(item.key + "/DieuKhien/batDen");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menCauHinh) {
-            showDialogSettingWifi();
-        }
+        /*if (item.getItemId() == R.id.menCauHinh) {
+            //showDialogSettingWifi();
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
@@ -135,7 +232,7 @@ public class DetailActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void showDialogSettingWifi() {
+  /*  private void showDialogSettingWifi() {
         count = 0;
         AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
 
@@ -234,5 +331,5 @@ public class DetailActivity extends AppCompatActivity {
 
         builder.show();
     }
-
+*/
 }

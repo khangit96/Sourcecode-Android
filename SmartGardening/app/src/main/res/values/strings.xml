@@ -1,7 +1,7 @@
 <resources>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="app_name">Smart Gardening</string>
     <string name="action_settings">Cấu hình wifi</string>
     <string name="smart_gardening">Smart Gardening</string>
     <string name="image_home">Image Home</string>

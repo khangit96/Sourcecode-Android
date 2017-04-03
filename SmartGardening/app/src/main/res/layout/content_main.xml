@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
-        android:background="@color/colorPrimary">
+        android:background="#4CAF50">
 
         <TextView
             android:id="@+id/text_main"
@@ -41,27 +41,25 @@
             app:srcCompat="@drawable/ic_garden" />
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/grid_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout"
-        android:background="#E3F2FD"
-        android:columnWidth="50dp"
-        android:gravity="center"
-        android:numColumns="1">
-
-    </GridView>
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/grid_view">
+        android:layout_below="@+id/linearLayout">
 
-        <include layout="@layout/layout_fab" />
-    </RelativeLayout>
+        <GridView
+            android:id="@+id/grid_view"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout"
+            android:layout_marginTop="20dp"
+            android:columnWidth="50dp"
+            android:gravity="center"
+            android:numColumns="1"
+            android:padding="10dp"></GridView>
+
+    </FrameLayout>
 
 
 </RelativeLayout>

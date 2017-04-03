@@ -26,9 +26,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Item> itemList = new ArrayList<>();
+    private ArrayList<ThongTinHeThong> thongTinHeThongList = new ArrayList<>();
     private Toolbar toolbar;
-    boolean isLedEnable = true;
+    boolean isFabLedClick = false, isFabWatering = false, isFabPush = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +37,163 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         initGridView();
         initDrawer();
-        startService(new Intent(MainActivity.this, CheckErrorService.class));
+        initEvents();
     }
 
+    /*
+    * Init Event
+    * */
+    private void initEvents() {
+
+        //Event led
+        findViewById(R.id.fabLed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog pg = new ProgressDialog(MainActivity.this);
+                pg.setCanceledOnTouchOutside(false);
+
+                if (isFabLedClick) {
+
+                    pg.setMessage("Đang tắt đèn...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batDen");
+                    mDatabase.setValue(false, listener);
+
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabLed);
+                    fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
+                    isFabLedClick = false;
+
+                } else {
+                    pg.setMessage("Đang tắt đèn...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batDen");
+                    mDatabase.setValue(true, listener);
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabLed);
+                    fab.setColorFilter(getResources().getColor(android.R.color.white));
+                    isFabLedClick = true;
+                }
+
+            }
+        });
+
+        //Event watering
+        findViewById(R.id.fabWatering).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog pg = new ProgressDialog(MainActivity.this);
+                pg.setCanceledOnTouchOutside(false);
+
+                if (isFabWatering) {
+
+                    pg.setMessage("Đang tắt máy bơm...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batMayBom");
+                    mDatabase.setValue(false, listener);
+
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabWatering);
+                    fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
+                    isFabWatering = false;
+
+                } else {
+                    pg.setMessage("Đang bật máy bơm...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batMayBom");
+                    mDatabase.setValue(true, listener);
+
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabWatering);
+                    fab.setColorFilter(getResources().getColor(android.R.color.white));
+                    isFabWatering = true;
+                }
+            }
+        });
+
+        //Event push
+        findViewById(R.id.fabPush).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog pg = new ProgressDialog(MainActivity.this);
+                pg.setCanceledOnTouchOutside(false);
+
+                if (isFabPush) {
+                    pg.setMessage("Đang tắt kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/keoMang");
+                    mDatabase.setValue(false, listener);
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabPush);
+                    fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
+                    isFabPush = false;
+
+                } else {
+                    pg.setMessage("Đang bật kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/keoMang");
+                    mDatabase.setValue(true, listener);
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabPush);
+                    fab.setColorFilter(getResources().getColor(android.R.color.white));
+                    isFabPush = true;
+                }
+            }
+        });
+    }
+
+    /*
+    * Init toolbar
+    * */
     public void initToolbar() {
-        //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("");
@@ -49,30 +201,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void initGridView() {
         final ProgressDialog pg = new ProgressDialog(MainActivity.this);
-        pg.setMessage("Đang tải dữ liệu");
+        pg.setMessage("Đang tải dữ liệu...");
         pg.setCanceledOnTouchOutside(false);
         pg.show();
 
-        final ItemAdapter itemAdapter = new ItemAdapter(this, itemList);
+        final ThongTinHeThongAdapter thongTinHeThongAdapter = new ThongTinHeThongAdapter(this, thongTinHeThongList);
         final DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
         GridView gridView = (GridView) findViewById(R.id.grid_view);
-        gridView.setAdapter(itemAdapter);
+        gridView.setAdapter(thongTinHeThongAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent activity = new Intent(MainActivity.this, DetailActivity.class);
-                activity.putExtra("SYSTEM", (Serializable) itemList.get(position));
+                activity.putExtra("SYSTEM", (Serializable) thongTinHeThongList.get(position));
                 startActivity(activity);
             }
         });
-        mData.child("System").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        mData.child("/").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for (DataSnapshot dt : dataSnapshot.getChildren()) {
-                    Item item = dt.getValue(Item.class);
-                    itemList.add(item);
-                    itemAdapter.notifyDataSetChanged();
-                    pg.dismiss();
+                    if (!dt.getKey().equals("DieuKhienChung")) {
+                        DataSnapshot dt1 = dt.child("ThongTinHeThong");
+                        ThongTinHeThong thongTinHeThong = dt1.getValue(ThongTinHeThong.class);
+                        thongTinHeThongList.add(thongTinHeThong);
+                        thongTinHeThongAdapter.notifyDataSetChanged();
+                        pg.dismiss();
+                    }
+
                 }
             }
 
@@ -81,45 +239,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final ProgressDialog pg = new ProgressDialog(MainActivity.this);
-                pg.setCanceledOnTouchOutside(false);
-
-                if (isLedEnable) {
-                    pg.setMessage("Đang bật đèn");
-                    pg.show();
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            pg.dismiss();
-                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                            fab.setColorFilter(getResources().getColor(android.R.color.white));
-                        }
-                    };
-                    DatabaseReference m = FirebaseDatabase.getInstance().getReference().child("ledEnable");
-                    m.setValue(true, listener);
-                    isLedEnable = false;
-                } else {
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            pg.dismiss();
-                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                            fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
-                        }
-                    };
-                    pg.setMessage("Đang tắt đèn");
-                    pg.show();
-                    DatabaseReference m = FirebaseDatabase.getInstance().getReference().child("ledEnable");
-                    m.setValue(false, listener);
-                    isLedEnable = true;
-                }
-
-            }
-        });
-
     }
 
 

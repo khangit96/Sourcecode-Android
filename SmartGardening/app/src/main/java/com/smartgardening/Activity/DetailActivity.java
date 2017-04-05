@@ -1,4 +1,4 @@
-package com.smartgardening;
+package com.smartgardening.Activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.smartgardening.R;
+import com.smartgardening.ThongTinHeThong;
 
 
 public class DetailActivity extends AppCompatActivity {

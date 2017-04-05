@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menuBanDo"
         android:orderInCategory="100"
         android:title="Bản đồ"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menuTongQuan"
+        android:orderInCategory="100"
+        android:title="Tổng quan"
         app:showAsAction="never" />
 </menu>

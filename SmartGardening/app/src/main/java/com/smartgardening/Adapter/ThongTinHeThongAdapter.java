@@ -1,4 +1,4 @@
-package com.smartgardening;
+package com.smartgardening.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.smartgardening.R;
+import com.smartgardening.ThongTinHeThong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +52,7 @@ public class ThongTinHeThongAdapter extends BaseAdapter {
 
             gridViewAndroid = new View(context);
             gridViewAndroid = inflater.inflate(R.layout.item_layout, null);
-            ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
+            //ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.txt_item);
             textViewAndroid.setText(thongTinHeThongList.get(position).tenHeThong);
         } else {

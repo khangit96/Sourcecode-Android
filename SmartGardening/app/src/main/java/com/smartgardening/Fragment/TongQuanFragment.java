@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.smartgardening.Activity.DetailActivity;
 import com.smartgardening.R;
 import com.smartgardening.ThongTinHeThong;
-import com.smartgardening.ThongTinHeThongAdapter;
+import com.smartgardening.Adapter.ThongTinHeThongAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;

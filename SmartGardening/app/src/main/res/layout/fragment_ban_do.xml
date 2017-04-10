@@ -1,13 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/map"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.smartgardening.Fragment.BanDoFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Bản đồ" />
-
-</FrameLayout>
+    android:layout_height="match_parent" />

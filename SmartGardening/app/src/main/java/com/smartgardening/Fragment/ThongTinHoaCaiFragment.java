@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 
 import com.smartgardening.R;
 
-public class CaiDatFragment extends Fragment {
+public class ThongTinHoaCaiFragment extends Fragment {
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cai_dat, container, false);
+        return inflater.inflate(R.layout.fragment_thong_tin_hoa_cai, container, false);
     }
 }

@@ -3,6 +3,7 @@ package com.smartgardening.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.smartgardening.Fragment.BanDoFragment;
+import com.smartgardening.Fragment.MapsActivity;
 import com.smartgardening.Fragment.TongQuanFragment;
 import com.smartgardening.R;
 

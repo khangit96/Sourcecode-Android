@@ -18,6 +18,9 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/secondary_text</item>
     </style>
+    <style name="fab">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -52,7 +52,13 @@ public class ThongTinHeThongAdapter extends BaseAdapter {
 
             gridViewAndroid = new View(context);
             gridViewAndroid = inflater.inflate(R.layout.item_layout, null);
-            //ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
+            ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image_item);
+
+            if (position == 1) {
+                imageViewAndroid.setImageResource(R.drawable.rsz_lach1);
+            } else {
+                imageViewAndroid.setImageResource(R.drawable.hoa_lan);
+            }
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.txt_item);
             textViewAndroid.setText(thongTinHeThongList.get(position).tenHeThong);
         } else {

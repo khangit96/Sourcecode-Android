@@ -1,9 +1,7 @@
 package com.smartgardening.Activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,7 +16,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.smartgardening.Fragment.CaiDatFragment;
 import com.smartgardening.Fragment.DieuKhienFragment;
 import com.smartgardening.Fragment.DuLieuFragment;
-import com.smartgardening.Fragment.ThongTinFragment;
+import com.smartgardening.Fragment.ThongTinHoaCaiFragment;
+import com.smartgardening.Fragment.ThongTinHoaLanFragment;
 import com.smartgardening.R;
 import com.smartgardening.ThongTinHeThong;
 
@@ -40,10 +39,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void loaFragment(Fragment fr) {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, fr);
-        fragmentTransaction.commit();
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, fr);
+        ft.commit();
     }
 
     /*
@@ -64,31 +62,33 @@ public class DetailActivity extends AppCompatActivity {
         loaiCay = (TextView) findViewById(R.id.tvLoaiCay);
         loaiCay.setText("Loại cây: " + item.loaiCay);
         ground_humidity = (TextView) findViewById(R.id.tvDoAm);
-       /* if (key.equals("2")) {
-            findViewById(R.id.lnKeoMang).setVisibility(View.GONE);
-        }*/
-
 
         DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
         mData.child(key + "/DuLieu").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String nhietDo = dataSnapshot.child("NhietDo").getValue().toString();
-                String doAm1 = dataSnapshot.child("DoAm1").getValue().toString();
-                //String doAm2 = dataSnapshot.child("DoAm2").getValue().toString();
-                // String doAm3 = dataSnapshot.child("DoAm3").getValue().toString();
+                if (key.equals("1")) {
 
+                    String doAm1 = dataSnapshot.child("DoAm1").getValue().toString();
+                    String doAm1Number1 = doAm1.substring(1, 2);
+                    String doAm1Number2 = doAm1.substring(2, 3);
+                    String doAm1Number3 = doAm1.substring(3, 4);
+
+                    ground_humidity.setText("Độ ẩm đất trung bình: " + doAm1Number1 + doAm1Number2 + doAm1Number3 + "%");
+                } else {
+                    String doAmKK = dataSnapshot.child("DoAmKhongKhi").getValue().toString();
+                    ground_humidity.setText("Độ ẩm không khí: " + doAmKK + "%");
+                }
+
+
+                String nhietDo = dataSnapshot.child("NhietDo").getValue().toString();
                 String nhietDoNumber1 = nhietDo.substring(1, 2);
                 String nhietDoNumber2 = nhietDo.substring(2, 3);
                 String nhietDoNumber3 = nhietDo.substring(3, 4);
 
-                String doAm1Number1 = doAm1.substring(1, 2);
-                String doAm1Number2 = doAm1.substring(2, 3);
-                String doAm1Number3 = doAm1.substring(3, 4);
-
                 temp.setText("Nhiệt độ: " + nhietDoNumber1 + nhietDoNumber2 + "." + nhietDoNumber3 + "°C");
-                ground_humidity.setText("Độ ẩm đất trung bình: " + doAm1Number1 + doAm1Number2 + doAm1Number3 + "%");
+
 
             }
 
@@ -106,7 +106,12 @@ public class DetailActivity extends AppCompatActivity {
             loaFragment(new DuLieuFragment());
 
         } else if (item.getItemId() == R.id.menuThongTin) {
-            loaFragment(new ThongTinFragment());
+            if (key.equals("1")) {
+                loaFragment(new ThongTinHoaCaiFragment());
+            } else {
+                loaFragment(new ThongTinHoaLanFragment());
+            }
+
 
         } else if (item.getItemId() == R.id.menuDieuKhien) {
             loaFragment(new DieuKhienFragment());

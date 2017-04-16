@@ -1,4 +1,4 @@
-package com.smartgardening;
+package com.smartgardening.Service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.smartgardening.Activity.MainActivity;
+import com.smartgardening.Model.Config;
+import com.smartgardening.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

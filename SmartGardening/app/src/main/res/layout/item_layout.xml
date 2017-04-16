@@ -38,8 +38,8 @@
                 android:src="@drawable/hoa_lan" />
 
             <ImageView
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="40dp"
                 android:layout_toRightOf="@+id/image_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

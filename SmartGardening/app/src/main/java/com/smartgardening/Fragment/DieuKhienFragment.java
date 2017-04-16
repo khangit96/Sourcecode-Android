@@ -1,8 +1,8 @@
 package com.smartgardening.Fragment;
 
-import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +34,7 @@ public class DieuKhienFragment extends Fragment {
         return rootView;
     }
 
-    /*
-    * Init Event
-    * */
-    public void initEvents() {
-
-        //Event Watering
+    void khoiTaoHoaCai() {
         final SwitchCompat switchWatering = (SwitchCompat) rootView.findViewById(R.id.switchWatering);
         switchWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -162,6 +157,142 @@ public class DieuKhienFragment extends Fragment {
                 }
             }
         });
+    }
+
+    void khoiTaoHoaLan() {
+        final SwitchCompat switchWatering = (SwitchCompat) rootView.findViewById(R.id.switchWatering);
+        switchWatering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(getActivity());
+                pg.setCanceledOnTouchOutside(false);
+
+                if (switchWatering.isChecked()) {
+                    pg.setMessage("Đang bật phun sương...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/batMayBom");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt phun sương" +
+                            "...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/batMayBom");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
+
+        //Event push
+        final SwitchCompat switchPush = (SwitchCompat) rootView.findViewById(R.id.switchPush);
+        switchPush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(getActivity());
+                pg.setCanceledOnTouchOutside(false);
+
+                if (switchPush.isChecked()) {
+                    pg.setMessage("Đang bật kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/keoMang");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt kéo màng che...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/keoMang");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
+
+        //Event enable led
+        final SwitchCompat switchEnableLed = (SwitchCompat) rootView.findViewById(R.id.switchEnableLed);
+        switchEnableLed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final ProgressDialog pg = new ProgressDialog(getActivity());
+                pg.setCanceledOnTouchOutside(false);
+
+                if (switchEnableLed.isChecked()) {
+                    pg.setMessage("Đang bật đèn ...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/batDen");
+                    mDatabase.setValue(true, listener);
+
+                } else {
+                    pg.setMessage("Đang tắt đèn...");
+                    pg.show();
+
+                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                            pg.dismiss();
+                        }
+                    };
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DetailActivity.key + "/DieuKhien/batDen");
+                    mDatabase.setValue(false, listener);
+                }
+            }
+        });
+    }
+
+    /*
+    * Init Event
+    * */
+    public void initEvents() {
+        if (DetailActivity.key.equals("1")) {
+            khoiTaoHoaCai();
+        } else {
+            khoiTaoHoaLan();
+        }
     }
 
 

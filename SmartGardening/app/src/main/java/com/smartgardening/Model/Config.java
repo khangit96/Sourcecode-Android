@@ -1,4 +1,4 @@
-package com.smartgardening;
+package com.smartgardening.Model;
 
 /**
  * Created by Administrator on 3/24/2017.

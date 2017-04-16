@@ -32,6 +32,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'com.code-troopers.betterpickers:library:3.1.0'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

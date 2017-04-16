@@ -1,4 +1,4 @@
-package com.smartgardening;
+package com.smartgardening.Model;
 
 import java.io.Serializable;
 

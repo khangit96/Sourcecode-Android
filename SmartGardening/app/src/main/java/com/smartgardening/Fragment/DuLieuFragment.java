@@ -39,7 +39,6 @@ public class DuLieuFragment extends Fragment {
         v.findViewById(R.id.fabCalendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
                         .setOnDateSetListener(new CalendarDatePickerDialogFragment.OnDateSetListener() {
                             @Override

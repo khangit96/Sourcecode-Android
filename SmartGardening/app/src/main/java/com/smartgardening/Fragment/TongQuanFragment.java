@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.smartgardening.Activity.DetailActivity;
 import com.smartgardening.R;
-import com.smartgardening.ThongTinHeThong;
+import com.smartgardening.Model.ThongTinHeThong;
 import com.smartgardening.Adapter.ThongTinHeThongAdapter;
 
 import java.io.Serializable;
@@ -58,35 +58,61 @@ public class TongQuanFragment extends Fragment {
                     pg.setMessage("Đang tắt đèn...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+
+                        }
+                    };
+
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batDen");
-                    mDatabase.setValue(false, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/batDen");
+                    mDatabase1.setValue(false, listener1);
+
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/batDen");
+                    mDatabase2.setValue(false, listener2);
 
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabLed);
                     fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
                     isFabLedClick = false;
 
                 } else {
-                    pg.setMessage("Đang tắt đèn...");
+                    pg.setMessage("Đang bật đèn...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+                        }
+                    };
+
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batDen");
-                    mDatabase.setValue(true, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/batDen");
+                    mDatabase1.setValue(true, listener1);
+
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/batDen");
+                    mDatabase2.setValue(true, listener2);
+
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabLed);
                     fab.setColorFilter(getResources().getColor(android.R.color.white));
                     isFabLedClick = true;
@@ -107,16 +133,28 @@ public class TongQuanFragment extends Fragment {
                     pg.setMessage("Đang tắt máy bơm...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+
+                        }
+                    };
+
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batMayBom");
-                    mDatabase.setValue(false, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/batMayBom");
+                    mDatabase1.setValue(false, listener1);
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/batMayBom");
+                    mDatabase2.setValue(false, listener2);
 
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabWatering);
                     fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
@@ -126,16 +164,27 @@ public class TongQuanFragment extends Fragment {
                     pg.setMessage("Đang bật máy bơm...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+
+                        }
+                    };
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/batMayBom");
-                    mDatabase.setValue(true, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/batMayBom");
+                    mDatabase1.setValue(true, listener1);
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/batMayBom");
+                    mDatabase2.setValue(true, listener2);
 
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabWatering);
                     fab.setColorFilter(getResources().getColor(android.R.color.white));
@@ -155,16 +204,28 @@ public class TongQuanFragment extends Fragment {
                     pg.setMessage("Đang tắt kéo màng che...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+
+                        }
+                    };
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/keoMang");
-                    mDatabase.setValue(false, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/keoMang");
+                    mDatabase1.setValue(false, listener1);
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/keoMang");
+                    mDatabase2.setValue(false, listener2);
+
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabPush);
                     fab.setColorFilter(getResources().getColor(android.R.color.darker_gray));
                     isFabPush = false;
@@ -173,16 +234,28 @@ public class TongQuanFragment extends Fragment {
                     pg.setMessage("Đang bật kéo màng che...");
                     pg.show();
 
-                    DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+                    DatabaseReference.CompletionListener listener1 = new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/tinhTrang");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/tinhTrang");
+                            mDatabase.setValue(true);
+
+                        }
+                    };
+                    DatabaseReference.CompletionListener listener2 = new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/tinhTrang");
                             mDatabase.setValue(true);
                             pg.dismiss();
                         }
                     };
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("DieuKhienChung/keoMang");
-                    mDatabase.setValue(true, listener);
+
+                    DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child("1/DieuKhien/keoMang");
+                    mDatabase1.setValue(true, listener1);
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("2/DieuKhien/keoMang");
+                    mDatabase2.setValue(true, listener2);
+
                     FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabPush);
                     fab.setColorFilter(getResources().getColor(android.R.color.white));
                     isFabPush = true;

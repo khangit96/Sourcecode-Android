@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smartgardening.R;
-import com.smartgardening.ThongTinHeThong;
+import com.smartgardening.Model.ThongTinHeThong;
 
 import java.util.ArrayList;
 import java.util.List;

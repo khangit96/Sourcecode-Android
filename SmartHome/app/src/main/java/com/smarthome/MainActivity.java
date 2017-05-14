@@ -32,6 +32,8 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
     ProgressDialog pg;
     CheckBox cb;
+    boolean check = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void initControls() {
         pg = new ProgressDialog(MainActivity.this);
         pg.setCanceledOnTouchOutside(false);
-        cb= (CheckBox) findViewById(R.id.cb);
+        cb = (CheckBox) findViewById(R.id.cb);
     }
 
 
@@ -62,9 +64,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (switchBatDen.isChecked()) {
-                    proceccBatDen(true, "Đang bật đèn...");
+                    if (check) {
+                        proceccBatDen(true, "Đang bật đèn...");
+                        return;
+                    }
+                    processBatDenServer(true,"Đang bật đèn...");
                 } else {
-                    proceccBatDen(false, "Đang tắt đèn...");
+                    if (check) {
+                        proceccBatDen(false, "Đang tắt đèn...");
+                        return;
+                    }
+                    processBatDenServer(false,"Đang tắt đèn...");
                 }
             }
         });
@@ -74,9 +84,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (switchBatOCamDien.isChecked()) {
-                    proceccBatOCamDien(true, "Đang bật ổ cắm điện...");
+                    if(check) {
+                        proceccBatOCamDien(true, "Đang bật ổ cắm điện...");
+                        return;
+                    }
+                    proceccBatOCamDienServer(true,"Đang bật ổ cắm điện...");
+
                 } else {
-                    proceccBatOCamDien(false, "Đang tắt ổ cắm điện...");
+                    if(check) {
+                        proceccBatOCamDien(false, "Đang tắt ổ cắm điện...");
+                        return;
+                    }
+                    proceccBatOCamDienServer(false,"Đang tắt ổ cắm điện");
+
                 }
             }
         });
@@ -84,13 +104,11 @@ public class MainActivity extends AppCompatActivity {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             if(cb.isChecked()){
-                 Toast.makeText(getApplicationContext(),"checked",Toast.LENGTH_LONG).show();
-             }
-             else {
-                 Toast.makeText(getApplicationContext(),"uncheck",Toast.LENGTH_LONG).show();
-
-             }
+                if (cb.isChecked()) {
+                    check = true;
+                } else {
+                    check = false;
+                }
             }
         });
 
@@ -191,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         // prepare the Request
         String wifiNameFix = wifiName.replaceAll("\\s+", "+");
-       String url = "http://192.168.4.1/setting?ssid=" + wifiNameFix + "&pass=" + wifiPass;
+        String url = "http://192.168.4.1/setting?ssid=" + wifiNameFix + "&pass=" + wifiPass;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -206,7 +224,99 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pg.dismiss();
-                        Toast.makeText(getApplicationContext(), "Error+\n"+error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error+\n" + error.toString(), Toast.LENGTH_LONG).show();
+
+                    }
+                }
+        );
+
+        int socketTimeout = 30000; // 30 seconds. You can change it
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        getRequest.setRetryPolicy(policy);
+
+        queue.add(getRequest);
+    }
+
+    /*
+    *
+    * */
+    public void processBatDenServer(boolean value,String message){
+        pg.setMessage(message);
+        pg.show();
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        // prepare the Request
+        String para="";
+        if(value) {
+            para="batDen";
+        }
+        else {
+            para="tatDen";
+        }
+        String url = "http://192.168.4.1/controls?para="+para;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // display response
+                        pg.dismiss();
+                        Toast.makeText(getApplicationContext(), "Bật đèn thành công", Toast.LENGTH_LONG).show();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pg.dismiss();
+                        Toast.makeText(getApplicationContext(), "Error+\n" + error.toString(), Toast.LENGTH_LONG).show();
+
+                    }
+                }
+        );
+
+        int socketTimeout = 30000; // 30 seconds. You can change it
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        getRequest.setRetryPolicy(policy);
+
+        queue.add(getRequest);
+    }
+
+    /*
+    *
+    * */
+    public void proceccBatOCamDienServer(boolean value,String message){
+        pg.setMessage(message);
+        pg.show();
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        // prepare the Request
+        String para="";
+        if(value) {
+            para="batOCamDien";
+        }
+        else {
+            para="tatOCamDien";
+        }
+        String url = "http://192.168.4.1/controls?para="+para;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pg.dismiss();
+                        // display response
+                               Toast.makeText(getApplicationContext(), "Bật ổ cắm điện thành công", Toast.LENGTH_LONG).show();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pg.dismiss();
+                        Toast.makeText(getApplicationContext(), "Error+\n" + error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }
